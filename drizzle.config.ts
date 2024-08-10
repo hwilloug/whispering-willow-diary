@@ -6,7 +6,10 @@ export default {
   schema: "./src/server/db/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: env.DATABASE_URL,
+    host: env.DATABASE_URL,
+    port: parseInt(env.DATABASE_PORT),
+    user: env.DATABASE_USER,
+    password: env.DATABASE_PASSWORD,
+    database: env.DATABASE_DATABASE,
   },
-  tablesFilter: ["whispering_willow_diary_*"],
 } satisfies Config;
