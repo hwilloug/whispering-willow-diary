@@ -6,10 +6,10 @@ export default function TopNav({}: Readonly<{}>) {
   const user = useAuth()
 
   return (
-    <nav className="flex items-center justify-between w-full p-4 text-xl bg-lime-900">
+    <nav className="flex items-center justify-between w-full p-4 text-xl bg-primary-main">
       <div className="flex items-center gap-2">
         <img className="w-14" src="/whispering_willow_logo.png" />
-        <div className="font-dancing-script text-lime-200 text-2xl">Whispering Willow Diary</div>
+        <div className="font-dancing-script text-primary-light text-3xl">Whispering Willow Diary</div>
         <div className="text-blue-400 text-sm border rounded-full p-2 border-blue-400">Beta</div>
       </div>
       

@@ -1,6 +1,5 @@
 import "~/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import TopNav from "./_components/topnav";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -17,10 +16,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable}`}>
+      <html lang="en">
         <body>
-          <TopNav />
-          {children}
+          <div className="h-screen grid grid-rows-[auto,1fr,auto]">
+            <TopNav />
+            <main>{children}</main>
+          </div>
           <Footer />
         </body>
       </html>

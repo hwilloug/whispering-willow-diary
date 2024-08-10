@@ -38,10 +38,36 @@
 
 body {
   font-family: 'Ubuntu';
-  
+
   background-image: url("/background_2.jpeg");
   background-size: cover;
   background-attachment: fixed;
   background-repeat: repeat;
   background-position: bottom;
+}
+
+.text-outline-bold {
+  font-family: "PoetsenOne";
+  color: black;
+  text-shadow: 1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb;
+}
+
+.text-outline-bold-inverted {
+  font-family: "PoetsenOne";
+  color: #e0f0bb;
+  text-shadow: 1px 1px 0px black, -1px 1px 0px black, 1px -1px 0px black, -1px -1px 0px black;
+}
+
+.container-transparent {
+  background-color: rgba(224, 240, 187, 0.65);
+  padding: 20px 20px 50px 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 24px;
+}
+
+.container-title {
+  font-family: "PoetsenOne";
+  font-size: x-large;
+  text-align: center;
 }
