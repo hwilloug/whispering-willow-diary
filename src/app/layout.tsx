@@ -16,9 +16,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="overscroll-none">
         <body>
-          <div className="h-screen grid grid-rows-[auto,1fr,auto]">
+          <div className="min-h-screen grid grid-rows-[auto,1fr,auto]">
             <TopNav />
             <main>{children}</main>
           </div>

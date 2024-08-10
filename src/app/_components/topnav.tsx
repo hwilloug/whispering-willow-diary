@@ -3,8 +3,6 @@
 import { SignInButton, SignedIn, SignedOut, UserButton, useAuth } from "@clerk/nextjs";
 
 export default function TopNav({}: Readonly<{}>) {
-  const user = useAuth()
-
   return (
     <nav className="flex items-center justify-between w-full p-4 text-xl bg-primary-main">
       <div className="flex items-center gap-2">
