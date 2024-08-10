@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Ubuntu";
+    src: local('Ubuntu'), url("/fonts/Ubuntu-Regular.ttf");
+  }
+
+  @font-face {
+    font-family: "Ubuntu-Bold";
+    src: local('Ubuntu-Bold'), url("/fonts/Ubuntu-Bold.ttf");
+  }
+
+  @font-face {
+    font-family: "PoetsenOne";
+    src: local("PoetsenOne"), url("/fonts/PoetsenOne-Regular.ttf");
+  }
+
+  @font-face {
+    font-family: "DancingScript";
+    src: local('DancingScript'), url("/fonts/DancingScript-Bold.ttf");
+  }
+}
+
+.font-dancing-script {
+  font-family: "DancingScript";
+}
+
+.font-ubuntu {
+  font-family: "Ubuntu"
+}
+
+.font-ubuntu-bold {
+  font-family: "Ubuntu-Bold"
+}
+
+body {
+  font-family: 'Ubuntu';
+  
+  background-image: url("/background_2.jpeg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-position: bottom;
+}

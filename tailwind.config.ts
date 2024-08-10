@@ -6,7 +6,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        script: ["DancingScript", "font-sans"],
+        sans: ["Ubuntu", "font-sans"]
       },
     },
   },

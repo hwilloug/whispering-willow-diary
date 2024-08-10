@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import TopNav from "./_components/topnav";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Footer } from "./_components/footer";
 
 export const metadata: Metadata = {
   title: "Whispering Willow Diary",
@@ -20,6 +21,7 @@ export default function RootLayout({
         <body>
           <TopNav />
           {children}
+          <Footer />
         </body>
       </html>
     </ClerkProvider>
