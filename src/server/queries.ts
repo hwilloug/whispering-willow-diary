@@ -8,16 +8,11 @@ export async function getMyEntries() {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  try {
-    const entries = await db.query.entries.findMany({
-      where: (model, { eq }) => eq(model.userId, user.userId),
-      orderBy: (model, { desc }) => desc(model.date)
-    })
-    return entries
-  } catch (e) {
-    console.log(e)
-  }
-  
+  const entries = await db.query.entries.findMany({
+    where: (model, { eq }) => eq(model.userId, user.userId),
+    orderBy: (model, { desc }) => desc(model.date)
+  })
+  return entries  
 }
 
 export async function getMyEntry(date: string) {

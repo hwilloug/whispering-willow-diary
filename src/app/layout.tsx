@@ -1,17 +1,14 @@
+"use client"
+
 import "~/styles/globals.css";
 
-import { type Metadata } from "next";
 import TopNav from "./_components/topnav";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Footer } from "./_components/footer";
+import { getMyEntries } from "~/server/queries";
+import AppInitializer from "./appinitializer";
 
-export const metadata: Metadata = {
-  title: "Whispering Willow Diary",
-  description: "A journaling and mood tracking website created by Hannah Willoughby",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (

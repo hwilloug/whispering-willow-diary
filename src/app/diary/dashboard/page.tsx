@@ -1,5 +1,3 @@
-"use server"
-
 import { format } from "date-fns";
 import { getMyEntries } from "~/server/queries";
 import { DailyAffirmation } from "./_components/dailyaffirmation";
@@ -20,9 +18,6 @@ function TodaysDate() {
 }
 
 export default async function Dashboard() {
-
-  const entries = await getMyEntries()
-  
   return (
     <main>
       <TodaysDate />
