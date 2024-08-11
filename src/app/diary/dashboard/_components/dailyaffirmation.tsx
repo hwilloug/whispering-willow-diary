@@ -1,6 +1,6 @@
 export function DailyAffirmation() {
   return (
-    <div className="bg-amber-900/80 w-1/2 text-center m-auto p-4 my-4 rounded-md">
+    <div className="bg-amber-900/80 w-1/2 text-center m-auto p-4 my-4 rounded-md border-black border">
       <div className="text-outline-bold-inverted text-3xl">
         🌸 Today's Affirmation 🌸
       </div>
