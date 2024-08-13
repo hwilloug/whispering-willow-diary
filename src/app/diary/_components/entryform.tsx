@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import DailyAffirmationEntry from "./dailyaffirmationentry";
-import DailyGoalEntry from "./dailygoalentry";
+import GoalsEntry from "./goalsentry";
 import Entry from "./entry";
 import MoodEntry from "./moodentry";
 import SleepEntry from "./sleepentry";
@@ -10,6 +10,7 @@ import MentalHealthEntry from "./mentalhealthentry";
 import FeelingsEntry from "./feelingsentry";
 import SubstanceUseEntry from "./substanceuseentry";
 import ExerciseEntry from "./exerciseentry";
+import { format, isEqual, isFirstDayOfMonth, startOfWeek } from "date-fns";
 
 export default function EntryForm({date}: Readonly<{date: string}>) {
   const [timeOfDay, setTimeOfDay] = useState("Morning")
@@ -32,7 +33,9 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
             <SleepEntry />
             <MoodEntry />
             <DailyAffirmationEntry />
-            <DailyGoalEntry />
+            <GoalsEntry cadence="Daily" />
+              {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
+              {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
             <Entry />
           </>
         )
@@ -44,7 +47,6 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
             <FeelingsEntry />
             <SubstanceUseEntry />
             <ExerciseEntry />
-            <DailyGoalEntry />
             <Entry />
           </>
         )

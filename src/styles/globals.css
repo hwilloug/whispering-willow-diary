@@ -10,9 +10,9 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --primary: #e0f0bb;
+    --primary-foreground: rgba(224, 240, 187, 0.65);
+    --secondary: #673ab7;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
@@ -122,8 +122,8 @@ body {
 }
 
 .container-transparent {
-  background-color: rgba(224, 240, 187, 0.65);
-  padding: 20px 20px 50px 20px;
+  background-color: var(--primary-foreground);
+  padding: 20px;
   border: 1px solid black;
   border-radius: 10px;
   margin: 24px;

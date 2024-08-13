@@ -11,7 +11,9 @@ export default async function DiaryLayout({
   return (
     <AppInitializer entries={entries}>
       <SideBar />
-      {children}
+      <div className="ml-10">
+        {children}
+      </div>
     </AppInitializer>
   )
 }
