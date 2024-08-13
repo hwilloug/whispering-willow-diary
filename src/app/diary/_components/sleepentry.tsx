@@ -24,7 +24,7 @@ export default function SleepEntry() {
             plugins={[
               <TimePicker position="bottom" hideSeconds />
             ]}
-            style={{padding: 20, backgroundColor: "var(--primary)"}}
+            style={{padding: 20, backgroundColor: "var(--primary)", textAlign: "center"}}
           />
           <span>to</span>
           <DatePicker
@@ -33,8 +33,7 @@ export default function SleepEntry() {
             plugins={[
               <TimePicker position="bottom" hideSeconds />
             ]}
-            style={{padding: 20, backgroundColor: "var(--primary)"}}
-            arrowStyle={{border: "solid var(--primary)"}}
+            style={{padding: 20, backgroundColor: "var(--primary)", textAlign: "center"}}
           />
           <div>
             <span>({s.hoursSleep} hours)</span>
