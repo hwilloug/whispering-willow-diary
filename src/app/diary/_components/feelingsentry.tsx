@@ -4,8 +4,8 @@ import { Checkbox } from "~/components/ui/checkbox";
 function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
   return (
     <AccordionItem value={title} className="border-b-0">
-      <AccordionTrigger>{title}</AccordionTrigger>
-      <AccordionContent className="flex gap-4 flex-wrap">
+      <AccordionTrigger className="flex justify-center gap-4 font-bold">{title}</AccordionTrigger>
+      <AccordionContent className="flex gap-4 flex-wrap justify-center">
         {feelingsList.map((f) => (
           <div key={f} className="flex gap-2 items-center">
             <Checkbox /><span>{f}</span>
