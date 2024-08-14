@@ -2,7 +2,7 @@ import { create } from "zustand"
 
 export interface EntryState {
   date: string
-  mood?: string
+  mood?: number
   hoursSleep?: string
   bedTime?: string
   wakeUpTime?: string
@@ -15,7 +15,7 @@ export interface EntryState {
   morningEntryContent?: string
   dailyQuestionQ?: string
   dailyQuestionA?: string
-  exercise?: string
+  exercise?: number
 }
 
 interface JournalState {

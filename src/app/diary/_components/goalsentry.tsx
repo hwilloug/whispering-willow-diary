@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input"
@@ -18,7 +20,7 @@ export default function GoalsEntry({ cadence }: Readonly<{cadence: "Daily" | "We
         ))}
       </div>
       <div className="w-fit m-auto">
-        <button className="w-fit px-8 py-2 border border-[--secondary] hover:text-[--secondary] m-auto rounded-lg bg-[--secondary] text-white hover:bg-transparent" onClick={() => setGoals([...goals, {value: "", checked: false}])}>Add Goal</button>
+        <button className="styled-button" onClick={() => setGoals([...goals, {value: "", checked: false}])}>Add Goal</button>
       </div>
     </div>
   )

@@ -156,3 +156,18 @@ body {
 .sidenav-animation:hover svg {
   width: 45px;
 }
+
+.styled-button {
+  width: fit-content;
+  margin: auto;
+  padding: 8px 16px;
+  border: 1px solid var(--secondary);
+  color: white;
+  background-color: var(--secondary);
+  border-radius: 10px;
+}
+
+.styled-button:hover {
+  background-color: transparent;
+  color: var(--secondary);
+}

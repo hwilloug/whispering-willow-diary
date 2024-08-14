@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export default function FaceIcon({color, variant}: Readonly<{ color: string; variant: "distressed" | "bad" | "neutral" | "happy" | "ecstatic" }>) {
+export default function FaceIcon({color, variant, className, value, onClick}: Readonly<{ value: number; color: string; variant: "distressed" | "bad" | "neutral" | "happy" | "ecstatic"; className?: string; onClick?: (mood: number) => void }>) {
   const mouth = useMemo(() => {
     switch (variant) {
       case "distressed":
@@ -41,6 +41,8 @@ export default function FaceIcon({color, variant}: Readonly<{ color: string; var
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={className}
+      onClick={() => onClick && onClick(value)}
     >
       <circle cx="12" cy="12" r="10" />
       <circle cx="8" cy="10" r="1" />

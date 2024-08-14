@@ -1,3 +1,5 @@
+"use client"
+
 import { useMemo, useState } from "react";
 import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
@@ -44,7 +46,7 @@ export default function SleepEntry() {
         <span>Total hours sleep: </span><span>{totalHoursSleep}</span>
       </div>
       <div className="w-fit m-auto">
-        <button className="w-fit px-8 py-2 border border-[--secondary] hover:text-[--secondary] m-auto rounded-lg bg-[--secondary] text-white hover:bg-transparent" onClick={() => setSleep([...sleep, {bedTime: "", wakeUpTime: "", hoursSleep: 0, sleepQuality: ""}])}>Add Sleep</button>
+        <button className="styled-button" onClick={() => setSleep([...sleep, {bedTime: "", wakeUpTime: "", sleepQuality: "", hoursSleep: 0}])}>Add Sleep</button>
       </div>
     </div>
   )

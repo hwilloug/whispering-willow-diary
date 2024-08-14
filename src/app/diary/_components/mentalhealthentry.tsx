@@ -1,4 +1,3 @@
-import { useState } from "react"
 import MultipleSelector from "~/components/ui/multiselect"
 
 export const mentalHealthSymptoms = [
@@ -26,9 +25,6 @@ export const mentalHealthSymptoms = [
 ]
 
 export default function MentalHealthEntry() {
-
-  const [values, setValues] = useState<string[]>([])
-
   return (
     <div className="container-transparent">
       <div className="container-title">Mental Health & Behavior</div>
