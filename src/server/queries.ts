@@ -14,7 +14,7 @@ export async function getMyEntries() {
     where: (model, { eq }) => eq(model.userId, user.userId),
     orderBy: (model, { desc }) => desc(model.date)
   })
-  return entries  
+  return entries.map(e => dtoToContent(e))
 }
 
 export async function getMyEntry(date: string) {
@@ -79,4 +79,24 @@ function contentToDTO(content: Partial<EntryState>) {
 
 function removeUndefined(dto: Record<string, any>) {
   return Object.fromEntries(Object.entries(dto).filter(([_, v]) => v !== undefined))
+}
+
+function dtoToContent(dto: Record<string, any>) {
+  return {
+    date: dto.date,
+    mood: dto.mood,
+    hoursSleep: dto.hoursSleep,
+    bedTime: dto.bedTime,
+    wakeUpTime: dto.wakeUpTime,
+    sleepQuality: dto.sleepQuality,
+    affirmation: dto.affirmation,
+    mentalHealth: JSON.parse(dto.mentalHealth || "[]"),
+    feelings: JSON.parse(dto.feelings || "[]"),
+    substances: JSON.parse(dto.substances || "[]"),
+    entryContent: dto.entryContent,
+    morningEntryContent: dto.morningEntryContent,
+    dailyQuestionQ: dto.dailyQuestionQ,
+    dailyQuestionA: dto.dailyQuestionA,
+    minutesExercise: dto.exercise,
+  }
 }

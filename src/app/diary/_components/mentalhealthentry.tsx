@@ -1,4 +1,5 @@
 import MultipleSelector from "~/components/ui/multiselect"
+import { EntryState } from "~/store";
 
 export const mentalHealthSymptoms = [
   "Anxiety",
@@ -24,7 +25,7 @@ export const mentalHealthSymptoms = [
   "Suicidal Ideation",
 ]
 
-export default function MentalHealthEntry() {
+export default function MentalHealthEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
   return (
     <div className="container-transparent">
       <div className="container-title">Mental Health & Behavior</div>

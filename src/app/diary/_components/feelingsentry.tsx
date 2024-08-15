@@ -1,22 +1,35 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Checkbox } from "~/components/ui/checkbox";
+import { EntryState, useJournalStore } from "~/store";
 
-function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
-  return (
-    <AccordionItem value={title} className="border-b-0">
-      <AccordionTrigger className="flex justify-center gap-4 font-bold">{title}</AccordionTrigger>
-      <AccordionContent className="flex gap-4 flex-wrap justify-center">
-        {feelingsList.map((f) => (
-          <div key={f} className="flex gap-2 items-center">
-            <Checkbox /><span>{f}</span>
-          </div>
-        ))}
-      </AccordionContent>
-    </AccordionItem>
-  )
-}
+export default function FeelingsEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
+  const feelings = useJournalStore((store) => store.entries.find((e) => e.date === date)?.feelings) || []
 
-export default function FeelingsEntry() {
+  console.log(feelings)
+
+  const handleFeelingsChange = (feeling: string) => {
+    if (feelings.includes(feeling)) {
+      onSave({feelings: feelings.filter((f) => f !== feeling)})
+    } else {
+      onSave({feelings: [...feelings, feeling]})
+    }
+  }
+
+  function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
+    return (
+      <AccordionItem value={title} className="border-b-0">
+        <AccordionTrigger className="flex justify-center gap-4 font-bold">{title}</AccordionTrigger>
+        <AccordionContent className="flex gap-4 flex-wrap justify-center">
+          {feelingsList.map((f) => (
+            <div key={f} className="flex gap-2 items-center">
+              <Checkbox checked={feelings.includes(f)} onClick={() => handleFeelingsChange(f)} /><span>{f}</span>
+            </div>
+          ))}
+        </AccordionContent>
+      </AccordionItem>
+    )
+  }
+
   const acceptingOpen = [
     "Calm",
     "Centered",

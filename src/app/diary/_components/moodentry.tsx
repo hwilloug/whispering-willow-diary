@@ -5,7 +5,7 @@ import { EntryState, useJournalStore } from "~/store";
 export default function MoodEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
   const mood = useJournalStore(state => state.entries.find(entry => entry.date === date))?.mood
 
-  const activeMoodStyle = "b-2 border-[var(--secondary)] rounded-full p-1"
+  const activeMoodStyle = "outline outline-offset-2 outline-[--primary-dark] rounded-full"
 
   const submitMood = (mood: number) => {
     onSave({ mood })

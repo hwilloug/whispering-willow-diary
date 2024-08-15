@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react";
 import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
+import { EntryState } from "~/store";
 
-export default function SleepEntry() {
+export default function SleepEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
   const [sleep, setSleep] = useState<{bedTime: string, wakeUpTime: string, sleepQuality: string, hoursSleep: number}[]>([])
 
   const totalHoursSleep = useMemo(() => {

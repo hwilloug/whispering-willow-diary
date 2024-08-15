@@ -65,24 +65,24 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
       {
         timeOfDay === "Morning" && (
           <>
-            <SleepEntry />
+            <SleepEntry date={date} onSave={handleSave} />
             <MoodEntry date={date} onSave={handleSave} />
-            <DailyAffirmationEntry />
+            <DailyAffirmationEntry date={date} onSave={handleSave} />
             <GoalsEntry cadence="Daily" />
               {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
               {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
-            <Entry />
+            <Entry date={date} timeOfDay={"Morning"} onSave={handleSave} />
           </>
         )
       }
       {
         timeOfDay === "Evening" && (
           <>
-            <MentalHealthEntry />
-            <FeelingsEntry />
-            <SubstanceUseEntry />
-            <ExerciseEntry />
-            <Entry />
+            <MentalHealthEntry date={date} onSave={handleSave} />
+            <FeelingsEntry date={date} onSave={handleSave} />
+            <SubstanceUseEntry date={date} onSave={handleSave} />
+            <ExerciseEntry date={date} onSave={handleSave} />
+            <Entry date={date} timeOfDay={"Evening"} onSave={handleSave} />
           </>
         )
       }

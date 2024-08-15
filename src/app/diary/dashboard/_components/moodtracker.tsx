@@ -5,7 +5,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { EntryState, useJournalStore } from '~/store';
 import { useMemo, useState } from 'react';
 import TimeRangeButton from './timerangebutton';
-import { format, sub } from 'date-fns';
+import { format, fromUnixTime, getUnixTime, parse, parseISO, sub } from 'date-fns';
 
 interface HighchartsDataPoint {
   x: number,
@@ -61,8 +61,8 @@ export function MoodTracker() {
     for (let idx in entries) {
       if (entries[idx]?.mood !== undefined) {
         moodData.push({
-          x: new Date(entries[idx]!.date).valueOf(),
-          y: parseInt(entries[idx]!.mood!),
+          x: getUnixTime(parse(entries[idx]!.date, "yyyy-MM-dd", new Date())),
+          y: entries[idx]!.mood!,
         })
       }
     }
@@ -72,7 +72,7 @@ export function MoodTracker() {
 
   const filteredMoodData = useMemo(() => {
     return moodData.filter((d) => {
-      return d.x > new Date(timeFilter).valueOf()
+      return d.x > getUnixTime(parseISO(timeFilter.toISOString()))
     })
   }, [moodData, timeFilter])
 
@@ -85,10 +85,10 @@ export function MoodTracker() {
       borderRadius: 10,
     },
     xAxis: {
-      min: timeFilter.valueOf(),
+      min: getUnixTime(parseISO(timeFilter.toISOString())),
       labels: {
         formatter: (function () {
-          return format(this.value, "dd/MMM/yyyy")
+          return format(fromUnixTime(typeof this.value === "string" ? parseInt(this.value) : this.value), "MMM dd")
         }),
       },
     },
@@ -174,7 +174,7 @@ export function MoodTracker() {
       formatter: function () {
         switch (this.series.name) {
           case "Mood":
-            return `${format(this.x!, "MMM dd, yyyy")}: <b>${
+            return `${format(fromUnixTime(typeof this.x === "string" ? parseInt(this.x) : this.x!), "MMM dd, yyyy")}: <b>${
               // @ts-ignore
               moodText[this.y!.toString()]
             }</b>`

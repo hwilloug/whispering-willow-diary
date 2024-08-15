@@ -1,4 +1,5 @@
 import { Input } from "~/components/ui/input"
+import { EntryState } from "~/store";
 
 export const allSubstances = [
   "Caffeine",
@@ -14,7 +15,7 @@ export const allSubstances = [
   "Other",
 ]
 
-export default function SubstanceUseEntry() {
+export default function SubstanceUseEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
   return (
     <div className="container-transparent">
       <div className="container-title">Substance Use</div>

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { cn } from "~/lib/utils";
 
 export default function FaceIcon({color, variant, className, value, onClick}: Readonly<{ value: number; color: string; variant: "distressed" | "bad" | "neutral" | "happy" | "ecstatic"; className?: string; onClick?: (mood: number) => void }>) {
   const mouth = useMemo(() => {
@@ -41,7 +42,7 @@ export default function FaceIcon({color, variant, className, value, onClick}: Re
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={className}
+      className={cn(className, "cursor-pointer")}
       onClick={() => onClick && onClick(value)}
     >
       <circle cx="12" cy="12" r="10" />
