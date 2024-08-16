@@ -2,8 +2,10 @@ import "server-only"
 
 import { db } from "./db"
 import { auth } from "@clerk/nextjs/server"
-import { entries } from "./db/schema"
-import { EntryState } from "~/store"
+import { entries, sleep } from "./db/schema"
+import { EntryState, SleepState } from "~/store"
+import { eq } from "drizzle-orm"
+import { format, parse } from "date-fns"
 
 export async function getMyEntries() {
   const user = auth()
@@ -12,8 +14,12 @@ export async function getMyEntries() {
 
   const entries = await db.query.entries.findMany({
     where: (model, { eq }) => eq(model.userId, user.userId),
-    orderBy: (model, { desc }) => desc(model.date)
+    orderBy: (model, { desc }) => desc(model.date),
+    with: {
+      sleep: true
+    }
   })
+  
   return entries.map(e => dtoToContent(e))
 }
 
@@ -24,13 +30,16 @@ export async function getMyEntry(date: string) {
 
   const entry = await db.query.entries.findFirst({
     where: (model, { eq }) => eq(model.date, date),
+    with: {
+      sleep: true
+    }
   })
 
   if (!entry) return null
 
   if (entry.userId !== user.userId) throw new Error("Unauthorized")
 
-  return entry
+  return dtoToContent(entry)
 }
 
 export async function createEntry(date: string) {
@@ -50,25 +59,30 @@ export async function createEntry(date: string) {
   }).execute()
 }
 
-export async function updateEntry(date: string, content: Partial<EntryState>) {
+export async function updateEntry(entryId: number, date: string, content: Partial<EntryState>) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  await db.update(entries).set({ date, userId: user.userId, ...removeUndefined(contentToDTO(content)) }).execute()
+  await db.update(entries).set({ date, userId: user.userId, ...removeUndefined(contentToDTO(content)) }).where(eq(entries.date, date)).execute()
+  if (content.sleep) {
+    if (content.sleep.length === 0) {
+      await db.delete(sleep).where(eq(sleep.entryId, entryId)).execute()
+    } else {
+      await db.delete(sleep).where(eq(sleep.entryId, entryId)).execute()
+      // @ts-ignore
+      await db.insert(sleep).values(content.sleep.map(s => sleepContentToDTO(date, entryId, s))).execute()
+    }
+  }
 }
 
 function contentToDTO(content: Partial<EntryState>) {
   return {
     mood: content.mood,
-    hoursSleep: content.hoursSleep,
-    bedTime: content.bedTime,
-    wakeUpTime: content.wakeUpTime,
-    sleepQuality: content.sleepQuality,
     affirmation: content.affirmation,
     mentalHealth: JSON.stringify(content.mentalHealth),
     feelings: JSON.stringify(content.feelings),
-    substances: JSON.stringify(content.substances),
+    substances: content.substances,
     entryContent: content.entryContent,
     morningEntryContent: content.morningEntryContent,
     dailyQuestionQ: content.dailyQuestionQ,
@@ -83,20 +97,34 @@ function removeUndefined(dto: Record<string, any>) {
 
 function dtoToContent(dto: Record<string, any>) {
   return {
+    id: dto.id,
     date: dto.date,
     mood: dto.mood,
-    hoursSleep: dto.hoursSleep,
-    bedTime: dto.bedTime,
-    wakeUpTime: dto.wakeUpTime,
-    sleepQuality: dto.sleepQuality,
+    sleep: dto.sleep.map((s: Record<string, any>) => ({
+      hoursSleep: s.hoursSleep,
+      bedTime: s.bedTime ? format(s.bedTime, "HH:mm") : undefined,
+      wakeUpTime: s.wakeUpTime ? format(s.wakeUpTime, "HH:mm") : undefined,
+      sleepQuality: s.sleepQuality,
+    })),
     affirmation: dto.affirmation,
     mentalHealth: JSON.parse(dto.mentalHealth || "[]"),
     feelings: JSON.parse(dto.feelings || "[]"),
-    substances: JSON.parse(dto.substances || "[]"),
+    substances: dto.substances,
     entryContent: dto.entryContent,
     morningEntryContent: dto.morningEntryContent,
     dailyQuestionQ: dto.dailyQuestionQ,
     dailyQuestionA: dto.dailyQuestionA,
     minutesExercise: dto.exercise,
+  }
+}
+
+function sleepContentToDTO(date: string, entryId: number, sleep: Partial<SleepState>) {
+  return {
+    entryId,
+    date,
+    hoursSleep: sleep.hoursSleep,
+    bedTime: sleep.bedTime ? parse(sleep.bedTime, "HH:mm", new Date()) : undefined,
+    wakeUpTime: sleep.wakeUpTime ? parse(sleep.wakeUpTime, "HH:mm", new Date()) : undefined,
+    sleepQuality: sleep.sleepQuality,
   }
 }

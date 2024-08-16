@@ -5,8 +5,6 @@ import { EntryState, useJournalStore } from "~/store";
 export default function FeelingsEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
   const feelings = useJournalStore((store) => store.entries.find((e) => e.date === date)?.feelings) || []
 
-  console.log(feelings)
-
   const handleFeelingsChange = (feeling: string) => {
     if (feelings.includes(feeling)) {
       onSave({feelings: feelings.filter((f) => f !== feeling)})

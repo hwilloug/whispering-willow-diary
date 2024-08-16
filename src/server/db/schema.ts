@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   date,
@@ -31,10 +31,6 @@ export const entries = createTable(
     userId: varchar("user_id", { length: 256 }).notNull(),
     date: date("date").default(sql`CURRENT_TIMESTAMP`).notNull(),
     mood: integer("mood"),
-    hoursSleep: numeric("hours_sleep", { precision: 2 }),
-    bedTime: varchar("bed_time", { length: 36 }),
-    wakeUpTime: varchar("wake_up_time", { length: 36 }),
-    sleepQuality: varchar("sleep_quality", { length: 36 }),
     affirmation: varchar("affirmation", { length: 1024 }),
     mentalHealth: varchar("mental_health", { length: 1024 }),
     feelings: varchar("feelings", { length: 1024 }),
@@ -51,7 +47,31 @@ export const entries = createTable(
       () => new Date()
     ),
   }
-);
+)
+
+export const entryRelations = relations(entries, ({ many }) => ({
+  sleep: many(sleep, { relationName: "sleep_entry" }),
+}))
+
+export const sleep = createTable(
+  "sleep",
+  {
+    id: serial("id").primaryKey(),
+    entryId: integer("entry_id").references(() => entries.id),
+    bedTime: timestamp("bed_time", { withTimezone: true }),
+    wakeUpTime: timestamp("wake_up_time", { withTimezone: true }),
+    sleepQuality: varchar("sleep_quality", { length: 256 }),
+    hoursSleep: numeric("hours_sleep", { precision: 2 }),
+  }
+)
+
+export const sleepRelations = relations(sleep, ({ one }) => ({
+  entry: one(entries, {
+    fields: [sleep.entryId],
+    references: [entries.id],
+    relationName: "sleep_entry",
+  })
+}))
 
 export const yearlyGoals = createTable(
   "yearly_goal",

@@ -1,7 +1,7 @@
 "use server"
 
 import { format } from "date-fns";
-import { createEntry } from "~/server/queries";
+import { createEntry } from "~/server/entries-queries";
 
 export default async function CreateEntryButton() {
   return (

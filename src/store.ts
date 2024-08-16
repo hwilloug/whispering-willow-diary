@@ -1,21 +1,33 @@
+import { DateObject } from "react-multi-date-picker"
 import { create } from "zustand"
 
 export interface EntryState {
+  id: number
   date: string
   mood?: number
-  hoursSleep?: string
-  bedTime?: string
-  wakeUpTime?: string
-  sleepQuality?: string
+  sleep?: SleepState[]
   affirmation?: string
   mentalHealth: string[]
   feelings: string[]
-  substances: string[]
+  substances: SubstancesState[]
   entryContent?: string
   morningEntryContent?: string
   dailyQuestionQ?: string
   dailyQuestionA?: string
   exercise?: number
+}
+
+export interface SubstancesState {
+  substance: string
+  value: number
+}
+
+export interface SleepState {
+  id?: number
+  hoursSleep?: number
+  bedTime?: string
+  wakeUpTime?: string
+  sleepQuality?: string
 }
 
 interface JournalState {

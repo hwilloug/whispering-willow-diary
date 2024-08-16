@@ -1,4 +1,4 @@
-import { getMyEntries } from "~/server/queries";
+import { getMyEntries } from "~/server/entries-queries";
 import AppInitializer from "../appinitializer";
 import SideBar from "./_components/sidebar";
 
@@ -7,7 +7,7 @@ export default async function DiaryLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 
   const entries = await getMyEntries()
-
+  
   return (
     <AppInitializer entries={entries}>
       <SideBar />

@@ -22,10 +22,10 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
   const [timeOfDay, setTimeOfDay] = useState("Morning")
 
   const handleSave = async (saveObj: Partial<EntryState>) => {
-    setEntries([...entries.filter(e => e.date !== date), {...entry!, ...saveObj}])
+    setEntries(entries.map(e => e.date === date ? {...e, ...saveObj} : e))
     await fetch("/diary/api/entries", {
       method: "PUT",
-      body: JSON.stringify({date, content: {...saveObj}}),
+      body: JSON.stringify({entryId: entry!.id, date, content: {...saveObj}}),
       headers: {
         "Content-Type": "application/json"
       }
