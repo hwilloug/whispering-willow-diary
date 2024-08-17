@@ -98,7 +98,7 @@ function removeUndefined(dto: Record<string, any>) {
   return Object.fromEntries(Object.entries(dto).filter(([_, v]) => v !== undefined))
 }
 
-function dtoToContent(dto: Record<string, any>) {
+function dtoToContent(dto: Record<string, any>): EntryState {
   return {
     id: dto.id,
     date: dto.date,
@@ -118,7 +118,7 @@ function dtoToContent(dto: Record<string, any>) {
     morningEntryContent: dto.morningEntryContent,
     dailyQuestionQ: dto.dailyQuestionQ,
     dailyQuestionA: dto.dailyQuestionA,
-    minutesExercise: dto.exercise,
+    exercise: dto.minutesExercise,
   }
 }
 
