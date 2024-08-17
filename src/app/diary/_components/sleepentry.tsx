@@ -1,18 +1,39 @@
 "use client"
 
-import { differenceInHours, format, parse } from "date-fns";
-import { useMemo, useState } from "react";
+import { addDays, differenceInHours, differenceInMinutes, format, parse } from "date-fns";
+import { useMemo } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
-import { EntryState, useJournalStore } from "~/store";
+import { EntryState, SleepState, useJournalStore } from "~/store";
+import TrashIcon from "./icons/trashicon";
 
 export default function SleepEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
 
   const sleep = useJournalStore(state => state.entries.find(e => e.date === date)?.sleep) || []
 
-  const totalHoursSleep = useMemo(() => {
-    return sleep.reduce((acc, s) => acc + (s.hoursSleep ? s.hoursSleep : 0), 0)
+  function getHoursSleep(bedTime: string, wakeUpTime: string) {
+    const bedTimeDate = parse(bedTime, "HH:mm", new Date())
+    const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
+    const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
+    let diff = diffMin / 60
+    if (diff < 0) {
+      diff += 24
+    }
+    return diff
+  }
+
+  const sleepWithHours = useMemo(() => {
+    return sleep.map(s => {
+      if (s.bedTime && s.wakeUpTime) {
+        return {...s, hoursSleep: parseFloat(getHoursSleep(s.bedTime, s.wakeUpTime).toFixed(2))}
+      }
+      return s
+    })
   }, [[...sleep]])
+
+  const totalHoursSleep = useMemo(() => {
+    return sleepWithHours.reduce((acc, s) => acc + (s.hoursSleep ? s.hoursSleep : 0), 0).toFixed(2)
+  }, [[...sleepWithHours]])
 
   const addSleep = () => {
     onSave({sleep: [...sleep, {hoursSleep: 0}]})
@@ -48,11 +69,28 @@ export default function SleepEntry({ date, onSave }: {date?: string; onSave: (sa
     onSave({sleep: newSleep})
   }
 
+  async function deleteSleep(sleepEntry: SleepState) {
+    let newSleep = sleep
+    if (sleepEntry.id) {
+      await fetch("/diary/api/sleep", {
+        method: "DELETE",
+        body: JSON.stringify({sleepId: sleep.find((s) => s.id === sleepEntry.id)?.id}),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      newSleep = sleep.filter(s => s.id !== sleepEntry.id)
+    } else {
+      newSleep.filter(s => s.bedTime !== sleepEntry.bedTime && s.wakeUpTime !== sleepEntry.wakeUpTime)
+    }
+    onSave({sleep: newSleep})
+  }
+
   return (
     <div className="container-transparent text-center">
       <div className="container-title">Sleep</div>
-      { sleep.map((s, idx) => (
-        <div className="grid grid-cols-[1fr,auto,1fr,1fr] gap-2 m-2 items-center">
+      { sleepWithHours.map((s, idx) => (
+        <div className="grid grid-cols-[1fr,auto,1fr,1fr,auto] gap-2 m-2 items-center">
           <DatePicker
             disableDayPicker
             onChange={(date) => date !== null ? updateSleep(idx, {bedTime: date}) : updateSleep(idx, {})}
@@ -76,6 +114,9 @@ export default function SleepEntry({ date, onSave }: {date?: string; onSave: (sa
           />
           <div>
             <span>({s.hoursSleep} hours)</span>
+          </div>
+          <div>
+            <TrashIcon onClick={() => deleteSleep(s)} />
           </div>
         </div>
       ))}

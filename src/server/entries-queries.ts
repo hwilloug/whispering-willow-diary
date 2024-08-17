@@ -18,8 +18,7 @@ export async function getMyEntries() {
     with: {
       sleep: true
     }
-  })
-  
+  })  
   return entries.map(e => dtoToContent(e))
 }
 
@@ -76,6 +75,10 @@ export async function updateEntry(entryId: number, date: string, content: Partia
   }
 }
 
+export async function deleteSleep(id: number) {
+  await db.delete(sleep).where(eq(sleep.id, id)).execute()
+}
+
 function contentToDTO(content: Partial<EntryState>) {
   return {
     mood: content.mood,
@@ -101,6 +104,7 @@ function dtoToContent(dto: Record<string, any>) {
     date: dto.date,
     mood: dto.mood,
     sleep: dto.sleep.map((s: Record<string, any>) => ({
+      id: s.id,
       hoursSleep: s.hoursSleep,
       bedTime: s.bedTime ? format(s.bedTime, "HH:mm") : undefined,
       wakeUpTime: s.wakeUpTime ? format(s.wakeUpTime, "HH:mm") : undefined,
