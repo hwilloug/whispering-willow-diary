@@ -1,8 +1,8 @@
 import "server-only"
 
-import { db } from "./db"
+import { db } from "./db/models"
 import { auth } from "@clerk/nextjs/server"
-import { entries, sleep } from "./db/schema"
+import { entries, sleep } from "./db/models/journal"
 import { EntryState, SleepState } from "~/store"
 import { eq } from "drizzle-orm"
 import { format, parse } from "date-fns"

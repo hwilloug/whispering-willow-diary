@@ -1,9 +1,10 @@
-import { type Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 
 import { env } from "~/env";
 
-export default {
-  schema: "./src/server/db/schema.ts",
+export default defineConfig({
+  schema: ["./src/server/db/models/*"],
+  schemaFilter: ["public", "journal", "goals", "habits", "users"],
   dialect: "postgresql",
   dbCredentials: {
     host: env.DATABASE_URL,
@@ -12,4 +13,5 @@ export default {
     password: env.DATABASE_PASSWORD,
     database: env.DATABASE_DATABASE,
   },
-} satisfies Config;
+  out: "./src/server/db/migrations/*",
+})

@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import { getMyEntries } from "~/server/queries";
 import { DailyAffirmation } from "./_components/dailyaffirmation";
 import { MoodTracker } from "./_components/moodtracker";
 import { DiaryStats } from "./_components/diarystats";
