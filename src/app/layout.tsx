@@ -1,12 +1,13 @@
+"use client"
+
 import "~/styles/globals.css";
 
 import TopNav from "./_components/topnav";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Footer } from "./_components/footer";
-import { getMyEntries } from "~/server/queries";
-import AppInitializer from "./appinitializer";
+import { trpc } from "~/utils/trpc";
 
-export default async function RootLayout({
+function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -23,3 +24,5 @@ export default async function RootLayout({
     </ClerkProvider>
   );
 }
+
+export default trpc.withTRPC(RootLayout);

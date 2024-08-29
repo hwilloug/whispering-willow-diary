@@ -26,7 +26,7 @@ export const entries = journal.table(
   {
     id: serial("id").primaryKey(),
     userId: varchar("user_id", { length: 256 }).notNull(),
-    date: date("date").default(sql`CURRENT_TIMESTAMP`).notNull(),
+    date: varchar("date", { length: 10 }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   }
 )
 
@@ -46,7 +46,9 @@ export const sleep = journal.table(
   "sleep",
   {
     id: serial("id").primaryKey(),
+    date: varchar("date", { length: 10 }).notNull(),
     entryId: integer("entry_id").references(() => entries.id),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     bedTime: timestamp("bed_time", { withTimezone: true }),
     wakeUpTime: timestamp("wake_up_time", { withTimezone: true }),
     sleepQuality: varchar("sleep_quality", { length: 256 }),
@@ -65,7 +67,8 @@ export const affirmation = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     affirmation: text("affirmation").notNull(),
   }
 )
@@ -82,7 +85,8 @@ export const mentalHealth = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     mentalHealth: text("mental_health").array().notNull(),
   }
 )
@@ -99,7 +103,8 @@ export const feelings = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     feelings: text("feelings").array().notNull(),
   }
 )
@@ -116,7 +121,8 @@ export const substances = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     substance: text("substance").notNull(),
     amount: integer("amount").notNull().default(0),
   }
@@ -134,7 +140,8 @@ export const mood = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     mood: integer("mood").notNull(),
   }
 )
@@ -151,7 +158,8 @@ export const question = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     question: text("question").notNull(),
     answer: text("answer").notNull(),
   }
@@ -169,7 +177,8 @@ export const exercise = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     exercise: integer("exercise").notNull(),
   }
 )
@@ -186,8 +195,14 @@ export const content = journal.table(
   {
     id: serial("id").primaryKey(),
     entryId: integer("entry_id").references(() => entries.id),
-    date: date("date").notNull(),
+    date: varchar("date", { length: 10 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
     content: text("content").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date())
   }
 )
 

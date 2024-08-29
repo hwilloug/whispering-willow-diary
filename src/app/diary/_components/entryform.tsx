@@ -12,40 +12,22 @@ import SubstanceUseEntry from "./substanceuseentry";
 import ExerciseEntry from "./exerciseentry";
 import { isEqual, isFirstDayOfMonth, startOfWeek } from "date-fns";
 import { EntryState, useJournalStore } from "~/store";
+import { trpc } from "~/utils/trpc";
+import CreateEntryButton from "./createentrybutton";
 
 export default function EntryForm({date}: Readonly<{date: string}>) {
-  const { setEntries } = useJournalStore()
-  const entries = useJournalStore(state => state.entries)
+  const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
 
-  const entry = entries.find(e => e.date === date)
-  
   const [timeOfDay, setTimeOfDay] = useState("Morning")
 
-  const handleSave = async (saveObj: Partial<EntryState>) => {
-    setEntries(entries.map(e => e.date === date ? {...e, ...saveObj} : e))
-    await fetch("/diary/api/entries", {
-      method: "PUT",
-      body: JSON.stringify({entryId: entry!.id, date, content: {...saveObj}}),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
-  const handleCreate = async () => {
-    await fetch("/diary/api/entries", {
-      method: "POST",
-      body: JSON.stringify({date}),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-  }
-
-  if (!entry) {
+  if (!entry && !isLoading) {
     return (
       <div className="m-auto mt-12 w-fit">
-        <button className="styled-button" onClick={handleCreate}>Create Entry</button>
+        <CreateEntryButton date={date} />
       </div>
     )
   }
@@ -62,31 +44,17 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
           <label htmlFor="evening" className="text-outline-bold text-lg">Evening</label>
         </div>
       </div>
-      {
-        timeOfDay === "Morning" && (
-          <>
-            <SleepEntry date={date} onSave={handleSave} />
-            <MoodEntry date={date} onSave={handleSave} />
-            <DailyAffirmationEntry date={date} onSave={handleSave} />
-            <GoalsEntry cadence="Daily" />
-              {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
-              {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
-            <Entry date={date} timeOfDay={"Morning"} onSave={handleSave} />
-          </>
-        )
-      }
-      {
-        timeOfDay === "Evening" && (
-          <>
-            <MentalHealthEntry date={date} onSave={handleSave} />
-            <FeelingsEntry date={date} onSave={handleSave} />
-            <SubstanceUseEntry date={date} onSave={handleSave} />
-            <ExerciseEntry date={date} onSave={handleSave} />
-            <Entry date={date} timeOfDay={"Evening"} onSave={handleSave} />
-          </>
-        )
-      }
-      
+      <SleepEntry date={date} />
+      <MoodEntry date={date} />
+      <DailyAffirmationEntry date={date} />
+      <GoalsEntry cadence="Daily" />
+        {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
+        {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
+      <Entry date={date} />
+      <MentalHealthEntry date={date} />
+      <FeelingsEntry date={date} />
+      <SubstanceUseEntry date={date} />
+      <ExerciseEntry date={date} />
     </div>
   )
 }

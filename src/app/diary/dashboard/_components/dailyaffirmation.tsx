@@ -1,10 +1,9 @@
 "use client"
 
-import { format } from "date-fns"
-import { useJournalStore } from "~/store"
+import { trpc } from "~/utils/trpc"
 
 export function DailyAffirmation() {
-  const affirmation = useJournalStore((store) => store.entries.find((e) => e.date === format(new Date(), "yyyy-MM-dd"))?.affirmation)
+  const { data: affirmation, isLoading } = trpc.affirmation.useQuery({ date: new Date().toISOString().split("T")[0]! })
 
   if (!affirmation) return null
 
@@ -14,7 +13,7 @@ export function DailyAffirmation() {
         🌸 Today's Affirmation 🌸
       </div>
       <div className="text-white my-2 font-ubuntu-bold text-lg">
-        {affirmation}
+        {affirmation.affirmation}
       </div>
     </div>
   )

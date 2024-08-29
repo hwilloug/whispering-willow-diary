@@ -1,23 +1,57 @@
-import { DateObject } from "react-multi-date-picker"
 import { create } from "zustand"
 
 export interface EntryState {
   id: number
   date: string
-  mood?: number
+  mood?: MoodState
   sleep?: SleepState[]
-  affirmation?: string
-  mentalHealth: string[]
-  feelings: string[]
+  affirmation?: AffirmationState
+  mentalHealth: MentalHealthState[]
+  feelings: FeelingsState[]
   substances: SubstancesState[]
-  entryContent?: string
-  morningEntryContent?: string
-  dailyQuestionQ?: string
-  dailyQuestionA?: string
-  exercise?: number
+  content?: ContentState[]
+  question?: QuestionState
+  exercise?: ExerciseState
+}
+
+export interface MoodState {
+  mood: number
+  id?: number
+}
+
+export interface ExerciseState {
+  id?: number
+  minutesExercise: number
+}
+
+export interface AffirmationState {
+  id?: number
+  affirmation: string
+}
+
+export interface MentalHealthState {
+  id?: number
+  mentalHealth: string
+}
+
+export interface FeelingsState {
+  id?: number
+  feelings: string
+}
+
+export interface ContentState {
+  id?: number
+  content: string
+}
+
+export interface QuestionState {
+  id?: number
+  question: string
+  answer: string
 }
 
 export interface SubstancesState {
+  id?: number
   substance: string
   value: number
 }
@@ -31,11 +65,11 @@ export interface SleepState {
 }
 
 interface JournalState {
-  entries: EntryState[],
-  setEntries: (entry: EntryState[]) => void
+  entries: { [date: string]: EntryState },
+  setEntries: (entry: { [date: string]: EntryState }) => void
 }
 
 export const useJournalStore = create<JournalState>((set) => ({
-  entries: [],
-  setEntries: (entries: EntryState[]) => set({ entries })
+  entries: {},
+  setEntries: (entries: { [date: string]: EntryState }) => set({ entries })
 }))

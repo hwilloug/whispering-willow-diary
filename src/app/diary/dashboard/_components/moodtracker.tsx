@@ -6,6 +6,7 @@ import { EntryState, useJournalStore } from '~/store';
 import { useMemo, useState } from 'react';
 import TimeRangeButton from './timerangebutton';
 import { format, fromUnixTime, getUnixTime, parse, parseISO, sub } from 'date-fns';
+import { trpc } from '~/utils/trpc';
 
 interface HighchartsDataPoint {
   x: number,
@@ -13,8 +14,7 @@ interface HighchartsDataPoint {
 }
 
 export function MoodTracker() {  
-
-  const entries = useJournalStore((state) => state.entries)
+  const { data: mood, isLoading } = trpc.moods.useQuery()
 
   const today = new Date()
 
@@ -57,18 +57,20 @@ export function MoodTracker() {
   }
 
   const moodData = useMemo(() => {
+    if (!mood) return []
+
     let moodData: HighchartsDataPoint[] = []
-    for (let idx in entries) {
-      if (entries[idx]?.mood !== undefined) {
+    for (let idx = 0; idx < mood.length; idx++) {
+      if (mood![idx]?.mood !== undefined) {
         moodData.push({
-          x: getUnixTime(parse(entries[idx]!.date, "yyyy-MM-dd", new Date())),
-          y: entries[idx]!.mood!,
+          x: getUnixTime(parse(mood[idx]!.date, "yyyy-MM-dd", new Date())),
+          y: mood![idx]!.mood,
         })
       }
     }
     moodData.sort((a, b) => a.x - b.x)
     return moodData
-  }, [entries])
+  }, [mood])
 
   const filteredMoodData = useMemo(() => {
     return moodData.filter((d) => {

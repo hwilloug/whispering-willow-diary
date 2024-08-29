@@ -1,10 +1,21 @@
-"use server"
+"use client"
 
-import { format } from "date-fns";
-import { createEntry } from "~/server/entries-queries";
+import { trpc } from "~/utils/trpc";
 
-export default async function CreateEntryButton() {
+export default function CreateEntryButton({date}: Readonly<{date: string}>) {
+  const utils = trpc.useUtils()
+
+  const mutation = trpc.entries.post.useMutation({
+    onSuccess: () => {
+      utils.entries.invalidate()
+    }
+  })
+
+  const handleCreate = () => {
+    mutation.mutate({date})
+  }
+
   return (
-    <div><button className="styled-button" onClick={() => createEntry(format(new Date(), "yyyy-MM-dd"))}>Create Entry</button></div>
+    <button className="styled-button" disabled={mutation.isPending} onClick={handleCreate}>Create Entry</button>
   )
 }

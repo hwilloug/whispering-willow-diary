@@ -1,17 +1,11 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Checkbox } from "~/components/ui/checkbox";
-import { EntryState, useJournalStore } from "~/store";
+import { EntryState } from "~/store";
+import { trpc } from "~/utils/trpc";
 
-export default function FeelingsEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
-  const feelings = useJournalStore((store) => store.entries.find((e) => e.date === date)?.feelings) || []
+export default function FeelingsEntry({ date }: {date: string}) {
+  const { data: feelings, isLoading } = trpc.feelings.one.useQuery({ date })
 
-  const handleFeelingsChange = (feeling: string) => {
-    if (feelings.includes(feeling)) {
-      onSave({feelings: feelings.filter((f) => f !== feeling)})
-    } else {
-      onSave({feelings: [...feelings, feeling]})
-    }
-  }
 
   function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
     return (
@@ -20,7 +14,7 @@ export default function FeelingsEntry({ date, onSave }: {date?: string; onSave: 
         <AccordionContent className="flex gap-4 flex-wrap justify-center">
           {feelingsList.map((f) => (
             <div key={f} className="flex gap-2 items-center">
-              <Checkbox checked={feelings.includes(f)} onClick={() => handleFeelingsChange(f)} /><span>{f}</span>
+              <Checkbox checked={feelings?.feelings.includes(f)} /><span>{f}</span>
             </div>
           ))}
         </AccordionContent>

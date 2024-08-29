@@ -1,6 +1,8 @@
 import MultipleSelector, { Option } from "~/components/ui/multiselect"
 import { EntryState, useJournalStore } from "~/store";
+import { trpc } from "~/utils/trpc";
 
+// TODO - move this to user settings
 export const mentalHealthSymptoms = [
   "Anxiety",
   "Avoidance",
@@ -25,19 +27,15 @@ export const mentalHealthSymptoms = [
   "Suicidal Ideation",
 ]
 
-export default function MentalHealthEntry({ date, onSave }: {date?: string; onSave: (saveObj: Partial<EntryState>) => void}) {
-  const mentalHealth = useJournalStore((store) => store.entries.find((e) => e.date === date)?.mentalHealth) || []
+export default function MentalHealthEntry({ date }: {date: string}) {
+  const { data: mentalHealth, isLoading } = trpc.mentalHealth.one.useQuery({ date })
 
-  const mentalHealthOptions = mentalHealth.map((s) => ({ label: s, value: s}))
-
-  const handleSubmit = (options: Option[]) => {
-    onSave({mentalHealth: options.map((o) => o.value)})
-  }
+  const mentalHealthOptions = mentalHealth?.mentalHealth.map((s) => ({ label: s, value: s}))
 
   return (
     <div className="container-transparent">
       <div className="container-title">Mental Health & Behavior</div>
-      <MultipleSelector className="bg-[--primary]" badgeClassName="bg-[--primary-dark]" value={mentalHealthOptions} defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s}))} onChange={(e) => handleSubmit(e)} />
+      <MultipleSelector className="bg-[--primary]" badgeClassName="bg-[--primary-dark]" value={mentalHealthOptions} defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s}))} />
     </div>
   )
 }
