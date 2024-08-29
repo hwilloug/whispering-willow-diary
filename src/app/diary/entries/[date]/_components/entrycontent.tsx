@@ -13,9 +13,13 @@ export default function EntryContent() {
     <div className="bg-amber-300 rounded-xl p-2">
       <h5 className="text-outline-bold text-2xl text-center my-4">Entries</h5>
       {
-        data?.map((entry) => (
-          <div key={entry.id} className="text-justify m-4">{entry.content}</div>
-        ))
+        !isLoading && data?.length === 0 ? (
+          <div className="text-center m-4">None</div>
+        ) : (
+          data?.map((entry) => (
+            <div key={entry.id} className="text-justify m-4">{entry.content}</div>
+          ))
+        )
       }
     </div>
   )

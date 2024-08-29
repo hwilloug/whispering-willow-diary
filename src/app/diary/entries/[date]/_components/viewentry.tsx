@@ -51,7 +51,7 @@ export default function ViewEntry() {
           <MentalHealthContent />
           <FeelingsContent />
         </div>
-        <div className="grid grid-cols-[1fr,2fr] gap-4">
+        <div className="grid grid-cols-[2fr,1fr] gap-4">
           <DailyQuestionContent />
           <ExerciseContent />
         </div>

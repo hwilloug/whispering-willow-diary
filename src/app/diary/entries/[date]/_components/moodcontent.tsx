@@ -9,9 +9,15 @@ export default function MoodContent() {
   const { data, isLoading } = trpc.mood.one.useQuery({ date })
 
   return (
-    <div className="bg-[--primary] rounded-xl">
+    <div className="bg-[--primary] rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Mood</h5>
-      <div className="text-center m-4">{data?.mood}</div>
+      {
+        !isLoading && !data ? (
+          <div className="text-center m-4">None</div>
+        ) : (
+          <div className="text-center m-4">{data?.mood}</div>
+        )
+      }
     </div>
   )
 }

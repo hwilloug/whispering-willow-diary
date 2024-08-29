@@ -28,9 +28,9 @@ export default function SleepContent() {
   }, [sleep])
   
   return (
-    <div className="bg-blue-300 rounded-xl">
+    <div className="bg-blue-300 rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Sleep</h5>
-      <div className="text-center m-4">{hoursSleep}</div>
+      <div className="text-center m-4">{hoursSleep} hours</div>
     </div>
   )
 }

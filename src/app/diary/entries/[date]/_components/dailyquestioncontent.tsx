@@ -11,8 +11,15 @@ export default function DailyQuestionContent() {
   return (
     <div className="bg-blue-300 rounded-xl my-4 p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Daily Question</h5>
-      <div className="text-center text-lg m-4">{data?.question}</div>
-      <div className="text-center m-4">{data?.answer}</div>
+      { !isLoading && !data ? (
+          <div className="text-center m-4">None</div>
+        ) : (
+          <>
+            <div className="text-center text-lg m-4">{data?.question}</div>
+            <div className="text-center m-4">{data?.answer}</div>
+          </>
+        )
+      }
     </div>
   )
 }
