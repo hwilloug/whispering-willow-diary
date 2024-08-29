@@ -1,8 +1,9 @@
 import { useParams } from "next/navigation"
+import MentalHealthEntry from "~/app/diary/_components/mentalhealthentry"
 import { MentalHealthState } from "~/store"
 import { trpc } from "~/utils/trpc"
 
-export default function MentalHealthContent() {
+export default function MentalHealthContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
   if (!date || typeof date !== "string") return null
@@ -11,9 +12,11 @@ export default function MentalHealthContent() {
 
   return (
     <div className="bg-pink-300 rounded-xl p-4 mt-4">
-      <h5 className="text-outline-bold text-2xl text-center my-4">Mental Health</h5>
+      <h5 className="text-outline-bold text-2xl text-center my-4">Mental Health & Behavior</h5>
       <div className="flex flex-wrap justify-center gap-4">{
-        !isLoading && !mentalHealth?.mentalHealth ? (
+        isEditMode ? (
+          <MentalHealthEntry date={date} />
+        ) : !isLoading && !mentalHealth?.mentalHealth ? (
           <div className="text-center m-4">None</div>
         ) : (
           mentalHealth?.mentalHealth.map((item: string, index: number) => (

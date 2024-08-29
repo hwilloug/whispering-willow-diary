@@ -36,8 +36,7 @@ export default function SleepEntry({ date }: { date: string }) {
   }, [sleepWithHours])
 
   return (
-    <div className="container-transparent text-center">
-      <div className="container-title">Sleep</div>
+    <>
       { sleepWithHours?.map((s, idx) => (
         <div className="grid grid-cols-[1fr,auto,1fr,1fr,auto] gap-2 m-2 items-center">
           <DatePicker
@@ -73,6 +72,6 @@ export default function SleepEntry({ date }: { date: string }) {
       <div className="w-fit m-auto">
         <button className="styled-button" onClick={() => ({})}>Add Sleep</button>
       </div>
-    </div>
+    </>
   )
 }

@@ -1,7 +1,8 @@
 import { useParams } from "next/navigation";
+import SubstanceUseEntry from "~/app/diary/_components/substanceuseentry";
 import { trpc } from "~/utils/trpc";
 
-export default function SubstanceUseContent() {
+export default function SubstanceUseContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
   if (!date || typeof date !== "string") return null
@@ -12,7 +13,9 @@ export default function SubstanceUseContent() {
     <div className="bg-red-500 rounded-xl my-4 p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Substance Use</h5>
       {
-        !isLoading && data?.length === 0 ? (
+        isEditMode ? (
+          <SubstanceUseEntry date={date} />
+        ) : !isLoading && data?.length === 0 ? (
           <div className="text-center m-4">None</div>
         ) : (
           data?.map((s) => (

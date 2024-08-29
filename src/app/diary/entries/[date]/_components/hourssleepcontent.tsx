@@ -1,9 +1,10 @@
 import { differenceInMinutes, parse } from "date-fns"
 import { useParams } from "next/navigation"
 import { useMemo } from "react"
+import SleepEntry from "~/app/diary/_components/sleepentry"
 import { trpc } from "~/utils/trpc"
 
-export default function SleepContent() {
+export default function SleepContent({isEditMode}: { isEditMode: boolean }) {
   const { date } = useParams()
 
   if (!date || typeof date !== "string") return null
@@ -30,7 +31,11 @@ export default function SleepContent() {
   return (
     <div className="bg-blue-300 rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Sleep</h5>
-      <div className="text-center m-4">{hoursSleep} hours</div>
+      {
+        isEditMode ? (
+          <SleepEntry date={date} />
+        ) : <div className="text-center m-4">{hoursSleep} hours</div>
+      }
     </div>
   )
 }

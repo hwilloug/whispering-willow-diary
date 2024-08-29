@@ -263,8 +263,6 @@ export default function FeelingsEntry({ date }: {date: string}) {
   ]
 
   return (
-    <div className="container-transparent">
-      <div className="container-title">Feelings</div>
       <Accordion type="multiple">
         <FeelingsAccordion title="Accepting/Open" feelingsList={acceptingOpen} />
         <FeelingsAccordion title="Aliveness/Joy" feelingsList={alivenessJoy} />
@@ -285,6 +283,5 @@ export default function FeelingsEntry({ date }: {date: string}) {
         <FeelingsAccordion title="Stressed/Tense" feelingsList={stressedTense} />
         <FeelingsAccordion title="Unsettled/Doubt" feelingsList={unsettledDoubt} />
       </Accordion>
-    </div>
   )
 }

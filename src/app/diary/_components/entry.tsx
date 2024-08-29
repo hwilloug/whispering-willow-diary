@@ -1,23 +1,27 @@
+import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import { trpc } from "~/utils/trpc";
 
-export default function Entry({ date }: {date: string;}) {
+export default function Entry() {
+  const { date } = useParams()
+
+  if (!date || typeof date !== "string") return null
+
   const { data: content, isLoading} = trpc.content.one.useQuery({ date })
 
+  if (isLoading) return <div>Loading...</div>
+
   return (
-    <div className="container-transparent">
-      <div className="container-title mb-4">Entries</div>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && content?.map((c, idx) => (
+    <>
+      {
+        content?.map((c, idx) => (
         <div key={idx}>
           <textarea className="w-full p-4 bg-[--primary]" value={c.content} />
         </div>
       ))}
-      {!isLoading && content?.length === 0 && (
-        <div className="w-fit m-auto">
-          <button className="styled-button m-auto">Add Entry</button>
-        </div>
-      )}
-    </div>
+      <div className="w-fit m-auto my-4">
+        <button className="styled-button m-auto">Add Entry</button>
+      </div>
+    </>
   )
 }

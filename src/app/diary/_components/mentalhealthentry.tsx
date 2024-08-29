@@ -33,9 +33,6 @@ export default function MentalHealthEntry({ date }: {date: string}) {
   const mentalHealthOptions = mentalHealth?.mentalHealth.map((s) => ({ label: s, value: s}))
 
   return (
-    <div className="container-transparent">
-      <div className="container-title">Mental Health & Behavior</div>
-      <MultipleSelector className="bg-[--primary]" badgeClassName="bg-[--primary-dark]" value={mentalHealthOptions} defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s}))} />
-    </div>
+    <MultipleSelector className="bg-[--primary]" badgeClassName="bg-[--primary-dark]" value={mentalHealthOptions} defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s}))} />
   )
 }

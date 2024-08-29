@@ -21,18 +21,15 @@ export default function SubstanceUseEntry({ date }: {date: string}) {
 
 
   return (
-    <div className="container-transparent">
-      <div className="container-title">Substance Use</div>
-      <div className="grid grid-cols-2 gap-4">
-        {allSubstances.map((s) => {
-          const substance = substances?.find((substance) => substance.substance === s)
-          return (
-            <div className="flex items-center gap-2" key={s}>
-              <Input type="number" value={substance?.amount}  className="max-w-20 bg-[--primary]" /><span>{s}</span>
-            </div>
-          )
-        })}
-      </div>
+    <div className="grid grid-cols-2 gap-4">
+      {allSubstances.map((s) => {
+        const substance = substances?.find((substance) => substance.substance === s)
+        return (
+          <div className="flex items-center gap-2" key={s}>
+            <Input type="number" value={substance?.amount}  className="max-w-20 bg-red-400" /><span>{s}</span>
+          </div>
+        )
+      })}
     </div>
   )
 }

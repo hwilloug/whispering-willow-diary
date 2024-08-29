@@ -1,7 +1,8 @@
 import { useParams } from "next/navigation"
+import ExerciseEntry from "~/app/diary/_components/exerciseentry"
 import { trpc } from "~/utils/trpc"
 
-export default function ExerciseContent() {
+export default function ExerciseContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
   if (!date || typeof date !== "string") return null
@@ -11,7 +12,11 @@ export default function ExerciseContent() {
   return (
     <div className="bg-lime-300 my-4 p-4 rounded-xl">
       <h5 className="text-outline-bold text-2xl text-center my-4">Exercise</h5>
-      <div className="text-center my-4">{data?.exercise || 0} minutes</div>
+      {
+        isEditMode ? (
+          <ExerciseEntry date={date} />
+        ) : <div className="text-center my-4">{data?.exercise || 0} minutes</div>
+      }
     </div>
   )
 }

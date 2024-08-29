@@ -7,12 +7,9 @@ export default function DailyAffirmationEntry({ date }: {date: string;}) {
   const { data: affirmation, isLoading } = trpc.affirmation.one.useQuery({ date })
 
   return (
-    <div className="container-transparent">
-      <div className="container-title mb-4">Daily Affirmation</div>
       <div>
         {isLoading && <div>Loading...</div>}
-        {!isLoading && <textarea className="w-full p-4 bg-[--primary]" value={affirmation?.affirmation} />}
+        {!isLoading && <textarea className="w-full p-4 bg-[--primary] text-black" value={affirmation?.affirmation} />}
       </div>
-    </div>
   )
 }
