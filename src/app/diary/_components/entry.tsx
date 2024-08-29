@@ -14,7 +14,9 @@ export default function Entry({ date }: {date: string;}) {
         </div>
       ))}
       {!isLoading && content?.length === 0 && (
-        <button className="styled-button">Create Entry</button>
+        <div className="w-fit m-auto">
+          <button className="styled-button m-auto">Add Entry</button>
+        </div>
       )}
     </div>
   )

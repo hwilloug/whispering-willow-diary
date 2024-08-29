@@ -18,8 +18,6 @@ import CreateEntryButton from "./createentrybutton";
 export default function EntryForm({date}: Readonly<{date: string}>) {
   const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
 
-  const [timeOfDay, setTimeOfDay] = useState("Morning")
-
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -33,28 +31,22 @@ export default function EntryForm({date}: Readonly<{date: string}>) {
   }
 
   return (
-    <div className="max-w-3xl m-auto">
-      <div className="flex gap-6 justify-center m-4">
-        <div className="flex gap-2">
-          <input type="radio" id="morning" name="morning" checked={timeOfDay === "Morning"} onChange={() => setTimeOfDay("Morning")} />
-          <label htmlFor="morning" className="text-outline-bold text-lg">Morning</label>
-        </div>
-        <div className="flex gap-2">
-          <input type="radio" id="evening" checked={timeOfDay === "Evening"} onChange={() => setTimeOfDay("Evening")} />
-          <label htmlFor="evening" className="text-outline-bold text-lg">Evening</label>
-        </div>
+    <>
+      <div className="md:grid grid-cols-2">
+        <SleepEntry date={date} />
+        <MoodEntry date={date} />
       </div>
-      <SleepEntry date={date} />
-      <MoodEntry date={date} />
-      <DailyAffirmationEntry date={date} />
-      <GoalsEntry cadence="Daily" />
-        {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
-        {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
-      <Entry date={date} />
-      <MentalHealthEntry date={date} />
-      <FeelingsEntry date={date} />
-      <SubstanceUseEntry date={date} />
-      <ExerciseEntry date={date} />
-    </div>
+      <div>
+        <DailyAffirmationEntry date={date} />
+        <GoalsEntry cadence="Daily" />
+          {isEqual(startOfWeek(date), date) && <GoalsEntry cadence="Weekly" />}
+          {isFirstDayOfMonth(date) && <GoalsEntry cadence="Monthly" />}
+        <Entry date={date} />
+        <MentalHealthEntry date={date} />
+        <FeelingsEntry date={date} />
+        <SubstanceUseEntry date={date} />
+        <ExerciseEntry date={date} />
+      </div>
+    </>
   )
 }

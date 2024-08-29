@@ -1,8 +1,36 @@
-export default function SleepContent({content}: {content: string | number}) {
+import { differenceInMinutes, parse } from "date-fns"
+import { useParams } from "next/navigation"
+import { useMemo } from "react"
+import { trpc } from "~/utils/trpc"
+
+export default function SleepContent() {
+  const { date } = useParams()
+
+  if (!date || typeof date !== "string") return null
+
+  const { data: sleep, isLoading} = trpc.sleep.one.useQuery({ date })
+
+  const hoursSleep = useMemo(() => {
+
+    function getHoursSleep(bedTime: string, wakeUpTime: string) {
+      const bedTimeDate = parse(bedTime, "HH:mm", new Date())
+      const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
+      const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
+      let diff = diffMin / 60
+      if (diff < 0) {
+        diff += 24
+      }
+      return diff
+    }
+
+    if (!sleep) return 0
+    return sleep.reduce((acc, sleep) => acc + (sleep.bedTime && sleep.wakeUpTime ? getHoursSleep(sleep.bedTime, sleep.wakeUpTime) : 0), 0).toFixed(2)
+  }, [sleep])
+  
   return (
     <div className="bg-blue-300 rounded-xl">
       <h5 className="text-outline-bold text-2xl text-center my-4">Sleep</h5>
-      <div className="text-center m-4">{content}</div>
+      <div className="text-center m-4">{hoursSleep}</div>
     </div>
   )
 }

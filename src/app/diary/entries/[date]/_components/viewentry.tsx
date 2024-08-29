@@ -1,6 +1,6 @@
 "use client"
 
-import MorningEntryContent from "../../[date]/_components/morningentrycontent"
+import MorningEntryContent from "./entrycontent"
 import SleepContent from "../../[date]/_components/hourssleepcontent"
 import MoodContent from "../../[date]/_components/moodcontent"
 import AffirmationContent from "../../[date]/_components/affirmationcontent"
@@ -9,7 +9,6 @@ import FeelingsContent from "../../[date]/_components/feelingscontent"
 import ExerciseContent from "../../[date]/_components/exercisecontent"
 import DailyQuestionContent from "../../[date]/_components/dailyquestioncontent"
 import SubstanceUseContent from "../../[date]/_components/substanceusecontent"
-import EveningEntryContent from "../../[date]/_components/eveningentrycontent"
 import TrashIcon from "../../../_components/icons/trashicon"
 import PencilIcon from "../../../_components/icons/pencilicon"
 import Link from "next/link"
@@ -18,28 +17,20 @@ import { differenceInMinutes, format, parse } from "date-fns"
 import { useMemo } from "react"
 import NoEntry from "../../_components/noentry"
 import { useParams } from "next/navigation"
+import { trpc } from "~/utils/trpc"
+import EntryContent from "./entrycontent"
 
 
 export default function ViewEntry() {
   const { date } = useParams()
-  
-  const entry = useJournalStore(state => state.entries).find(entry => entry.date === date)
 
-  const hoursSleep = useMemo(() => {
-    function getHoursSleep(bedTime: string, wakeUpTime: string) {
-      const bedTimeDate = parse(bedTime, "HH:mm", new Date())
-      const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
-      const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
-      let diff = diffMin / 60
-      if (diff < 0) {
-        diff += 24
-      }
-      return diff
-    }
+  if (!date || typeof date !== "string") return <div>Invalid date</div>
 
-    if (!entry?.sleep) return 0
-    return entry.sleep.reduce((acc, sleep) => acc + (sleep.bedTime && sleep.wakeUpTime ? getHoursSleep(sleep.bedTime, sleep.wakeUpTime) : 0), 0).toFixed(2)
-  }, [entry?.sleep])
+  const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   if (!entry) return <NoEntry />
   
@@ -51,48 +42,24 @@ export default function ViewEntry() {
       </div>
       <div className="text-outline-bold text-4xl text-center py-6">{format(parse(date! as string, "yyyy-MM-dd", new Date()), "eeee, LLLL d, yyyy")}</div>
       <div>
-        { entry.affirmation && 
-          <AffirmationContent content={entry.affirmation} />
-        }
+        <AffirmationContent />
         <div className="grid grid-cols-[1fr,2fr] m-4 gap-4">
-          {entry.mood && 
-            <MoodContent mood={entry.mood} />
-          }
-          { entry.sleep &&
-            <SleepContent content={hoursSleep} />
-          }
+          <MoodContent />
+          <SleepContent />
         </div>
-        <div className="m-4">
-          {entry.morningEntryContent && 
-            <MorningEntryContent content={entry.morningEntryContent} />
-          }
-        </div>
-        <hr className="border-[--secondary]" />
         <div className="grid grid-cols-2 gap-4">
-          { entry.mentalHealth.length > 0 &&
-            <MentalHealthContent mentalHealth={entry.mentalHealth} />
-          }
-          { entry.feelings.length > 0 &&
-            <FeelingsContent feelings={entry.feelings} />
-          }
+          <MentalHealthContent />
+          <FeelingsContent />
         </div>
         <div className="grid grid-cols-[1fr,2fr] gap-4">
-          { entry.dailyQuestionA && 
-            <DailyQuestionContent question={entry.dailyQuestionQ!} answer={entry.dailyQuestionA} />
-          }
-          { entry.exercise &&
-            <ExerciseContent content={entry.exercise || 0} />
-          }
+          <DailyQuestionContent />
+          <ExerciseContent />
         </div>
         <div>
-          { entry.substances?.length > 0 &&
-            <SubstanceUseContent substances={entry.substances} />
-          }
+          <SubstanceUseContent />
         </div>
         <div>
-          { entry.entryContent &&
-            <EveningEntryContent content={entry.entryContent} />
-          }
+          <EntryContent />
         </div>
       </div>
     </div>
