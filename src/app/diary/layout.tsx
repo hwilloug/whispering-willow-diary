@@ -1,15 +1,12 @@
-import AppInitializer from "../appinitializer";
-import SideBar from "./_components/sidebar";
+import SideBar from "./_components/sidebar"
 
 export default function DiaryLayout({
-  children,
+  children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <AppInitializer entries={{}}>
+    <>
       <SideBar />
-      <div className="ml-10">
-        {children}
-      </div>
-    </AppInitializer>
+      <div className="ml-10">{children}</div>
+    </>
   )
 }

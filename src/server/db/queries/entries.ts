@@ -22,11 +22,11 @@ export async function getMyEntries() {
       content: true,
       mood: true,
       exercise: true,
-      question: true,
+      question: true
     }
   })
 
-  return entries.map(e => entryDTOToContent(e))
+  return entries.map((e) => entryDTOToContent(e))
 }
 
 export async function getMyEntry(date: string) {
@@ -54,13 +54,16 @@ export async function createEntry(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const entry = await db.query.entries.findFirst({
-    where: (model, { eq }) => eq(model.date, date),
+    where: (model, { eq }) => eq(model.date, date)
   })
 
   if (entry) throw new Error("Entry already exists")
 
-  await db.insert(entries).values({
-    userId: user.userId,
-    date,
-  }).execute()
+  await db
+    .insert(entries)
+    .values({
+      userId: user.userId,
+      date
+    })
+    .execute()
 }

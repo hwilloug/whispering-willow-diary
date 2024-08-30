@@ -1,8 +1,13 @@
-import { useParams } from "next/navigation";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
-import { Checkbox } from "~/components/ui/checkbox";
-import { EntryState } from "~/store";
-import { trpc } from "~/utils/trpc";
+import { useParams } from "next/navigation"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "~/components/ui/accordion"
+import { Checkbox } from "~/components/ui/checkbox"
+import { EntryState } from "~/store"
+import { trpc } from "~/utils/trpc"
 
 export default function FeelingsEntry() {
   const { date } = useParams()
@@ -11,14 +16,20 @@ export default function FeelingsEntry() {
 
   const { data: feelings, isLoading } = trpc.feelings.one.useQuery({ date })
 
-  function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
+  function FeelingsAccordion({
+    feelingsList,
+    title
+  }: Readonly<{ feelingsList: string[]; title: string }>) {
     return (
       <AccordionItem value={title} className="border-b-0">
-        <AccordionTrigger className="flex justify-center gap-4 font-bold">{title}</AccordionTrigger>
+        <AccordionTrigger className="flex justify-center gap-4 font-bold">
+          {title}
+        </AccordionTrigger>
         <AccordionContent className="flex gap-4 flex-wrap justify-center">
           {feelingsList.map((f) => (
             <div key={f} className="flex gap-2 items-center">
-              <Checkbox checked={feelings?.feelings.includes(f)} /><span>{f}</span>
+              <Checkbox checked={feelings?.feelings.includes(f)} />
+              <span>{f}</span>
             </div>
           ))}
         </AccordionContent>
@@ -36,7 +47,7 @@ export default function FeelingsEntry() {
     "Present",
     "Relaxed",
     "Serene",
-    "Trusting",
+    "Trusting"
   ]
 
   const alivenessJoy = [
@@ -64,7 +75,7 @@ export default function FeelingsEntry() {
     "Renewed",
     "Satisfied",
     "Thrilled",
-    "Vibrant",
+    "Vibrant"
   ]
 
   const angryAnnoyed = [
@@ -91,7 +102,7 @@ export default function FeelingsEntry() {
     "Pissed",
     "Resentful",
     "Upset",
-    "Vindictave",
+    "Vindictave"
   ]
 
   const courageousPowerful = [
@@ -106,7 +117,7 @@ export default function FeelingsEntry() {
     "Proud",
     "Strong",
     "Worthy",
-    "Valiant",
+    "Valiant"
   ]
 
   const connectedLoving = [
@@ -119,7 +130,7 @@ export default function FeelingsEntry() {
     "Present",
     "Safe",
     "Warm",
-    "Worthy",
+    "Worthy"
   ]
 
   const curious = [
@@ -129,7 +140,7 @@ export default function FeelingsEntry() {
     "Interested",
     "Intrigued",
     "Involved",
-    "Stimulated",
+    "Stimulated"
   ]
 
   const despairSad = [
@@ -151,7 +162,7 @@ export default function FeelingsEntry() {
     "Unhappy",
     "Upset",
     "Weary",
-    "Yearning",
+    "Yearning"
   ]
 
   const disconnectedNumb = [
@@ -168,7 +179,7 @@ export default function FeelingsEntry() {
     "Resistant",
     "Shut Down",
     "Uneasy",
-    "Withdrawn",
+    "Withdrawn"
   ]
 
   const embarrassedShame = [
@@ -179,7 +190,7 @@ export default function FeelingsEntry() {
     "Self-conscious",
     "Useless",
     "Weak",
-    "Worthless",
+    "Worthless"
   ]
 
   const fear = [
@@ -193,7 +204,7 @@ export default function FeelingsEntry() {
     "Paralyzed",
     "Scared",
     "Terrified",
-    "Worried",
+    "Worried"
   ]
 
   const fragile = ["Helpless", "Sensitive"]
@@ -208,7 +219,7 @@ export default function FeelingsEntry() {
     "Lucky",
     "Moved",
     "Thankful",
-    "Touched",
+    "Touched"
   ]
 
   const guilt = ["Regret", "Remorseful", "Sorry"]
@@ -225,7 +236,7 @@ export default function FeelingsEntry() {
     "Self-loving",
     "Serene",
     "Vulnerable",
-    "Warm",
+    "Warm"
   ]
 
   const stressedTense = [
@@ -243,7 +254,7 @@ export default function FeelingsEntry() {
     "Shaken",
     "Tight",
     "Weary",
-    "Worn out",
+    "Worn out"
   ]
 
   const unsettledDoubt = [
@@ -263,29 +274,44 @@ export default function FeelingsEntry() {
     "Suspicious",
     "Ungrounded",
     "Unsure",
-    "Worried",
+    "Worried"
   ]
 
   return (
-      <Accordion type="multiple">
-        <FeelingsAccordion title="Accepting/Open" feelingsList={acceptingOpen} />
-        <FeelingsAccordion title="Aliveness/Joy" feelingsList={alivenessJoy} />
-        <FeelingsAccordion title="Angry/Annoyed" feelingsList={angryAnnoyed} />
-        <FeelingsAccordion title="Courageous/Powerful" feelingsList={courageousPowerful} />
-        <FeelingsAccordion title="Connected/Loving" feelingsList={connectedLoving} />
-        <FeelingsAccordion title="Curious" feelingsList={curious} />
-        <FeelingsAccordion title="Despair/Sad" feelingsList={despairSad} />
-        <FeelingsAccordion title="Disconnected/Numb" feelingsList={disconnectedNumb} />
-        <FeelingsAccordion title="Embarrassed/Shame" feelingsList={embarrassedShame} />
-        <FeelingsAccordion title="Fear" feelingsList={fear} />
-        <FeelingsAccordion title="Fragile" feelingsList={fragile} />
-        <FeelingsAccordion title="Grateful" feelingsList={grateful} />
-        <FeelingsAccordion title="Guilt" feelingsList={guilt} />
-        <FeelingsAccordion title="Hopeful" feelingsList={hopeful} />
-        <FeelingsAccordion title="Powerless" feelingsList={powerless} />
-        <FeelingsAccordion title="Tender" feelingsList={tender} />
-        <FeelingsAccordion title="Stressed/Tense" feelingsList={stressedTense} />
-        <FeelingsAccordion title="Unsettled/Doubt" feelingsList={unsettledDoubt} />
-      </Accordion>
+    <Accordion type="multiple">
+      <FeelingsAccordion title="Accepting/Open" feelingsList={acceptingOpen} />
+      <FeelingsAccordion title="Aliveness/Joy" feelingsList={alivenessJoy} />
+      <FeelingsAccordion title="Angry/Annoyed" feelingsList={angryAnnoyed} />
+      <FeelingsAccordion
+        title="Courageous/Powerful"
+        feelingsList={courageousPowerful}
+      />
+      <FeelingsAccordion
+        title="Connected/Loving"
+        feelingsList={connectedLoving}
+      />
+      <FeelingsAccordion title="Curious" feelingsList={curious} />
+      <FeelingsAccordion title="Despair/Sad" feelingsList={despairSad} />
+      <FeelingsAccordion
+        title="Disconnected/Numb"
+        feelingsList={disconnectedNumb}
+      />
+      <FeelingsAccordion
+        title="Embarrassed/Shame"
+        feelingsList={embarrassedShame}
+      />
+      <FeelingsAccordion title="Fear" feelingsList={fear} />
+      <FeelingsAccordion title="Fragile" feelingsList={fragile} />
+      <FeelingsAccordion title="Grateful" feelingsList={grateful} />
+      <FeelingsAccordion title="Guilt" feelingsList={guilt} />
+      <FeelingsAccordion title="Hopeful" feelingsList={hopeful} />
+      <FeelingsAccordion title="Powerless" feelingsList={powerless} />
+      <FeelingsAccordion title="Tender" feelingsList={tender} />
+      <FeelingsAccordion title="Stressed/Tense" feelingsList={stressedTense} />
+      <FeelingsAccordion
+        title="Unsettled/Doubt"
+        feelingsList={unsettledDoubt}
+      />
+    </Accordion>
   )
 }

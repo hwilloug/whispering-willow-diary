@@ -69,12 +69,12 @@
   }
   @font-face {
     font-family: "Ubuntu";
-    src: local('Ubuntu'), url("/fonts/Ubuntu-Regular.ttf");
+    src: local("Ubuntu"), url("/fonts/Ubuntu-Regular.ttf");
   }
 
   @font-face {
     font-family: "Ubuntu-Bold";
-    src: local('Ubuntu-Bold'), url("/fonts/Ubuntu-Bold.ttf");
+    src: local("Ubuntu-Bold"), url("/fonts/Ubuntu-Bold.ttf");
   }
 
   @font-face {
@@ -84,7 +84,7 @@
 
   @font-face {
     font-family: "DancingScript";
-    src: local('DancingScript'), url("/fonts/DancingScript-Bold.ttf");
+    src: local("DancingScript"), url("/fonts/DancingScript-Bold.ttf");
   }
 }
 
@@ -93,15 +93,15 @@
 }
 
 .font-ubuntu {
-  font-family: "Ubuntu"
+  font-family: "Ubuntu";
 }
 
 .font-ubuntu-bold {
-  font-family: "Ubuntu-Bold"
+  font-family: "Ubuntu-Bold";
 }
 
 body {
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
 
   background-image: url("/background_2.jpeg");
   background-size: cover;
@@ -113,13 +113,21 @@ body {
 .text-outline-bold {
   font-family: "PoetsenOne";
   color: black;
-  text-shadow: 1px 1px 0px #e0f0bb, -1px 1px 0px #e0f0bb, 1px -1px 0px #e0f0bb, -1px -1px 0px #e0f0bb;
+  text-shadow:
+    1px 1px 0px #e0f0bb,
+    -1px 1px 0px #e0f0bb,
+    1px -1px 0px #e0f0bb,
+    -1px -1px 0px #e0f0bb;
 }
 
 .text-outline-bold-inverted {
   font-family: "PoetsenOne";
   color: #e0f0bb;
-  text-shadow: 1px 1px 0px black, -1px 1px 0px black, 1px -1px 0px black, -1px -1px 0px black;
+  text-shadow:
+    1px 1px 0px black,
+    -1px 1px 0px black,
+    1px -1px 0px black,
+    -1px -1px 0px black;
 }
 
 .container-transparent {
@@ -134,20 +142,19 @@ body {
   font-family: "PoetsenOne";
   font-size: x-large;
   text-align: center;
-  margin-bottom: 16px
+  margin-bottom: 16px;
 }
-
 
 /* todo move these somewhere better */
 .sidenav-svg svg {
   margin: auto;
   width: 22px;
-  transition: width ease-in-out .2s;
+  transition: width ease-in-out 0.2s;
 }
 
 .sidenav-animation {
   width: 40px;
-  transition: width ease-in-out .2s;
+  transition: width ease-in-out 0.2s;
 }
 
 .sidenav-animation:hover {

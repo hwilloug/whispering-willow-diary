@@ -1,26 +1,34 @@
-import { useMemo } from "react";
-import { cn } from "~/lib/utils";
+import { useMemo } from "react"
+import { cn } from "~/lib/utils"
 
-export default function FaceIcon({color, variant, className, value, onClick}: Readonly<{ value: number; color: string; variant: "distressed" | "bad" | "neutral" | "happy" | "ecstatic"; className?: string; onClick?: (mood: number) => void }>) {
+export default function FaceIcon({
+  color,
+  variant,
+  className,
+  value,
+  onClick
+}: Readonly<{
+  value: number
+  color: string
+  variant: "distressed" | "bad" | "neutral" | "happy" | "ecstatic"
+  className?: string
+  onClick?: (mood: number) => void
+}>) {
   const mouth = useMemo(() => {
     switch (variant) {
       case "distressed":
-        return ( <>
-        <path d="M8,18 Q12,14 16,18" />
-        <rect x="8" y="18" width="8" height="0.25" />
-      </>)
+        return (
+          <>
+            <path d="M8,18 Q12,14 16,18" />
+            <rect x="8" y="18" width="8" height="0.25" />
+          </>
+        )
       case "bad":
-        return (
-          <path d="M8,17 Q12,14 16,17" />
-        )
+        return <path d="M8,17 Q12,14 16,17" />
       case "neutral":
-        return (
-          <path d="M8,17 16,17" />
-        )
+        return <path d="M8,17 16,17" />
       case "happy":
-        return (
-          <path d="M8,17 Q12,20 16,17" />
-        )
+        return <path d="M8,17 Q12,20 16,17" />
       case "ecstatic":
         return (
           <>
@@ -30,7 +38,7 @@ export default function FaceIcon({color, variant, className, value, onClick}: Re
         )
     }
   }, [variant])
-  
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

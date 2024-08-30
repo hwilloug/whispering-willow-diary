@@ -1,6 +1,6 @@
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit"
 
-import { env } from "~/env";
+import { env } from "~/env"
 
 export default defineConfig({
   schema: ["./src/server/db/models/*"],
@@ -11,7 +11,7 @@ export default defineConfig({
     port: parseInt(env.DATABASE_PORT),
     user: env.DATABASE_USER,
     password: env.DATABASE_PASSWORD,
-    database: env.DATABASE_DATABASE,
+    database: env.DATABASE_DATABASE
   },
-  out: "./src/server/db/migrations/*",
+  out: "./src/server/db/migrations/*"
 })

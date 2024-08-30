@@ -18,7 +18,6 @@ import { trpc } from "~/utils/trpc"
 import EntryContent from "./viewentry/entrycontent"
 import CheckCircleIcon from "./icons/checkcircle"
 
-
 export default function ViewEntry() {
   const { date } = useParams()
   const searchParams = useSearchParams()
@@ -27,7 +26,7 @@ export default function ViewEntry() {
   const isEditMode = useMemo(() => {
     return searchParams.get("edit") === "true"
   }, [searchParams])
-  
+
   if (!date || typeof date !== "string") return <div>Invalid date</div>
 
   const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
@@ -37,16 +36,26 @@ export default function ViewEntry() {
   }
 
   if (!entry) return <NoEntry />
-  
+
   return (
     <div className="container-transparent">
       <div className="flex justify-end">
-        { isEditMode ? <CheckCircleIcon className="mx-4 text-[--secondary] cursor-pointer" onClick={() => router.push(`/diary/entries/${date}`)} /> :
-          <PencilIcon className="mx-4 cursor-pointer" onClick={() => router.push(`/diary/entries/${date}?edit=true`)} />
-        }
+        {isEditMode ? (
+          <CheckCircleIcon
+            className="mx-4 text-[--secondary] cursor-pointer"
+            onClick={() => router.push(`/diary/entries/${date}`)}
+          />
+        ) : (
+          <PencilIcon
+            className="mx-4 cursor-pointer"
+            onClick={() => router.push(`/diary/entries/${date}?edit=true`)}
+          />
+        )}
         <TrashIcon className="mx-4 cursor-pointer" />
       </div>
-      <div className="text-outline-bold text-4xl text-center py-6">{format(parse(date! as string, "yyyy-MM-dd", new Date()), "eeee, LLLL d, yyyy")}</div>
+      <div className="text-outline-bold text-4xl text-center py-6">
+        {format(parse(date, "yyyy-MM-dd", new Date()), "eeee, LLLL d, yyyy")}
+      </div>
       <div>
         <div className="grid grid-cols-[1fr,2fr] gap-4">
           <MoodContent isEditMode={isEditMode} />

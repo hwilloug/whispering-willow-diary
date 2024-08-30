@@ -34,13 +34,20 @@ export default function EntryNav() {
   return (
     <div className="grid grid-cols-2 m-6">
       <div>
-        <button className="styled-button" onClick={onBack}><ArrowLeft /></button>
+        <button className="styled-button" onClick={onBack}>
+          <ArrowLeft />
+        </button>
       </div>
-      { noForward &&
+      {noForward && (
         <div className="text-right">
-          <button className="styled-button justify-self-end" onClick={onForward}><ArrowRight /></button>
+          <button
+            className="styled-button justify-self-end"
+            onClick={onForward}
+          >
+            <ArrowRight />
+          </button>
         </div>
-      }
+      )}
     </div>
   )
 }

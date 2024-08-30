@@ -4,15 +4,16 @@ import { useMemo } from "react"
 import SleepEntry from "../editentry/sleepentry"
 import { trpc } from "~/utils/trpc"
 
-export default function SleepContent({isEditMode}: { isEditMode: boolean }) {
+export default function SleepContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
-  if (!date || typeof date !== "string") return null
+  if (!date || typeof date !== "string") {
+    throw new Error("Invalid date")
+  }
 
-  const { data: sleep, isLoading} = trpc.sleep.one.useQuery({ date })
+  const { data: sleep, isLoading } = trpc.sleep.one.useQuery({ date })
 
   const hoursSleep = useMemo(() => {
-
     function getHoursSleep(bedTime: string, wakeUpTime: string) {
       const bedTimeDate = parse(bedTime, "HH:mm", new Date())
       const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
@@ -25,17 +26,26 @@ export default function SleepContent({isEditMode}: { isEditMode: boolean }) {
     }
 
     if (!sleep) return 0
-    return sleep.reduce((acc, sleep) => acc + (sleep.bedTime && sleep.wakeUpTime ? getHoursSleep(sleep.bedTime, sleep.wakeUpTime) : 0), 0).toFixed(2)
+    return sleep
+      .reduce(
+        (acc, sleep) =>
+          acc +
+          (sleep.bedTime && sleep.wakeUpTime
+            ? getHoursSleep(sleep.bedTime, sleep.wakeUpTime)
+            : 0),
+        0
+      )
+      .toFixed(2)
   }, [sleep])
-  
+
   return (
     <div className="bg-blue-300 rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Sleep</h5>
-      {
-        isEditMode ? (
-          <SleepEntry />
-        ) : <div className="text-center m-4">{hoursSleep} hours</div>
-      }
+      {isEditMode ? (
+        <SleepEntry />
+      ) : (
+        <div className="text-center m-4">{hoursSleep} hours</div>
+      )}
     </div>
   )
 }

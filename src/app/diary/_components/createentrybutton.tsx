@@ -1,24 +1,32 @@
 "use client"
 
-import { useRouter } from "next/navigation";
-import { trpc } from "~/utils/trpc";
+import { useRouter } from "next/navigation"
+import { trpc } from "~/utils/trpc"
 
-export default function CreateEntryButton({date}: Readonly<{date: string}>) {
+export default function CreateEntryButton({
+  date
+}: Readonly<{ date: string }>) {
   const utils = trpc.useUtils()
   const router = useRouter()
 
   const mutation = trpc.entries.post.useMutation({
-    onSuccess: () => {
-      utils.entries.invalidate()
+    onSuccess: async () => {
+      await utils.entries.invalidate()
       router.push(`/diary/entries/${date}?edit=true`)
     }
   })
 
   const handleCreate = () => {
-    mutation.mutate({date})
+    mutation.mutate({ date })
   }
 
   return (
-    <button className="styled-button" disabled={mutation.isPending} onClick={handleCreate}>Create Entry</button>
+    <button
+      className="styled-button"
+      disabled={mutation.isPending}
+      onClick={handleCreate}
+    >
+      Create Entry
+    </button>
   )
 }

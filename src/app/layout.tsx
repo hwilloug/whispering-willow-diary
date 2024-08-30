@@ -1,15 +1,13 @@
 "use client"
 
-import "~/styles/globals.css";
+import "~/styles/globals.css"
 
-import TopNav from "./_components/topnav";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Footer } from "./_components/footer";
-import { trpc } from "~/utils/trpc";
+import TopNav from "./_components/topnav"
+import { ClerkProvider } from "@clerk/nextjs"
+import { Footer } from "./_components/footer"
+import { trpc } from "~/utils/trpc"
 
-function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
       <html lang="en" className="overscroll-none">
@@ -22,7 +20,7 @@ function RootLayout({
         </body>
       </html>
     </ClerkProvider>
-  );
+  )
 }
 
-export default trpc.withTRPC(RootLayout);
+export default trpc.withTRPC(RootLayout)

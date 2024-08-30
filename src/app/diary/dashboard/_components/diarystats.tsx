@@ -1,7 +1,3 @@
 export function DiaryStats() {
-  return (
-    <div>
-      Test Stats
-    </div>
-  )
+  return <div>Test Stats</div>
 }

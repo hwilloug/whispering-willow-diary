@@ -1,20 +1,27 @@
 "use client"
 
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
-import { EntryState, useJournalStore } from '~/store';
-import { useMemo, useState } from 'react';
-import TimeRangeButton from './timerangebutton';
-import { format, fromUnixTime, getUnixTime, parse, parseISO, sub } from 'date-fns';
-import { trpc } from '~/utils/trpc';
+import Highcharts from "highcharts/highstock"
+import HighchartsReact from "highcharts-react-official"
+import { EntryState, useJournalStore } from "~/store"
+import { useMemo, useState } from "react"
+import TimeRangeButton from "./timerangebutton"
+import {
+  format,
+  fromUnixTime,
+  getUnixTime,
+  parse,
+  parseISO,
+  sub
+} from "date-fns"
+import { trpc } from "~/utils/trpc"
 
 interface HighchartsDataPoint {
-  x: number,
+  x: number
   y: number
 }
 
-export function MoodTracker() {  
-  const { data: mood, isLoading } = trpc.moods.useQuery()
+export function MoodTracker() {
+  const { data: mood, isLoading } = trpc.mood.all.useQuery()
 
   const today = new Date()
 
@@ -23,19 +30,19 @@ export function MoodTracker() {
     return [
       {
         text: "Last Week",
-        value: sub(today, { days: 7 }),
+        value: sub(today, { days: 7 })
       },
       {
         text: "Last 2 Weeks",
-        value: sub(today, { days: 14 }),
+        value: sub(today, { days: 14 })
       },
       {
         value: sub(today, { days: 30 }),
-        text: "Last Month",
+        text: "Last Month"
       },
       {
         text: "Last Year",
-        value: sub(today, { days: 375 }),
+        value: sub(today, { days: 375 })
       }
     ]
   }, [])
@@ -45,7 +52,7 @@ export function MoodTracker() {
     "1": "orange",
     "2": "blue",
     "3": "green",
-    "4": "purple",
+    "4": "purple"
   }
 
   const moodText = {
@@ -53,18 +60,18 @@ export function MoodTracker() {
     "1": "Bad",
     "2": "Ok",
     "3": "Good",
-    "4": "Ecstatic",
+    "4": "Ecstatic"
   }
 
   const moodData = useMemo(() => {
     if (!mood) return []
 
-    let moodData: HighchartsDataPoint[] = []
-    for (let idx = 0; idx < mood.length; idx++) {
-      if (mood![idx]?.mood !== undefined) {
+    const moodData: HighchartsDataPoint[] = []
+    for (const moodEntry of mood) {
+      if (moodEntry.mood !== undefined) {
         moodData.push({
-          x: getUnixTime(parse(mood[idx]!.date, "yyyy-MM-dd", new Date())),
-          y: mood![idx]!.mood,
+          x: getUnixTime(parse(moodEntry.date, "yyyy-MM-dd", new Date())),
+          y: moodEntry.mood
         })
       }
     }
@@ -80,24 +87,29 @@ export function MoodTracker() {
 
   const chartOptions: Highcharts.Options = {
     title: {
-      text: "",
+      text: ""
     },
     chart: {
       backgroundColor: "rgba(224, 240, 187)",
-      borderRadius: 10,
+      borderRadius: 10
     },
     xAxis: {
       min: getUnixTime(parseISO(timeFilter.toISOString())),
       labels: {
-        formatter: (function () {
-          return format(fromUnixTime(typeof this.value === "string" ? parseInt(this.value) : this.value), "MMM dd")
-        }),
-      },
+        formatter: function () {
+          return format(
+            fromUnixTime(
+              typeof this.value === "string" ? parseInt(this.value) : this.value
+            ),
+            "MMM dd"
+          )
+        }
+      }
     },
     yAxis: [
       {
         title: {
-          text: "Mood",
+          text: "Mood"
         },
         max: 4.5,
         min: 0,
@@ -105,11 +117,9 @@ export function MoodTracker() {
         gridLineColor: "transparent",
         labels: {
           useHTML: true,
-          // @ts-ignore
           formatter: function () {
             let mouth
             let color
-            // @ts-ignore
             switch (this.value) {
               case 0:
                 mouth = `<>
@@ -154,37 +164,36 @@ export function MoodTracker() {
               <circle cx="16" cy="10" r="1" />
               ${mouth}
             </svg>`
-          },
-        },
+          }
+        }
       }
     ],
     plotOptions: {
       column: {
-        stacking: "normal",
+        stacking: "normal"
       },
       series: {
         point: {
           events: {
             click: function () {
               // navigate(`/diary/${convertToShortDate(new Date(this.x))}/view`)
-            },
-          },
-        },
-      },
+            }
+          }
+        }
+      }
     },
     tooltip: {
       formatter: function () {
         switch (this.series.name) {
           case "Mood":
             return `${format(fromUnixTime(typeof this.x === "string" ? parseInt(this.x) : this.x!), "MMM dd, yyyy")}: <b>${
-              // @ts-ignore
+              // @ts-expect-error  index of string is fine
               moodText[this.y!.toString()]
             }</b>`
         }
-      },
+      }
     },
     series: [
-      // @ts-ignore
       {
         name: "Mood",
         data: filteredMoodData,
@@ -195,37 +204,46 @@ export function MoodTracker() {
         zones: [
           {
             value: 0.5,
-            color: moodColors["0"],
+            color: moodColors["0"]
           },
           {
             value: 1.5,
-            color: moodColors["1"],
+            color: moodColors["1"]
           },
           {
             value: 2.5,
-            color: moodColors["2"],
+            color: moodColors["2"]
           },
           {
             value: 3.5,
-            color: moodColors["3"],
+            color: moodColors["3"]
           },
           {
             value: 4.5,
-            color: moodColors["4"],
-          },
-        ],
+            color: moodColors["4"]
+          }
+        ]
       }
     ],
     legend: {
-      enabled: true,
-    },
+      enabled: true
+    }
   }
-  
+
   return (
     <div className="container-transparent">
       <div className="container-title">Mood Tracker</div>
       <div className="text-center">
-        {timeRangeButtonValues.map((t) => <TimeRangeButton key={t.text} onClick={() => setTimeFilter(t.value)} value={t.text} isActive={timeFilter.toLocaleDateString() === t.value.toLocaleDateString()} />)}
+        {timeRangeButtonValues.map((t) => (
+          <TimeRangeButton
+            key={t.text}
+            onClick={() => setTimeFilter(t.value)}
+            value={t.text}
+            isActive={
+              timeFilter.toLocaleDateString() === t.value.toLocaleDateString()
+            }
+          />
+        ))}
       </div>
       <div>
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />

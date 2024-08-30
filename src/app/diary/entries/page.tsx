@@ -17,38 +17,46 @@ export default function EntriesList({}) {
     return <div>Loading...</div>
   }
 
-  const lastThirtyDays = [...Array(30).keys()].map(i => subDays(today, i))
+  const lastThirtyDays = [...Array(30).keys()].map((i) => subDays(today, i))
 
   return (
     <div>
-    <div className="text-outline-bold text-5xl text-center py-6">Entries List</div>
-    <div className="grid grid-cols-3 gap-4">
-      {lastThirtyDays.map(date => {
-        const entryDate = format(date, "yyyy-MM-dd")
+      <div className="text-outline-bold text-5xl text-center py-6">
+        Entries List
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+        {lastThirtyDays.map((date) => {
+          const entryDate = format(date, "yyyy-MM-dd")
 
-        return (
-          <div key={date.toISOString()} className="border border-black container-transparent grid grid-rows-2">
-            <div className="text-lg">{date.toDateString()}</div>
-            {entries?.find((e) => e.date === entryDate) ? (
-              <div className="grid grid-cols-2 mt-1 gap-2">
-                <Link href={`/diary/entries/${entryDate}`} className="bg-[--primary] p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
-                  <EyeIcon className="m-auto" />
+          return (
+            <div
+              key={date.toISOString()}
+              className="border border-black container-transparent grid grid-rows-2"
+            >
+              <div className="text-lg">{date.toDateString()}</div>
+              {entries?.find((e) => e.date === entryDate) ? (
+                <div className="grid grid-cols-2 mt-1 gap-2">
+                  <Link
+                    href={`/diary/entries/${entryDate}`}
+                    className="bg-[--primary] p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer"
+                  >
+                    <EyeIcon className="m-auto" />
+                  </Link>
+                  <div className="bg-[--primary] p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
+                    <TrashIcon className="m-auto" />
+                  </div>
+                </div>
+              ) : (
+                <Link href={`/diary/entries/${entryDate}/edit`}>
+                  <div className="bg-[--primary] mt-1 p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
+                    <DocumentPlusIcon className="m-auto" />
+                  </div>
                 </Link>
-                <div className="bg-[--primary] p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
-                  <TrashIcon className="m-auto" />
-                </div>
-              </div>
-            ) : (
-              <Link  href={`/diary/entries/${entryDate}/edit`} >
-                <div className="bg-[--primary] mt-1 p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
-                  <DocumentPlusIcon className="m-auto" />
-                </div>
-            </Link>
-            )}
-          </div>
-        )
-      })}
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
-  </div>
   )
 }

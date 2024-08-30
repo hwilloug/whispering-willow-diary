@@ -5,14 +5,13 @@ import { auth } from "@clerk/nextjs/server"
 import { content } from "../models/journal"
 import { eq } from "drizzle-orm"
 
-
 export async function getContentByEntry(entryId: number) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
   const content = await db.query.content.findMany({
-    where: (model, { eq }) => eq(model.entryId, entryId),
+    where: (model, { eq }) => eq(model.entryId, entryId)
   })
 
   if (!content) return null
@@ -26,7 +25,7 @@ export async function getContentByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const content = await db.query.content.findMany({
-    where: (model, { eq }) => eq(model.date, date),
+    where: (model, { eq }) => eq(model.date, date)
   })
 
   if (!content) return null
@@ -34,27 +33,41 @@ export async function getContentByDate(date: string) {
   return content
 }
 
-export async function createContent(date: string, entryId: number, contentContent: string) {
+export async function createContent(
+  date: string,
+  entryId: number,
+  contentContent: string
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  await db.insert(content).values({
-    date,
-    entryId,
-    userId: user.userId,
-    content: contentContent
-  }).execute()
+  await db
+    .insert(content)
+    .values({
+      date,
+      entryId,
+      userId: user.userId,
+      content: contentContent
+    })
+    .execute()
 }
 
-export async function updateSubstance(contentId: number, contentContent: string) {
+export async function updateSubstance(
+  contentId: number,
+  contentContent: string
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  await db.update(content).set({
-    content: contentContent
-  }).where(eq(content.id, contentId)).execute()
+  await db
+    .update(content)
+    .set({
+      content: contentContent
+    })
+    .where(eq(content.id, contentId))
+    .execute()
 }
 
 export async function deleteSubstance(contentId: number) {

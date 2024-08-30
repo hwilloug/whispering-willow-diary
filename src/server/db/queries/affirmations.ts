@@ -1,5 +1,3 @@
-
-
 import "server-only"
 
 import { db } from "../models"
@@ -8,14 +6,13 @@ import { affirmation } from "../models/journal"
 import { eq } from "drizzle-orm"
 import { PgDateString } from "drizzle-orm/pg-core"
 
-
 export async function getAffirmationByEntry(entryId: number) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
   const affirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId),
+    where: (model, { eq }) => eq(model.entryId, entryId)
   })
 
   if (!affirmation) return null
@@ -29,7 +26,7 @@ export async function getAffirmationByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const affirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.date, date),
+    where: (model, { eq }) => eq(model.date, date)
   })
 
   if (!affirmation) return null
@@ -37,33 +34,47 @@ export async function getAffirmationByDate(date: string) {
   return affirmation
 }
 
-export async function createAffirmation(date: string, entryId: number, affirmationContent: string) {
+export async function createAffirmation(
+  date: string,
+  entryId: number,
+  affirmationContent: string
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbAffirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.date, date),
+    where: (model, { eq }) => eq(model.date, date)
   })
 
   if (dbAffirmation) throw new Error("Affirmation already exists")
 
-  await db.insert(affirmation).values({
-    date,
-    entryId,
-    userId: user.userId,
-    affirmation: affirmationContent
-  }).execute()
+  await db
+    .insert(affirmation)
+    .values({
+      date,
+      entryId,
+      userId: user.userId,
+      affirmation: affirmationContent
+    })
+    .execute()
 }
 
-export async function updateAffirmation(affirmationId: number, affirmationContent: string) {
+export async function updateAffirmation(
+  affirmationId: number,
+  affirmationContent: string
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  await db.update(affirmation).set({
-    affirmation: affirmationContent
-  }).where(eq(affirmation.id, affirmationId)).execute()
+  await db
+    .update(affirmation)
+    .set({
+      affirmation: affirmationContent
+    })
+    .where(eq(affirmation.id, affirmationId))
+    .execute()
 }
 
 export async function deleteAffirmation(affirmationId: number) {
@@ -71,5 +82,8 @@ export async function deleteAffirmation(affirmationId: number) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  await db.delete(affirmation).where(eq(affirmation.id, affirmationId)).execute()
+  await db
+    .delete(affirmation)
+    .where(eq(affirmation.id, affirmationId))
+    .execute()
 }

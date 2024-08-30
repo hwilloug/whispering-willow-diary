@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input"
-import { EntryState, useJournalStore } from "~/store";
-import { trpc } from "~/utils/trpc";
+import { EntryState, useJournalStore } from "~/store"
+import { trpc } from "~/utils/trpc"
 
 export const allSubstances = [
   "Caffeine",
@@ -13,20 +13,28 @@ export const allSubstances = [
   "Cocaine",
   "Mushrooms",
   "Adderall",
-  "Other",
+  "Other"
 ]
 
-export default function SubstanceUseEntry({ date }: {date: string}) {
-  const { data: substances, isLoading } = trpc.substances.one.useQuery({ date })
-
+export default function SubstanceUseEntry({ date }: { date: string }) {
+  const { data: substances, isLoading } = trpc.substances.one.useQuery({
+    date
+  })
 
   return (
     <div className="grid grid-cols-2 gap-4">
       {allSubstances.map((s) => {
-        const substance = substances?.find((substance) => substance.substance === s)
+        const substance = substances?.find(
+          (substance) => substance.substance === s
+        )
         return (
           <div className="flex items-center gap-2" key={s}>
-            <Input type="number" value={substance?.amount}  className="max-w-20 bg-red-400" /><span>{s}</span>
+            <Input
+              type="number"
+              value={substance?.amount}
+              className="max-w-20 bg-red-400"
+            />
+            <span>{s}</span>
           </div>
         )
       })}

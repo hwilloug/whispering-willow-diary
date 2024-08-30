@@ -12,15 +12,13 @@ export default function MoodContent({ isEditMode }: { isEditMode: boolean }) {
   return (
     <div className="bg-[--primary] rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">Mood</h5>
-      {
-        isEditMode ? (
-          <MoodEntry date={date} />
-        ) : !isLoading && !data ? (
-          <div className="text-center m-4">None</div>
-        ) : (
-          <div className="text-center m-4">{data?.mood}</div>
-        )
-      }
+      {isEditMode ? (
+        <MoodEntry date={date} />
+      ) : !isLoading && !data ? (
+        <div className="text-center m-4">None</div>
+      ) : (
+        <div className="text-center m-4">{data?.mood}</div>
+      )}
     </div>
   )
 }

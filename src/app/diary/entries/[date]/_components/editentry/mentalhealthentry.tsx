@@ -1,6 +1,6 @@
 import MultipleSelector, { Option } from "~/components/ui/multiselect"
-import { EntryState, useJournalStore } from "~/store";
-import { trpc } from "~/utils/trpc";
+import { EntryState, useJournalStore } from "~/store"
+import { trpc } from "~/utils/trpc"
 
 // TODO - move this to user settings
 export const mentalHealthSymptoms = [
@@ -24,15 +24,25 @@ export const mentalHealthSymptoms = [
   "Illusions of Grandeur",
   "Low Self-Esteem",
   "Reckless Spending",
-  "Suicidal Ideation",
+  "Suicidal Ideation"
 ]
 
-export default function MentalHealthEntry({ date }: {date: string}) {
-  const { data: mentalHealth, isLoading } = trpc.mentalHealth.one.useQuery({ date })
+export default function MentalHealthEntry({ date }: { date: string }) {
+  const { data: mentalHealth, isLoading } = trpc.mentalHealth.one.useQuery({
+    date
+  })
 
-  const mentalHealthOptions = mentalHealth?.mentalHealth.map((s) => ({ label: s, value: s}))
+  const mentalHealthOptions = mentalHealth?.mentalHealth.map((s) => ({
+    label: s,
+    value: s
+  }))
 
   return (
-    <MultipleSelector className="bg-[--primary]" badgeClassName="bg-[--primary-dark]" value={mentalHealthOptions} defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s}))} />
+    <MultipleSelector
+      className="bg-[--primary]"
+      badgeClassName="bg-[--primary-dark]"
+      value={mentalHealthOptions}
+      defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s }))}
+    />
   )
 }

@@ -1,5 +1,5 @@
-import { useParams } from "next/navigation";
-import CreateEntryButton from "../../_components/createentrybutton";
+import { useParams } from "next/navigation"
+import CreateEntryButton from "../../_components/createentrybutton"
 
 export default function NoEntry() {
   const { date } = useParams()

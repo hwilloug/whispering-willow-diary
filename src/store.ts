@@ -65,11 +65,11 @@ export interface SleepState {
 }
 
 interface JournalState {
-  entries: { [date: string]: EntryState },
-  setEntries: (entry: { [date: string]: EntryState }) => void
+  entries: Record<string, EntryState>
+  setEntries: (entry: Record<string, EntryState>) => void
 }
 
 export const useJournalStore = create<JournalState>((set) => ({
   entries: {},
-  setEntries: (entries: { [date: string]: EntryState }) => set({ entries })
+  setEntries: (entries: Record<string, EntryState>) => set({ entries })
 }))

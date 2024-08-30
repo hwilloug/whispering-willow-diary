@@ -2,7 +2,11 @@ import { useParams } from "next/navigation"
 import DailyAffirmationEntry from "../editentry/dailyaffirmationentry"
 import { trpc } from "~/utils/trpc"
 
-export default function AffirmationContent({ isEditMode }: { isEditMode: boolean }) {
+export default function AffirmationContent({
+  isEditMode
+}: {
+  isEditMode: boolean
+}) {
   const { date } = useParams()
 
   if (!date || typeof date !== "string") return <div>Invalid date</div>
@@ -12,15 +16,13 @@ export default function AffirmationContent({ isEditMode }: { isEditMode: boolean
   return (
     <div className="bg-amber-900 text-white text-xl p-10 my-4 text-center rounded-lg">
       <h5 className="text-outline-bold-inverted text-3xl">🌸 Affirmation 🌸</h5>
-      { 
-        isEditMode ? (
-          <DailyAffirmationEntry />
-        ) : !isLoading && !data?.affirmation ? (
-          <p className="mt-4">None</p>
-        ) : (
-          <p className="mt-4">{data?.affirmation}</p>
-        )
-      }
+      {isEditMode ? (
+        <DailyAffirmationEntry />
+      ) : !isLoading && !data?.affirmation ? (
+        <p className="mt-4">None</p>
+      ) : (
+        <p className="mt-4">{data?.affirmation}</p>
+      )}
     </div>
   )
 }
