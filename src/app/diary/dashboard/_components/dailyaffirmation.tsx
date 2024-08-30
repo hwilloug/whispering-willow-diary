@@ -1,9 +1,10 @@
 "use client"
 
+import { format } from "date-fns"
 import { trpc } from "~/utils/trpc"
 
 export function DailyAffirmation() {
-  const { data: affirmation, isLoading } = trpc.affirmation.useQuery({ date: new Date().toISOString().split("T")[0]! })
+  const { data: affirmation, isLoading } = trpc.affirmation.one.useQuery({ date: format(new Date(), "yyyy-MM-dd") })
 
   if (!affirmation) return null
 

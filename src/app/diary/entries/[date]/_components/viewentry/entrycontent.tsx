@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation"
-import Entry from "~/app/diary/_components/entry"
+import Entry from "../editentry/entry"
 import { trpc } from "~/utils/trpc"
 
 export default function EntryContent({ isEditMode }: { isEditMode: boolean }) {

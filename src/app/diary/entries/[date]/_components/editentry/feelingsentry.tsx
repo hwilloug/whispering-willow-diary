@@ -1,11 +1,15 @@
+import { useParams } from "next/navigation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Checkbox } from "~/components/ui/checkbox";
 import { EntryState } from "~/store";
 import { trpc } from "~/utils/trpc";
 
-export default function FeelingsEntry({ date }: {date: string}) {
-  const { data: feelings, isLoading } = trpc.feelings.one.useQuery({ date })
+export default function FeelingsEntry() {
+  const { date } = useParams()
 
+  if (!date || typeof date !== "string") return null
+
+  const { data: feelings, isLoading } = trpc.feelings.one.useQuery({ date })
 
   function FeelingsAccordion({ feelingsList, title }: Readonly<{feelingsList: string[]; title: string}>) {
     return (

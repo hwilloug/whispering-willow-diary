@@ -1,8 +1,13 @@
+import { useParams } from "next/navigation";
 import { Input } from "~/components/ui/input";
 import { EntryState, useJournalStore } from "~/store";
 import { trpc } from "~/utils/trpc";
 
-export default function ExerciseEntry({ date }: {date: string}) {
+export default function ExerciseEntry() {
+  const { date } = useParams()
+
+  if (!date || typeof date !== "string") return null
+
   const { data: exercise, isLoading } = trpc.exercise.one.useQuery({ date })
 
   return (

@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation"
-import FeelingsEntry from "~/app/diary/_components/feelingsentry"
+import FeelingsEntry from "../editentry/feelingsentry"
 import { trpc } from "~/utils/trpc"
 
 export default function FeelingsContent({ isEditMode }: { isEditMode: boolean }) {
@@ -14,7 +14,7 @@ export default function FeelingsContent({ isEditMode }: { isEditMode: boolean })
       <h5 className="text-outline-bold text-2xl text-center my-4">Feelings</h5>
       <div className="flex flex-wrap justify-center gap-4">{
         isEditMode ? (
-          <FeelingsEntry date={date} />
+          <FeelingsEntry />
         ) : !isLoading && !data?.feelings ? (
           <div className="text-center m-4">None</div>
         ) : (

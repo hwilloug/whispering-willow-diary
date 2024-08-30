@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { entries } from "../models/journal"
-import { entryDTOToContent } from "../../utils"
+import { entryDTOToContent } from "~/server/utils"
 
 export async function getMyEntries() {
   const user = auth()

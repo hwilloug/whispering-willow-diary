@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation"
-import DailyAffirmationEntry from "~/app/diary/_components/dailyaffirmationentry"
+import DailyAffirmationEntry from "../editentry/dailyaffirmationentry"
 import { trpc } from "~/utils/trpc"
 
 export default function AffirmationContent({ isEditMode }: { isEditMode: boolean }) {
@@ -14,7 +14,7 @@ export default function AffirmationContent({ isEditMode }: { isEditMode: boolean
       <h5 className="text-outline-bold-inverted text-3xl">🌸 Affirmation 🌸</h5>
       { 
         isEditMode ? (
-          <DailyAffirmationEntry date={date} />
+          <DailyAffirmationEntry />
         ) : !isLoading && !data?.affirmation ? (
           <p className="mt-4">None</p>
         ) : (

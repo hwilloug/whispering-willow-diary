@@ -5,10 +5,18 @@ import { useMemo } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
 import { EntryState, SleepState, useJournalStore } from "~/store";
-import TrashIcon from "./icons/trashicon";
+import TrashIcon from "~/app/diary/_components/icons/trashicon";
 import { trpc } from "~/utils/trpc";
+import { useParams } from "next/navigation";
 
-export default function SleepEntry({ date }: { date: string }) {
+export default function SleepEntry() {
+
+  const { date } = useParams()
+
+  if (!date || typeof date !== "string") {
+    return <div>Invalid date</div>
+  }
+
   const { data: sleep, isLoading } = trpc.sleep.one.useQuery({ date })
 
   function getHoursSleep(bedTime: string, wakeUpTime: string) {

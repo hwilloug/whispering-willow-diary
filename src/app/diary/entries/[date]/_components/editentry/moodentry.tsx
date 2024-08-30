@@ -1,4 +1,4 @@
-import FaceIcon from "./icons/faceicon";
+import FaceIcon from "~/app/diary/_components/icons/faceicon";
 import { trpc } from "~/utils/trpc";
 
 export default function MoodEntry({ date }: {date: string}) {

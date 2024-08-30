@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import SubstanceUseEntry from "~/app/diary/_components/substanceuseentry";
+import SubstanceUseEntry from "../editentry/substanceuseentry";
 import { trpc } from "~/utils/trpc";
 
 export default function SubstanceUseContent({ isEditMode }: { isEditMode: boolean }) {

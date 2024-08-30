@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation"
-import MoodEntry from "~/app/diary/_components/moodentry"
+import MoodEntry from "../editentry/moodentry"
 import { trpc } from "~/utils/trpc"
 
 export default function MoodContent({ isEditMode }: { isEditMode: boolean }) {

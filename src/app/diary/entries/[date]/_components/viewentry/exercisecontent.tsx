@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation"
-import ExerciseEntry from "~/app/diary/_components/exerciseentry"
+import ExerciseEntry from "../editentry/exerciseentry"
 import { trpc } from "~/utils/trpc"
 
 export default function ExerciseContent({ isEditMode }: { isEditMode: boolean }) {
@@ -14,7 +14,7 @@ export default function ExerciseContent({ isEditMode }: { isEditMode: boolean })
       <h5 className="text-outline-bold text-2xl text-center my-4">Exercise</h5>
       {
         isEditMode ? (
-          <ExerciseEntry date={date} />
+          <ExerciseEntry />
         ) : <div className="text-center my-4">{data?.exercise || 0} minutes</div>
       }
     </div>

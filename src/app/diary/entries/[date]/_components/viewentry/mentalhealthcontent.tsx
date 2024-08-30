@@ -1,6 +1,5 @@
 import { useParams } from "next/navigation"
-import MentalHealthEntry from "~/app/diary/_components/mentalhealthentry"
-import { MentalHealthState } from "~/store"
+import MentalHealthEntry from "../editentry/mentalhealthentry"
 import { trpc } from "~/utils/trpc"
 
 export default function MentalHealthContent({ isEditMode }: { isEditMode: boolean }) {
