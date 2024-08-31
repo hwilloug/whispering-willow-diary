@@ -170,7 +170,7 @@ export const content = journal.table("content", {
   entryId: integer("entry_id").references(() => entries.id),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
-  content: text("content").notNull(),
+  content: text("content"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

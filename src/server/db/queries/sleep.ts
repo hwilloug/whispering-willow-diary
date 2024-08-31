@@ -4,6 +4,7 @@ import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { sleep } from "../models/journal"
 import { eq } from "drizzle-orm"
+import { parse } from "date-fns"
 
 export async function getMySleep() {
   const user = auth()
@@ -50,9 +51,9 @@ export async function getSleepByDate(date: string) {
 export async function createSleep(
   date: string,
   entryId: number,
-  bedTime: Date,
-  wakeUpTime: Date,
-  sleepQuality: string
+  bedTime?: Date,
+  wakeUpTime?: Date,
+  sleepQuality?: string
 ) {
   const user = auth()
 
@@ -73,20 +74,26 @@ export async function createSleep(
 
 export async function updateSleep(
   sleepId: number,
-  bedTime: Date,
-  wakeUpTime: Date,
-  sleepQuality: string
+  bedTime?: string,
+  wakeUpTime?: string,
+  sleepQuality?: string
 ) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
+  const dbSleep = await db.query.sleep.findFirst({
+    where: (model, { eq }) => eq(model.id, sleepId)
+  })
+
+  if (!dbSleep) throw new Error("Sleep not found")
+
   await db
     .update(sleep)
     .set({
-      bedTime,
-      wakeUpTime,
-      sleepQuality
+      bedTime: parseTimeValue(bedTime) ?? dbSleep.bedTime,
+      wakeUpTime: parseTimeValue(wakeUpTime) ?? dbSleep.wakeUpTime,
+      sleepQuality: sleepQuality ?? dbSleep.sleepQuality
     })
     .where(eq(sleep.id, sleepId))
     .execute()
@@ -98,4 +105,8 @@ export async function deleteSleep(sleepId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   await db.delete(sleep).where(eq(sleep.id, sleepId)).execute()
+}
+
+const parseTimeValue = (date?: string | null) => {
+  return date ? parse(date, "HH:mm", new Date()) : undefined
 }

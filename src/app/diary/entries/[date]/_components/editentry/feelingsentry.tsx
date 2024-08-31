@@ -11,10 +11,57 @@ import { trpc } from "~/utils/trpc"
 
 export default function FeelingsEntry() {
   const { date } = useParams()
+  const utils = trpc.useUtils()
 
   if (!date || typeof date !== "string") return null
 
   const { data: feelings, isLoading } = trpc.feelings.one.useQuery({ date })
+
+  const { data: entry, isLoading: entryIsLoading } = trpc.entries.one.useQuery({
+    date
+  })
+
+  if (!entryIsLoading && (entry === undefined || entry === null))
+    throw new Error("Invalid entry")
+
+  const updateMutation = trpc.feelings.put.useMutation({
+    onSuccess: async () => {
+      await utils.feelings.invalidate()
+    }
+  })
+
+  const createMutation = trpc.feelings.post.useMutation({
+    onSuccess: async () => {
+      await utils.feelings.invalidate()
+    }
+  })
+
+  const update = (value: string[]) => {
+    updateMutation.mutate({
+      id: feelings!.id,
+      content: value
+    })
+  }
+
+  const add = (value: string[]) => {
+    createMutation.mutate({
+      date,
+      entryId: entry!.id,
+      content: value
+    })
+  }
+
+  const onChange = (value: string) => {
+    if (feelings?.id) {
+      const newFeelings = [
+        ...feelings.feelings.filter((f) => f !== value),
+        value
+      ]
+      update(newFeelings)
+    } else {
+      add([value])
+    }
+  }
 
   function FeelingsAccordion({
     feelingsList,
@@ -28,7 +75,10 @@ export default function FeelingsEntry() {
         <AccordionContent className="flex gap-4 flex-wrap justify-center">
           {feelingsList.map((f) => (
             <div key={f} className="flex gap-2 items-center">
-              <Checkbox checked={feelings?.feelings.includes(f)} />
+              <Checkbox
+                checked={feelings?.feelings.includes(f)}
+                onClick={() => onChange(f)}
+              />
               <span>{f}</span>
             </div>
           ))}

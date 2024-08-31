@@ -35,10 +35,7 @@ export async function getMyEntry(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const entry = await db.query.entries.findFirst({
-    where: (model, { eq }) => eq(model.date, date),
-    with: {
-      sleep: true
-    }
+    where: (model, { eq }) => eq(model.date, date)
   })
 
   if (!entry) return null

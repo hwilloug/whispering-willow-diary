@@ -1,32 +1,47 @@
 "use client"
 
-import {
-  addDays,
-  differenceInHours,
-  differenceInMinutes,
-  format,
-  parse
-} from "date-fns"
+import { differenceInMinutes, parse } from "date-fns"
 import { useMemo } from "react"
-import DatePicker, { DateObject } from "react-multi-date-picker"
+import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
-import { EntryState, SleepState, useJournalStore } from "~/store"
 import TrashIcon from "~/app/diary/_components/icons/trashicon"
 import { trpc } from "~/utils/trpc"
 import { useParams } from "next/navigation"
 
 export default function SleepEntry() {
   const { date } = useParams()
+  const utils = trpc.useUtils()
 
-  if (!date && typeof date !== "string") {
-    throw new Error("Invalid date")
-  }
+  if (!date && typeof date !== "string") throw new Error("Invalid date")
+
+  // @ts-expect-error  date will always be a string
+  const { data: entry, isLoading: isLoadingEntry } = trpc.entries.one.useQuery({
+    date
+  })
+  if (entry === undefined && !isLoadingEntry) throw new Error("Invalid entry")
+
   // @ts-expect-error  date will always be a string
   const { data: sleep, isLoading } = trpc.sleep.one.useQuery({ date })
 
+  const createMutation = trpc.sleep.post.useMutation({
+    onSuccess: async () => {
+      await utils.sleep.invalidate()
+    }
+  })
+
+  const updateMutation = trpc.sleep.put.useMutation({
+    onSuccess: async () => {
+      await utils.sleep.invalidate()
+    }
+  })
+
+  const parseDbDate = (date: string) => {
+    return new Date(date)
+  }
+
   function getHoursSleep(bedTime: string, wakeUpTime: string) {
-    const bedTimeDate = parse(bedTime, "HH:mm", new Date())
-    const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
+    const bedTimeDate = parseDbDate(bedTime)
+    const wakeUpTimeDate = parseDbDate(wakeUpTime)
     const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
     let diff = diffMin / 60
     if (diff < 0) {
@@ -55,64 +70,108 @@ export default function SleepEntry() {
       .toFixed(2)
   }, [sleepWithHours])
 
+  const addSleep = () => {
+    // @ts-expect-error  date will always be a string
+    createMutation.mutate({ date, entryId: entry!.id })
+  }
+
+  const updateSleep = ({
+    id,
+    bedTime,
+    wakeUpTime,
+    sleepQuality
+  }: {
+    id: number
+    bedTime?: string
+    wakeUpTime?: string
+    sleepQuality?: string
+  }) => {
+    updateMutation.mutate({ id, bedTime, wakeUpTime, sleepQuality })
+  }
+
+  const onChange = ({
+    id,
+    wakeUpTime,
+    bedTime,
+    sleepQuality
+  }: {
+    id?: number
+    wakeUpTime?: string
+    bedTime?: string
+    sleepQuality?: string
+  }) => {
+    if (id) {
+      updateSleep({ id, wakeUpTime, bedTime, sleepQuality })
+    } else {
+      addSleep()
+    }
+  }
+
   return (
     <>
       {sleepWithHours?.map((s, idx) => (
-        <div
-          key={idx}
-          className="grid grid-cols-[1fr,auto,1fr,1fr,auto] gap-2 m-2 items-center"
-        >
-          <DatePicker
-            disableDayPicker
-            value={s.bedTime ? parse(s.bedTime, "HH:mm", new Date()) : null}
-            format="hh:mm A"
-            plugins={[
-              <TimePicker
-                key={`${idx}-bed-time`}
-                position="bottom"
-                hideSeconds
-              />
-            ]}
-            style={{
-              padding: 20,
-              backgroundColor: "var(--primary)",
-              textAlign: "center"
-            }}
-          />
-          <span>to</span>
-          <DatePicker
-            disableDayPicker
-            value={
-              s.wakeUpTime ? parse(s.wakeUpTime, "HH:mm", new Date()) : null
-            }
-            format="hh:mm A"
-            plugins={[
-              <TimePicker
-                key={`${idx}-wake-up-time`}
-                position="bottom"
-                hideSeconds
-              />
-            ]}
-            style={{
-              padding: 20,
-              backgroundColor: "var(--primary)",
-              textAlign: "center"
-            }}
-          />
-          <div>
-            <span>({s.hoursSleep} hours)</span>
+        <>
+          <div
+            key={idx}
+            className="lg:grid grid-cols-[1fr,auto,1fr,1fr,auto] gap-2 m-2 items-center text-center"
+          >
+            <DatePicker
+              disableDayPicker
+              value={s.bedTime}
+              onChange={(value) => {
+                onChange({ id: s.id, bedTime: value?.format("HH:mm") })
+              }}
+              format="hh:mm A"
+              plugins={[
+                <TimePicker
+                  key={`${idx}-bed-time`}
+                  position="bottom"
+                  hideSeconds
+                />
+              ]}
+              style={{
+                padding: 20,
+                backgroundColor: "var(--primary)",
+                textAlign: "center"
+              }}
+            />
+            <p>to</p>
+            <DatePicker
+              disableDayPicker
+              value={s.wakeUpTime}
+              onChange={(value) => {
+                onChange({ id: s.id, wakeUpTime: value?.format("HH:mm") })
+              }}
+              format="hh:mm A"
+              plugins={[
+                <TimePicker
+                  key={`${idx}-wake-up-time`}
+                  position="bottom"
+                  hideSeconds
+                />
+              ]}
+              style={{
+                padding: 20,
+                backgroundColor: "var(--primary)",
+                textAlign: "center"
+              }}
+            />
+            <div>
+              <p>({s.hoursSleep} hours)</p>
+            </div>
+            <div className="flex justify-center">
+              <TrashIcon onClick={() => ({})} />
+            </div>
           </div>
-          <div>
-            <TrashIcon onClick={() => ({})} />
-          </div>
-        </div>
+          <hr className="border-blue-500" />
+        </>
       ))}
-      <div className="m-2">
+      <div className="my-2 text-center">
         <span>Total hours sleep: </span>
         <span>{totalHoursSleep}</span>
       </div>
       <div className="w-fit m-auto">
-        <button className="styled-button" onClick={() => ({})}>
+        <button className="styled-button" onClick={() => addSleep()}>
           Add Sleep
         </button>
       </div>

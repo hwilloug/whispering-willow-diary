@@ -3,23 +3,47 @@ import { initTRPC } from "@trpc/server"
 import { createEntry, getMyEntries, getMyEntry } from "../db/queries/entries"
 import {
   createAffirmation,
-  getAffirmationByDate
+  getAffirmationByDate,
+  updateAffirmation
 } from "../db/queries/affirmations"
-import { createFeelings, getFeelingsByDate } from "../db/queries/feelings"
+import {
+  createFeelings,
+  getFeelingsByDate,
+  updateFeelings
+} from "../db/queries/feelings"
 import {
   createMentalHealth,
-  getMentalHealthByDate
+  getMentalHealthByDate,
+  updateMentalHealth
 } from "../db/queries/mentalhealth"
 import {
   createSubstances,
   getMySubstances,
-  getSubstancesByDate
+  getSubstancesByDate,
+  updateSubstance
 } from "../db/queries/substances"
-import { createMood, getMoodByDate, getMyMoods } from "../db/queries/mood"
-import { createSleep, getMySleep, getSleepByDate } from "../db/queries/sleep"
-import { createExercise, getExerciseByDate } from "../db/queries/exercise"
-import { createQuestion, getQuestionByDate } from "../db/queries/question"
-import { createContent, getContentByDate } from "../db/queries/content"
+import {
+  createMood,
+  getMoodByDate,
+  getMyMoods,
+  updateMood
+} from "../db/queries/mood"
+import { createSleep, getSleepByDate, updateSleep } from "../db/queries/sleep"
+import {
+  createExercise,
+  getExerciseByDate,
+  updateExercise
+} from "../db/queries/exercise"
+import {
+  createQuestion,
+  getQuestionByDate,
+  updateQuestion
+} from "../db/queries/question"
+import {
+  createContent,
+  getContentByDate,
+  updateContent
+} from "../db/queries/content"
 
 const t = initTRPC.create()
 
@@ -63,6 +87,16 @@ export const appRouter = t.router({
           opts.input.content
         )
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          content: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateAffirmation(opts.input.id, opts.input.content)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -89,6 +123,16 @@ export const appRouter = t.router({
           opts.input.content
         )
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          content: z.string().array()
+        })
+      )
+      .mutation((opts) => {
+        return updateFeelings(opts.input.id, opts.input.content)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -114,6 +158,16 @@ export const appRouter = t.router({
           opts.input.entryId,
           opts.input.content
         )
+      }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          content: z.string().array()
+        })
+      )
+      .mutation((opts) => {
+        return updateMentalHealth(opts.input.id, opts.input.content)
       }),
     one: t.procedure
       .input(
@@ -146,6 +200,16 @@ export const appRouter = t.router({
           opts.input.amount
         )
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          amount: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return updateSubstance(opts.input.id, opts.input.amount)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -171,6 +235,16 @@ export const appRouter = t.router({
       .mutation((opts) => {
         return createMood(opts.input.date, opts.input.entryId, opts.input.mood)
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          mood: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return updateMood(opts.input.id, opts.input.mood)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -187,15 +261,32 @@ export const appRouter = t.router({
         z.object({
           date: z.string(),
           entryId: z.number(),
-          bedTime: z.date(),
-          wakeUpTime: z.date(),
-          sleepQuality: z.string()
+          bedTime: z.date().optional(),
+          wakeUpTime: z.date().optional(),
+          sleepQuality: z.string().optional()
         })
       )
       .mutation((opts) => {
         return createSleep(
           opts.input.date,
           opts.input.entryId,
+          opts.input.bedTime,
+          opts.input.wakeUpTime,
+          opts.input.sleepQuality
+        )
+      }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          bedTime: z.string().optional(),
+          wakeUpTime: z.string().optional(),
+          sleepQuality: z.string().optional()
+        })
+      )
+      .mutation((opts) => {
+        return updateSleep(
+          opts.input.id,
           opts.input.bedTime,
           opts.input.wakeUpTime,
           opts.input.sleepQuality
@@ -227,6 +318,16 @@ export const appRouter = t.router({
           opts.input.content
         )
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          minutes: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return updateExercise(opts.input.id, opts.input.minutes)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -255,6 +356,16 @@ export const appRouter = t.router({
           opts.input.answer
         )
       }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          answer: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateQuestion(opts.input.id, opts.input.answer)
+      }),
     one: t.procedure
       .input(
         z.object({
@@ -271,7 +382,7 @@ export const appRouter = t.router({
         z.object({
           date: z.string(),
           entryId: z.number(),
-          content: z.string()
+          content: z.string().optional()
         })
       )
       .mutation((opts) => {
@@ -280,6 +391,16 @@ export const appRouter = t.router({
           opts.input.entryId,
           opts.input.content
         )
+      }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          content: z.string().optional()
+        })
+      )
+      .mutation((opts) => {
+        return updateContent(opts.input.id, opts.input.content)
       }),
     one: t.procedure
       .input(

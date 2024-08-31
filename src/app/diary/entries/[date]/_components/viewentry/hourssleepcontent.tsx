@@ -7,9 +7,7 @@ import { trpc } from "~/utils/trpc"
 export default function SleepContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
-  if (!date || typeof date !== "string") {
-    throw new Error("Invalid date")
-  }
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data: sleep, isLoading } = trpc.sleep.one.useQuery({ date })
 

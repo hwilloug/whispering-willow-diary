@@ -63,7 +63,6 @@ export async function createQuestion(
 
 export async function updateQuestion(
   questionId: number,
-  questionContent: string,
   answerContent: string
 ) {
   const user = auth()
@@ -73,7 +72,6 @@ export async function updateQuestion(
   await db
     .update(question)
     .set({
-      question: questionContent,
       answer: answerContent
     })
     .where(eq(question.id, questionId))

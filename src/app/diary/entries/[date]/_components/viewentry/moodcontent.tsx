@@ -5,7 +5,7 @@ import { trpc } from "~/utils/trpc"
 export default function MoodContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
 
-  if (!date || typeof date !== "string") return <div>Invalid date</div>
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data, isLoading } = trpc.mood.one.useQuery({ date })
 

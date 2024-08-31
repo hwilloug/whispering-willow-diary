@@ -45,3 +45,11 @@ export const trpc = createTRPCNext<AppRouter>({
    **/
   ssr: false
 })
+
+export const debounce = (fn: any, delay: number) => {
+  let timerId: NodeJS.Timeout
+  return (...args: any) => {
+    clearTimeout(timerId)
+    timerId = setTimeout(() => fn(...args), delay)
+  }
+}

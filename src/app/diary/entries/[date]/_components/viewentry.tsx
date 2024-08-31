@@ -27,7 +27,7 @@ export default function ViewEntry() {
     return searchParams.get("edit") === "true"
   }, [searchParams])
 
-  if (!date || typeof date !== "string") return <div>Invalid date</div>
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
 
@@ -35,7 +35,7 @@ export default function ViewEntry() {
     return <div>Loading...</div>
   }
 
-  if (!entry) return <NoEntry />
+  if (entry === undefined || entry === null) return <NoEntry />
 
   return (
     <div className="container-transparent">

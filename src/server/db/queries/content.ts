@@ -36,7 +36,7 @@ export async function getContentByDate(date: string) {
 export async function createContent(
   date: string,
   entryId: number,
-  contentContent: string
+  contentContent?: string
 ) {
   const user = auth()
 
@@ -53,9 +53,9 @@ export async function createContent(
     .execute()
 }
 
-export async function updateSubstance(
+export async function updateContent(
   contentId: number,
-  contentContent: string
+  contentContent?: string
 ) {
   const user = auth()
 
@@ -70,7 +70,7 @@ export async function updateSubstance(
     .execute()
 }
 
-export async function deleteSubstance(contentId: number) {
+export async function deleteContent(contentId: number) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")

@@ -9,13 +9,15 @@ export default function AffirmationContent({
 }) {
   const { date } = useParams()
 
-  if (!date || typeof date !== "string") return <div>Invalid date</div>
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data, isLoading } = trpc.affirmation.one.useQuery({ date })
 
   return (
     <div className="bg-amber-900 text-white text-xl p-10 my-4 text-center rounded-lg">
-      <h5 className="text-outline-bold-inverted text-3xl">🌸 Affirmation 🌸</h5>
+      <h5 className="text-outline-bold-inverted text-3xl mb-4">
+        🌸 Affirmation 🌸
+      </h5>
       {isEditMode ? (
         <DailyAffirmationEntry />
       ) : !isLoading && !data?.affirmation ? (

@@ -71,7 +71,6 @@ export async function createSubstances(
 
 export async function updateSubstance(
   substanceId: number,
-  substanceName: string,
   substanceAmount: number
 ) {
   const user = auth()
@@ -81,7 +80,6 @@ export async function updateSubstance(
   await db
     .update(substances)
     .set({
-      substance: substanceName,
       amount: substanceAmount
     })
     .where(eq(substances.id, substanceId))

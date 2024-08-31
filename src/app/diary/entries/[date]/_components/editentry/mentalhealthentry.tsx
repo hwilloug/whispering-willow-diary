@@ -1,5 +1,6 @@
-import MultipleSelector, { Option } from "~/components/ui/multiselect"
-import { EntryState, useJournalStore } from "~/store"
+import { useParams } from "next/navigation"
+import { useMemo } from "react"
+import MultipleSelector from "~/components/ui/multiselect"
 import { trpc } from "~/utils/trpc"
 
 // TODO - move this to user settings
@@ -27,21 +28,67 @@ export const mentalHealthSymptoms = [
   "Suicidal Ideation"
 ]
 
-export default function MentalHealthEntry({ date }: { date: string }) {
+export default function MentalHealthEntry() {
+  const utils = trpc.useUtils()
+  const { date } = useParams()
+
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
+
+  const createMutation = trpc.mentalHealth.post.useMutation({
+    onSuccess: async () => {
+      await utils.mentalHealth.invalidate()
+    }
+  })
+
+  const updateMutation = trpc.mentalHealth.put.useMutation({
+    onSuccess: async () => {
+      await utils.mentalHealth.invalidate()
+    }
+  })
+
   const { data: mentalHealth, isLoading } = trpc.mentalHealth.one.useQuery({
     date
   })
 
-  const mentalHealthOptions = mentalHealth?.mentalHealth.map((s) => ({
-    label: s,
-    value: s
-  }))
+  const { data: entry, isLoading: entryIsLoading } = trpc.entries.one.useQuery({
+    date
+  })
+
+  if (!entryIsLoading && entry === undefined) throw new Error("Invalid entry")
+
+  const mentalHealthValue = useMemo(() => {
+    return mentalHealth?.mentalHealth.map((s) => ({ label: s, value: s })) ?? []
+  }, [mentalHealth])
+
+  const update = (value: string[]) => {
+    updateMutation.mutate({
+      id: mentalHealth!.id,
+      content: value
+    })
+  }
+
+  const add = (value: string[]) => {
+    createMutation.mutate({
+      date,
+      entryId: entry!.id,
+      content: value
+    })
+  }
+
+  const onChange = (value: string[]) => {
+    if (mentalHealth?.id) {
+      update(value)
+    } else {
+      add(value)
+    }
+  }
 
   return (
     <MultipleSelector
-      className="bg-[--primary]"
+      className="bg-pink-200"
       badgeClassName="bg-[--primary-dark]"
-      value={mentalHealthOptions}
+      value={mentalHealthValue}
+      onChange={(e) => onChange(e.map((s) => s.value))}
       defaultOptions={mentalHealthSymptoms.map((s) => ({ label: s, value: s }))}
     />
   )
