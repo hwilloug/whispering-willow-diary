@@ -5,6 +5,21 @@ import { auth } from "@clerk/nextjs/server"
 import { answer } from "../models/journal"
 import { eq } from "drizzle-orm"
 
+export async function getQuestion(dayOfMonth: number) {
+  const user = auth()
+
+  if (!user.userId) throw new Error("Unauthorized")
+
+  const question = await db.query.refQuestion.findFirst({
+    where: (model, { eq }) =>
+      eq(model.dayOfMonth, dayOfMonth) && eq(model.active, true)
+  })
+
+  if (!question) return undefined
+
+  return question
+}
+
 export async function getAnswerByEntry(entryId: number) {
   const user = auth()
 

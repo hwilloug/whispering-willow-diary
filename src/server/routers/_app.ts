@@ -53,6 +53,7 @@ import {
 import {
   createAnswer,
   getAnswerByDate,
+  getQuestion,
   updateAnswer
 } from "../db/queries/question"
 
@@ -368,6 +369,17 @@ export const appRouter = t.router({
       })
   }),
   question: t.router({
+    one: t.procedure
+      .input(
+        z.object({
+          dayOfMonth: z.number()
+        })
+      )
+      .query((opts) => {
+        return getQuestion(opts.input.dayOfMonth)
+      })
+  }),
+  answer: t.router({
     post: t.procedure
       .input(
         z.object({

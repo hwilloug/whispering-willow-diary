@@ -1,5 +1,6 @@
 import { useParams } from "next/navigation"
 import { trpc } from "~/utils/trpc"
+import DailyQuestionEntry from "../editentry/dailyquestionentry"
 
 export default function DailyQuestionContent({
   isEditMode
@@ -10,7 +11,7 @@ export default function DailyQuestionContent({
 
   if (!date || typeof date !== "string") return null
 
-  const { data, isLoading } = trpc.question.one.useQuery({ date })
+  const { data, isLoading } = trpc.answer.one.useQuery({ date })
 
   return (
     <div className="bg-blue-300 rounded-xl my-4 p-4">
@@ -18,12 +19,14 @@ export default function DailyQuestionContent({
         Daily Question
       </h5>
       {isEditMode ? (
-        <div>TODO: DailyQuestionEntry</div>
+        <DailyQuestionEntry />
       ) : !isLoading && !data ? (
         <div className="text-center m-4">None</div>
       ) : (
         <>
-          <div className="text-center text-lg m-4">{data?.question}</div>
+          <div className="text-center text-lg m-4">
+            {data?.question.question}
+          </div>
           <div className="text-center m-4">{data?.answer}</div>
         </>
       )}

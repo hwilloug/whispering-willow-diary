@@ -146,14 +146,14 @@ export const moodRelations = relations(mood, ({ one }) => ({
   })
 }))
 
-export const questionRef = journal.table("question_ref", {
+export const refQuestion = journal.table("ref_question", {
   id: serial("id").primaryKey(),
   dayOfMonth: integer("day_of_month").notNull(),
   question: text("question").notNull(),
   active: boolean("active").default(true)
 })
 
-export const questionRelations = relations(questionRef, ({ many }) => ({
+export const questionRelations = relations(refQuestion, ({ many }) => ({
   answer: many(answer)
 }))
 
@@ -165,7 +165,7 @@ export const answer = journal.table("answer", {
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   questionId: integer("question_id")
-    .references(() => questionRef.id)
+    .references(() => refQuestion.id)
     .notNull(),
   answer: text("answer").notNull()
 })
@@ -175,9 +175,9 @@ export const answerRelations = relations(answer, ({ one }) => ({
     fields: [answer.entryId],
     references: [entries.id]
   }),
-  question: one(questionRef, {
+  question: one(refQuestion, {
     fields: [answer.questionId],
-    references: [questionRef.id]
+    references: [refQuestion.id]
   })
 }))
 
