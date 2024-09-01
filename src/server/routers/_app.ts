@@ -1,6 +1,11 @@
 import { z } from "zod"
 import { initTRPC } from "@trpc/server"
-import { createEntry, getMyEntries, getMyEntry } from "../db/queries/entries"
+import {
+  createEntry,
+  deleteEntry,
+  getMyEntries,
+  getMyEntry
+} from "../db/queries/entries"
 import {
   createAffirmation,
   getAffirmationByDate,
@@ -28,7 +33,12 @@ import {
   getMyMoods,
   updateMood
 } from "../db/queries/mood"
-import { createSleep, getSleepByDate, updateSleep } from "../db/queries/sleep"
+import {
+  createSleep,
+  deleteSleep,
+  getSleepByDate,
+  updateSleep
+} from "../db/queries/sleep"
 import {
   createExercise,
   getExerciseByDate,
@@ -41,6 +51,7 @@ import {
 } from "../db/queries/question"
 import {
   createContent,
+  deleteContent,
   getContentByDate,
   updateContent
 } from "../db/queries/content"
@@ -69,6 +80,15 @@ export const appRouter = t.router({
       )
       .query((opts) => {
         return getMyEntry(opts.input.date)
+      }),
+    delete: t.procedure
+      .input(
+        z.object({
+          id: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteEntry(opts.input.id)
       })
   }),
   affirmation: t.router({
@@ -300,6 +320,15 @@ export const appRouter = t.router({
       )
       .query((opts) => {
         return getSleepByDate(opts.input.date)
+      }),
+    delete: t.procedure
+      .input(
+        z.object({
+          id: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteSleep(opts.input.id)
       })
   }),
   exercise: t.router({
@@ -410,6 +439,15 @@ export const appRouter = t.router({
       )
       .query((opts) => {
         return getContentByDate(opts.input.date)
+      }),
+    delete: t.procedure
+      .input(
+        z.object({
+          id: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteContent(opts.input.id)
       })
   })
 })

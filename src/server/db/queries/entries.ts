@@ -4,6 +4,7 @@ import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { entries } from "../models/journal"
 import { entryDTOToContent } from "~/server/utils"
+import { eq } from "drizzle-orm"
 
 export async function getMyEntries() {
   const user = auth()
@@ -63,4 +64,18 @@ export async function createEntry(date: string) {
       date
     })
     .execute()
+}
+
+export async function deleteEntry(id: number) {
+  const user = auth()
+
+  if (!user.userId) throw new Error("Unauthorized")
+
+  const dbEntry = await db.query.entries.findFirst({
+    where: (model, { eq }) => eq(model.id, id)
+  })
+
+  if (!dbEntry) throw new Error("Entry not found")
+
+  await db.delete(entries).where(eq(entries.id, id)).execute()
 }

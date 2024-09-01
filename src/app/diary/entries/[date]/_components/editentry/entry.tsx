@@ -1,13 +1,14 @@
 import { format } from "date-fns"
 import { useParams } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
+import TrashIcon from "~/app/diary/_components/icons/trashicon"
 import { debounce, trpc } from "~/utils/trpc"
 
 export default function Entry() {
   const { date } = useParams()
   const utils = trpc.useUtils()
 
-  if (!date || typeof date !== "string") return null
+  if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data: content, isLoading } = trpc.content.one.useQuery({ date })
 
@@ -24,12 +25,18 @@ export default function Entry() {
   }, [content])
 
   const createMutation = trpc.content.post.useMutation({
-    onSuccess: () => {
-      utils.content.invalidate()
+    onSuccess: async () => {
+      await utils.content.invalidate()
     }
   })
 
   const updateMutation = trpc.content.put.useMutation()
+
+  const deleteMutatoin = trpc.content.delete.useMutation({
+    onSuccess: async () => {
+      await utils.content.invalidate()
+    }
+  })
 
   const create = () => {
     createMutation.mutate({ date, entryId: entry!.id })
@@ -62,13 +69,29 @@ export default function Entry() {
     [[...contentValue]]
   )
 
+  const onDelete = (id: number) => {
+    if (!confirm("Are you sure you want to delete this entry?")) return
+
+    const newContent = contentValue.filter((c) => c.id !== id)
+    setContentValue([...newContent])
+    deleteMutatoin.mutate({ id })
+  }
+
   if (isLoading) return <div>Loading...</div>
 
   return (
     <>
       {contentValue?.map((c, idx) => (
-        <div key={idx} className="mt-4">
-          <h2>{format(new Date(c.createdAt), "h:mm a")}</h2>
+        <div key={idx} className="mt-9">
+          <div className="flex justify-between m-2">
+            <h2 className="font-bold">
+              {format(new Date(c.createdAt), "h:mm a")}
+            </h2>
+            <TrashIcon
+              className="cursor-pointer"
+              onClick={() => onDelete(c.id)}
+            />
+          </div>
           <textarea
             className="w-full p-4 bg-yellow-200 rounded-lg h-60"
             value={c.content ?? ""}

@@ -10,6 +10,7 @@ const config = {
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked"
   ],
+  ignorePatterns: ["*/utils/trpc.ts"],
   rules: {
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",

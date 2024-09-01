@@ -44,7 +44,9 @@ export const entryRelations = relations(entries, ({ many, one }) => ({
 export const sleep = journal.table("sleep", {
   id: serial("id").primaryKey(),
   date: varchar("date", { length: 10 }).notNull(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   bedTime: timestamp("bed_time", { withTimezone: true }),
   wakeUpTime: timestamp("wake_up_time", { withTimezone: true }),
@@ -60,7 +62,9 @@ export const sleepRelations = relations(sleep, ({ one }) => ({
 
 export const affirmation = journal.table("affirmation", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   affirmation: text("affirmation").notNull()
@@ -75,7 +79,9 @@ export const affirmationRelations = relations(affirmation, ({ one }) => ({
 
 export const mentalHealth = journal.table("mental_health", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   mentalHealth: text("mental_health").array().notNull()
@@ -90,7 +96,9 @@ export const mentalHealthRelations = relations(mentalHealth, ({ one }) => ({
 
 export const feelings = journal.table("feelings", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   feelings: text("feelings").array().notNull()
@@ -105,7 +113,9 @@ export const feelingsRelations = relations(feelings, ({ one }) => ({
 
 export const substances = journal.table("substances", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   substance: text("substance").notNull(),
@@ -121,7 +131,9 @@ export const substancesRelations = relations(substances, ({ one }) => ({
 
 export const mood = journal.table("mood", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   mood: integer("mood").notNull()
@@ -136,7 +148,9 @@ export const moodRelations = relations(mood, ({ one }) => ({
 
 export const question = journal.table("question", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   question: text("question").notNull(),
@@ -152,7 +166,9 @@ export const questionRelations = relations(question, ({ one }) => ({
 
 export const exercise = journal.table("exercise", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   exercise: integer("exercise").notNull()
@@ -167,7 +183,9 @@ export const exerciseRelations = relations(exercise, ({ one }) => ({
 
 export const content = journal.table("content", {
   id: serial("id").primaryKey(),
-  entryId: integer("entry_id").references(() => entries.id),
+  entryId: integer("entry_id")
+    .references(() => entries.id, { onDelete: "cascade" })
+    .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
   content: text("content"),

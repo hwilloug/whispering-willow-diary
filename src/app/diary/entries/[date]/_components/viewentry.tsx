@@ -22,6 +22,7 @@ export default function ViewEntry() {
   const { date } = useParams()
   const searchParams = useSearchParams()
   const router = useRouter()
+  const utils = trpc.useUtils()
 
   const isEditMode = useMemo(() => {
     return searchParams.get("edit") === "true"
@@ -31,6 +32,20 @@ export default function ViewEntry() {
 
   const { data: entry, isLoading } = trpc.entries.one.useQuery({ date })
 
+  const deleteMutation = trpc.entries.delete.useMutation({
+    onSuccess: async () => {
+      await utils.entries.invalidate()
+    }
+  })
+
+  const onDelete = () => {
+    if (entry?.id === undefined) return
+
+    if (confirm("Are you sure you want to delete this entry?")) {
+      deleteMutation.mutate({ id: entry.id })
+    }
+  }
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -38,7 +53,7 @@ export default function ViewEntry() {
   if (entry === undefined || entry === null) return <NoEntry />
 
   return (
-    <div className="container-transparent">
+    <div className="container-transparent" key={(entry.id = x)}>
       <div className="flex justify-end">
         {isEditMode ? (
           <CheckCircleIcon
@@ -51,7 +66,7 @@ export default function ViewEntry() {
             onClick={() => router.push(`/diary/entries/${date}?edit=true`)}
           />
         )}
-        <TrashIcon className="mx-4 cursor-pointer" />
+        <TrashIcon className="mx-4 cursor-pointer" onClick={onDelete} />
       </div>
       <div className="text-outline-bold text-4xl text-center py-6">
         {format(parse(date, "yyyy-MM-dd", new Date()), "eeee, LLLL d, yyyy")}

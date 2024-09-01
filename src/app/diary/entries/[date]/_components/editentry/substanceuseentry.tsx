@@ -34,14 +34,14 @@ export default function SubstanceUseEntry() {
   if (!entry && !isLoadingEntry) throw new Error("Entry not found")
 
   const createMutation = trpc.substances.post.useMutation({
-    onSuccess: () => {
-      utils.substances.invalidate()
+    onSuccess: async () => {
+      await utils.substances.invalidate()
     }
   })
 
   const updateMutation = trpc.substances.put.useMutation({
-    onSuccess: () => {
-      utils.substances.invalidate()
+    onSuccess: async () => {
+      await utils.substances.invalidate()
     }
   })
 

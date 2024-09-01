@@ -35,6 +35,12 @@ export default function SleepEntry() {
     }
   })
 
+  const deleteMutation = trpc.sleep.delete.useMutation({
+    onSuccess: async () => {
+      await utils.sleep.invalidate()
+    }
+  })
+
   const parseDbDate = (date: string) => {
     return new Date(date)
   }
@@ -107,6 +113,12 @@ export default function SleepEntry() {
     }
   }
 
+  const onDelete = (id: number) => {
+    if (!confirm("Are you sure you want to delete this sleep entry?")) return
+
+    deleteMutation.mutate({ id })
+  }
+
   return (
     <>
       {sleepWithHours?.map((s, idx) => (
@@ -160,7 +172,7 @@ export default function SleepEntry() {
               <p>({s.hoursSleep} hours)</p>
             </div>
             <div className="flex justify-center">
-              <TrashIcon onClick={() => ({})} />
+              <TrashIcon onClick={() => onDelete(s.id)} />
             </div>
           </div>
           <hr className="border-blue-500" />
