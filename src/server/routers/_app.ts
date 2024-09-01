@@ -45,16 +45,16 @@ import {
   updateExercise
 } from "../db/queries/exercise"
 import {
-  createQuestion,
-  getQuestionByDate,
-  updateQuestion
-} from "../db/queries/question"
-import {
   createContent,
   deleteContent,
   getContentByDate,
   updateContent
 } from "../db/queries/content"
+import {
+  createAnswer,
+  getAnswerByDate,
+  updateAnswer
+} from "../db/queries/question"
 
 const t = initTRPC.create()
 
@@ -373,15 +373,15 @@ export const appRouter = t.router({
         z.object({
           date: z.string(),
           entryId: z.number(),
-          question: z.string(),
+          questionId: z.number(),
           answer: z.string()
         })
       )
       .mutation((opts) => {
-        return createQuestion(
+        return createAnswer(
           opts.input.date,
           opts.input.entryId,
-          opts.input.question,
+          opts.input.questionId,
           opts.input.answer
         )
       }),
@@ -393,7 +393,7 @@ export const appRouter = t.router({
         })
       )
       .mutation((opts) => {
-        return updateQuestion(opts.input.id, opts.input.answer)
+        return updateAnswer(opts.input.id, opts.input.answer)
       }),
     one: t.procedure
       .input(
@@ -402,7 +402,7 @@ export const appRouter = t.router({
         })
       )
       .query((opts) => {
-        return getQuestionByDate(opts.input.date)
+        return getAnswerByDate(opts.input.date)
       })
   }),
   content: t.router({

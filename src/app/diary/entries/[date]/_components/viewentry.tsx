@@ -53,7 +53,7 @@ export default function ViewEntry() {
   if (entry === undefined || entry === null) return <NoEntry />
 
   return (
-    <div className="container-transparent" key={(entry.id = x)}>
+    <div className="container-transparent" key={entry.id}>
       <div className="flex justify-end">
         {isEditMode ? (
           <CheckCircleIcon

@@ -3,7 +3,7 @@
 
 import { relations, sql } from "drizzle-orm"
 import {
-  date,
+  boolean,
   integer,
   pgSchema,
   serial,
@@ -38,7 +38,7 @@ export const entryRelations = relations(entries, ({ many, one }) => ({
   mood: one(mood),
   exercise: one(exercise),
   content: many(content),
-  question: one(question)
+  answer: one(answer)
 }))
 
 export const sleep = journal.table("sleep", {
@@ -146,21 +146,38 @@ export const moodRelations = relations(mood, ({ one }) => ({
   })
 }))
 
-export const question = journal.table("question", {
+export const questionRef = journal.table("question_ref", {
+  id: serial("id").primaryKey(),
+  dayOfMonth: integer("day_of_month").notNull(),
+  question: text("question").notNull(),
+  active: boolean("active").default(true)
+})
+
+export const questionRelations = relations(questionRef, ({ many }) => ({
+  answer: many(answer)
+}))
+
+export const answer = journal.table("answer", {
   id: serial("id").primaryKey(),
   entryId: integer("entry_id")
     .references(() => entries.id, { onDelete: "cascade" })
     .notNull(),
   date: varchar("date", { length: 10 }).notNull(),
   userId: varchar("user_id", { length: 256 }).notNull(),
-  question: text("question").notNull(),
+  questionId: integer("question_id")
+    .references(() => questionRef.id)
+    .notNull(),
   answer: text("answer").notNull()
 })
 
-export const questionRelations = relations(question, ({ one }) => ({
+export const answerRelations = relations(answer, ({ one }) => ({
   entry: one(entries, {
-    fields: [question.entryId],
+    fields: [answer.entryId],
     references: [entries.id]
+  }),
+  question: one(questionRef, {
+    fields: [answer.questionId],
+    references: [questionRef.id]
   })
 }))
 
