@@ -14,8 +14,8 @@ export default function SleepEntry() {
 
   if (!date && typeof date !== "string") throw new Error("Invalid date")
 
-  // @ts-expect-error  date will always be a string
   const { data: entry, isLoading: isLoadingEntry } = trpc.entries.one.useQuery({
+    // @ts-expect-error  date will always be a string
     date
   })
   if (entry === undefined && !isLoadingEntry) throw new Error("Invalid entry")
@@ -131,8 +131,8 @@ export default function SleepEntry() {
               ]}
               style={{
                 padding: 20,
-                backgroundColor: "var(--primary)",
-                textAlign: "center"
+                textAlign: "center",
+                backgroundColor: "#bfdbfe"
               }}
             />
             <p>to</p>
@@ -152,7 +152,7 @@ export default function SleepEntry() {
               ]}
               style={{
                 padding: 20,
-                backgroundColor: "var(--primary)",
+                backgroundColor: "#bfdbfe",
                 textAlign: "center"
               }}
             />

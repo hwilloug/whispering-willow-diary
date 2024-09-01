@@ -68,7 +68,7 @@ export default function Entry() {
     <>
       {contentValue?.map((c, idx) => (
         <div key={idx} className="mt-4">
-          <h2>{format(new Date(c.createdAt), "hh:mm a")}</h2>
+          <h2>{format(new Date(c.createdAt), "h:mm a")}</h2>
           <textarea
             className="w-full p-4 bg-yellow-200 rounded-lg h-60"
             value={c.content ?? ""}

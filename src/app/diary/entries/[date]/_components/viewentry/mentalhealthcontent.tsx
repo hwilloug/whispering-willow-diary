@@ -22,7 +22,7 @@ export default function MentalHealthContent({
       </h5>
       <div className="flex flex-wrap justify-center gap-4">
         {isEditMode ? (
-          <MentalHealthEntry date={date} />
+          <MentalHealthEntry />
         ) : !isLoading && !mentalHealth?.mentalHealth ? (
           <div className="text-center m-4">None</div>
         ) : (
