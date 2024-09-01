@@ -31,24 +31,34 @@ export default function DailyAffirmationEntry() {
     }
   })
 
-  const updateMutation = trpc.affirmation.put.useMutation({
-    onSuccess: async () => {
-      await utils.affirmation.invalidate()
-    }
-  })
+  const updateMutation = trpc.affirmation.put.useMutation()
 
-  const submitDebounced = debounce((value: string) => {
-    if (affirmation?.id !== undefined) {
-      updateMutation.mutate({ id: affirmation.id, content: value })
-    } else {
-      createMutation.mutate({ date, entryId: entry!.id, content: value })
-    }
+  const update = useCallback(
+    debounce((id: number, content: string) => {
+      updateMutation.mutate({ id, content })
+    }, 500),
+    []
+  )
+
+  const create = debounce((content: string) => {
+    createMutation.mutate({ date, entryId: entry!.id, content })
   }, 500)
 
-  const onChange = useCallback((value: string) => {
+  const submit = useCallback(
+    (value: string) => {
+      if (affirmation?.id) {
+        update(affirmation.id, value)
+      } else {
+        create(value)
+      }
+    },
+    [affirmation?.id]
+  )
+
+  const onChange = (value: string) => {
     setAffirmationContent(value)
-    submitDebounced(value)
-  }, [])
+    submit(value)
+  }
 
   return (
     <div>
