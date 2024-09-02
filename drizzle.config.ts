@@ -7,7 +7,12 @@ export default defineConfig({
   schemaFilter: ["public", "journal", "goals", "habits", "users"],
   dialect: "postgresql",
   dbCredentials: {
-    url: env.DATABASE_URL
+    host: env.DATABASE_HOST,
+    port: parseInt(env.DATABASE_PORT),
+    user: env.DATABASE_USER,
+    password: env.DATABASE_PASSWORD,
+    database: env.DATABASE_DATABASE,
+    ssl: true
   },
   out: "./src/server/db/migrations/*"
 })

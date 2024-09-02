@@ -14,7 +14,7 @@ const globalForDb = globalThis as unknown as {
 
 const conn =
   globalForDb.conn ??
-  postgres(env.POSTGRES_CONNECTION_STRING, {
+  postgres(env.DATABASE_URL, {
     ssl: { rejectUnauthorized: false },
     max: 10
   })
