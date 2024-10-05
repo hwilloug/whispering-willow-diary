@@ -16,8 +16,8 @@ export default function TopNav() {
         <div className="font-dancing-script text-[#e0f0bb] text-3xl">
           Whispering Willow Diary
         </div>
-        <div className="text-blue-400 text-sm border rounded-full p-2 border-blue-400">
-          Beta
+        <div className="text-red-400 text-sm border rounded-full p-2 border-red-400">
+          Alpha
         </div>
       </div>
 

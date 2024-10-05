@@ -23,7 +23,7 @@ export async function getMyEntries() {
       content: true,
       mood: true,
       exercise: true,
-      question: true
+      answer: true
     }
   })
 
@@ -36,7 +36,8 @@ export async function getMyEntry(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const entry = await db.query.entries.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!entry) return null
@@ -52,7 +53,8 @@ export async function createEntry(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const entry = await db.query.entries.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (entry) throw new Error("Entry already exists")
@@ -72,7 +74,8 @@ export async function deleteEntry(id: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbEntry = await db.query.entries.findFirst({
-    where: (model, { eq }) => eq(model.id, id)
+    where: (model, { eq, and }) =>
+      and(eq(model.id, id), eq(model.userId, user.userId))
   })
 
   if (!dbEntry) throw new Error("Entry not found")

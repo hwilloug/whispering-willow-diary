@@ -47,7 +47,7 @@ export default function EntriesList({}) {
                   </div>
                 </div>
               ) : (
-                <Link href={`/diary/entries/${entryDate}/edit`}>
+                <Link href={`/diary/entries/${entryDate}?edit=true`}>
                   <div className="bg-[--primary] mt-1 p-4 border rounded-2xl hover:bg-transparent hover:cursor-pointer">
                     <DocumentPlusIcon className="m-auto" />
                   </div>

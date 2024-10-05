@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { affirmation } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { PgDateString } from "drizzle-orm/pg-core"
 
 export async function getAffirmationByEntry(entryId: number) {
@@ -12,7 +12,8 @@ export async function getAffirmationByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const affirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!affirmation) return null
@@ -26,7 +27,8 @@ export async function getAffirmationByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const affirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!affirmation) return null
@@ -44,7 +46,8 @@ export async function createAffirmation(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbAffirmation = await db.query.affirmation.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (dbAffirmation) throw new Error("Affirmation already exists")
@@ -73,7 +76,12 @@ export async function updateAffirmation(
     .set({
       affirmation: affirmationContent
     })
-    .where(eq(affirmation.id, affirmationId))
+    .where(
+      and(
+        eq(affirmation.id, affirmationId),
+        eq(affirmation.userId, user.userId)
+      )
+    )
     .execute()
 }
 

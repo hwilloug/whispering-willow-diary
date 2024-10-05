@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { exercise } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function getExerciseByEntry(entryId: number) {
   const user = auth()
@@ -11,7 +11,8 @@ export async function getExerciseByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const exercise = await db.query.exercise.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!exercise) return null
@@ -25,7 +26,8 @@ export async function getExerciseByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const exercise = await db.query.exercise.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!exercise) return null
@@ -43,7 +45,8 @@ export async function createExercise(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbExercise = await db.query.exercise.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (dbExercise) throw new Error("Exercise already exists")
@@ -72,7 +75,7 @@ export async function updateExercise(
     .set({
       exercise: exerciseContent
     })
-    .where(eq(exercise.id, exerciseId))
+    .where(and(eq(exercise.id, exerciseId), eq(exercise.userId, user.userId)))
     .execute()
 }
 

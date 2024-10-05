@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { content } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function getContentByEntry(entryId: number) {
   const user = auth()
@@ -11,7 +11,8 @@ export async function getContentByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const content = await db.query.content.findMany({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!content) return null
@@ -25,7 +26,8 @@ export async function getContentByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const content = await db.query.content.findMany({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!content) return null
@@ -66,7 +68,7 @@ export async function updateContent(
     .set({
       content: contentContent
     })
-    .where(eq(content.id, contentId))
+    .where(and(eq(content.id, contentId), eq(content.userId, user.userId)))
     .execute()
 }
 

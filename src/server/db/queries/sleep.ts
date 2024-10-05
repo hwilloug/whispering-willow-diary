@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { sleep } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { parse } from "date-fns"
 
 export async function getMySleep() {
@@ -26,7 +26,8 @@ export async function getSleepByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const sleep = await db.query.sleep.findMany({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!sleep) return null
@@ -40,7 +41,8 @@ export async function getSleepByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const sleep = await db.query.sleep.findMany({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!sleep) return null
@@ -83,7 +85,8 @@ export async function updateSleep(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbSleep = await db.query.sleep.findFirst({
-    where: (model, { eq }) => eq(model.id, sleepId)
+    where: (model, { eq, and }) =>
+      and(eq(model.id, sleepId), eq(model.userId, user.userId))
   })
 
   if (!dbSleep) throw new Error("Sleep not found")
@@ -95,7 +98,7 @@ export async function updateSleep(
       wakeUpTime: parseTimeValue(wakeUpTime) ?? dbSleep.wakeUpTime,
       sleepQuality: sleepQuality ?? dbSleep.sleepQuality
     })
-    .where(eq(sleep.id, sleepId))
+    .where(and(eq(sleep.id, sleepId), eq(sleep.userId, user.userId)))
     .execute()
 }
 

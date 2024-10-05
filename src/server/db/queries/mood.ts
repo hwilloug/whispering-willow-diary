@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { mood } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function getMyMoods() {
   const user = auth()
@@ -11,7 +11,7 @@ export async function getMyMoods() {
   if (!user.userId) throw new Error("Unauthorized")
 
   const moods = await db.query.mood.findMany({
-    where: (model, { eq }) => eq(model.userId, user.userId)
+    where: (model, { eq, and }) => and(eq(model.userId, user.userId))
   })
 
   if (!moods) return null
@@ -25,7 +25,8 @@ export async function getMoodByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const mood = await db.query.mood.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!mood) return null
@@ -39,7 +40,8 @@ export async function getMoodByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const mood = await db.query.mood.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!mood) return null
@@ -57,7 +59,8 @@ export async function createMood(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbMood = await db.query.mood.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (dbMood) throw new Error("Mood already exists")
@@ -83,7 +86,7 @@ export async function updateMood(moodId: number, moodContent: number) {
     .set({
       mood: moodContent
     })
-    .where(eq(mood.id, moodId))
+    .where(and(eq(mood.id, moodId), eq(mood.userId, user.userId)))
     .execute()
 }
 

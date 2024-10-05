@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { affirmation, feelings } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function getFeelingsByEntry(entryId: number) {
   const user = auth()
@@ -11,7 +11,8 @@ export async function getFeelingsByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const feelings = await db.query.feelings.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!feelings) return null
@@ -25,7 +26,8 @@ export async function getFeelingsByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const feelings = await db.query.feelings.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!feelings) return null
@@ -43,7 +45,8 @@ export async function createFeelings(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbFeelings = await db.query.feelings.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (dbFeelings) throw new Error("Feelings already exists")
@@ -72,7 +75,7 @@ export async function updateFeelings(
     .set({
       feelings: feelingsContent
     })
-    .where(eq(feelings.id, feelingsId))
+    .where(and(eq(feelings.id, feelingsId), eq(feelings.userId, user.userId)))
     .execute()
 }
 

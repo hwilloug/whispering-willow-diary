@@ -3,7 +3,7 @@ import "server-only"
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
 import { substances } from "../models/journal"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function getMySubstances() {
   const user = auth()
@@ -25,7 +25,8 @@ export async function getSubstancesByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const substances = await db.query.substances.findMany({
-    where: (model, { eq }) => eq(model.entryId, entryId)
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId))
   })
 
   if (!substances) return null
@@ -39,7 +40,8 @@ export async function getSubstancesByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const substances = await db.query.substances.findMany({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (!substances) return null
@@ -82,7 +84,9 @@ export async function updateSubstance(
     .set({
       amount: substanceAmount
     })
-    .where(eq(substances.id, substanceId))
+    .where(
+      and(eq(substances.id, substanceId), eq(substances.userId, user.userId))
+    )
     .execute()
 }
 
