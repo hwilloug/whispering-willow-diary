@@ -16,7 +16,7 @@ export default function MentalHealthContent({
   })
 
   return (
-    <div className="bg-pink-300 rounded-xl p-4 mt-4">
+    <div className="bg-pink-300 rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">
         Mental Health & Behavior
       </h5>

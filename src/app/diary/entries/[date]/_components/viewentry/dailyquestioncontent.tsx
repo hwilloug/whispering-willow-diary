@@ -14,7 +14,7 @@ export default function DailyQuestionContent({
   const { data, isLoading } = trpc.answer.one.useQuery({ date })
 
   return (
-    <div className="bg-blue-300 rounded-xl my-4 p-4">
+    <div className="bg-blue-300 rounded-xl p-4">
       <h5 className="text-outline-bold text-2xl text-center my-4">
         Daily Question
       </h5>

@@ -10,11 +10,14 @@ export default function SleepContent({ isEditMode }: { isEditMode: boolean }) {
   if (!date || typeof date !== "string") throw new Error("Invalid date")
 
   const { data: sleep, isLoading } = trpc.sleep.one.useQuery({ date })
-
   const hoursSleep = useMemo(() => {
+    const parseDbDate = (date: string) => {
+      return new Date(date)
+    }
+    
     function getHoursSleep(bedTime: string, wakeUpTime: string) {
-      const bedTimeDate = parse(bedTime, "HH:mm", new Date())
-      const wakeUpTimeDate = parse(wakeUpTime, "HH:mm", new Date())
+      const bedTimeDate = parseDbDate(bedTime)
+      const wakeUpTimeDate = parseDbDate(wakeUpTime)
       const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
       let diff = diffMin / 60
       if (diff < 0) {

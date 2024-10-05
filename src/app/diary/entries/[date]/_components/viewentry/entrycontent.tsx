@@ -11,7 +11,7 @@ export default function EntryContent({ isEditMode }: { isEditMode: boolean }) {
   const { data, isLoading } = trpc.content.one.useQuery({ date })
 
   return (
-    <div className="bg-amber-300 rounded-xl p-2">
+    <div className="bg-amber-300 rounded-xl mt-4 p-2">
       <h5 className="text-outline-bold text-2xl text-center my-4">Entries</h5>
       {isEditMode ? (
         <Entry />

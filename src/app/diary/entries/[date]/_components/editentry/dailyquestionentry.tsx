@@ -1,4 +1,4 @@
-import { getDay } from "date-fns"
+import { getDate, parse } from "date-fns"
 import { useParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { answer } from "~/server/db/models/journal"
@@ -10,7 +10,7 @@ export default function DailyQuestionEntry() {
 
   if (!date || typeof date !== "string") throw new Error("Invalid date")
 
-  const dayOfMonth = getDay(date)
+  const dayOfMonth = getDate(parse(date, "yyyy-MM-dd", new Date()))
 
   const createMutation = trpc.answer.post.useMutation({
     onSuccess: async () => {
@@ -42,14 +42,14 @@ export default function DailyQuestionEntry() {
     })
   }, 500)
 
-  const submit = useCallback((answer: string) => {
-    if (data?.id) {
+  const submit = useCallback((entryId: number, questionId: number, answer: string, id?: number) => {
+    if (id) {
       update(answer)
     } else {
       createMutation.mutate({
         date,
-        entryId: entry!.id,
-        questionId: question!.id,
+        entryId: entryId,
+        questionId: questionId,
         answer: answer
       })
     }
@@ -57,7 +57,7 @@ export default function DailyQuestionEntry() {
 
   const onChange = (value: string) => {
     setAnswerContent(value)
-    submit(value)
+    submit(entry!.id, question!.id, value, data?.id)
   }
 
   if (isLoading || isLoadingQuestion || isLoadingEntry)
@@ -65,7 +65,7 @@ export default function DailyQuestionEntry() {
 
   return (
     <div>
-      <div className="text-center">{question?.question}</div>
+      <div className="text-center">{data?.question.question ?? question?.question}</div>
       <textarea
         className="w-full rounded-lg p-2 bg-blue-100"
         value={answerContent}

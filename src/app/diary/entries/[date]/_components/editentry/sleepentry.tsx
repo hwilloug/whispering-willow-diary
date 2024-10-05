@@ -1,7 +1,7 @@
 "use client"
 
 import { differenceInMinutes, parse } from "date-fns"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
 import TrashIcon from "~/app/diary/_components/icons/trashicon"
@@ -95,7 +95,7 @@ export default function SleepEntry() {
     updateMutation.mutate({ id, bedTime, wakeUpTime, sleepQuality })
   }
 
-  const onChange = ({
+  const submit = useCallback(({
     id,
     wakeUpTime,
     bedTime,
@@ -111,6 +111,16 @@ export default function SleepEntry() {
     } else {
       addSleep()
     }
+  }, [])
+
+  const onChange = (
+    data : {
+    id?: number
+    wakeUpTime?: string
+    bedTime?: string
+    sleepQuality?: string
+  }) => {
+    submit(data)
   }
 
   const onDelete = (id: number) => {
