@@ -42,18 +42,21 @@ export default function DailyQuestionEntry() {
     })
   }, 500)
 
-  const submit = useCallback((entryId: number, questionId: number, answer: string, id?: number) => {
-    if (id) {
-      update(answer)
-    } else {
-      createMutation.mutate({
-        date,
-        entryId: entryId,
-        questionId: questionId,
-        answer: answer
-      })
-    }
-  }, [])
+  const submit = useCallback(
+    (entryId: number, questionId: number, answer: string, id?: number) => {
+      if (id) {
+        update(answer)
+      } else {
+        createMutation.mutate({
+          date,
+          entryId: entryId,
+          questionId: questionId,
+          answer: answer
+        })
+      }
+    },
+    []
+  )
 
   const onChange = (value: string) => {
     setAnswerContent(value)
@@ -65,7 +68,9 @@ export default function DailyQuestionEntry() {
 
   return (
     <div>
-      <div className="text-center">{data?.question.question ?? question?.question}</div>
+      <div className="text-center">
+        {data?.question.question ?? question?.question}
+      </div>
       <textarea
         className="w-full rounded-lg p-2 bg-blue-100"
         value={answerContent}

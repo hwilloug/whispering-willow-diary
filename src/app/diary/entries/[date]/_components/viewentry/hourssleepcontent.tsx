@@ -14,7 +14,7 @@ export default function SleepContent({ isEditMode }: { isEditMode: boolean }) {
     const parseDbDate = (date: string) => {
       return new Date(date)
     }
-    
+
     function getHoursSleep(bedTime: string, wakeUpTime: string) {
       const bedTimeDate = parseDbDate(bedTime)
       const wakeUpTimeDate = parseDbDate(wakeUpTime)

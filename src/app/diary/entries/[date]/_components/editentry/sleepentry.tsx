@@ -95,26 +95,28 @@ export default function SleepEntry() {
     updateMutation.mutate({ id, bedTime, wakeUpTime, sleepQuality })
   }
 
-  const submit = useCallback(({
-    id,
-    wakeUpTime,
-    bedTime,
-    sleepQuality
-  }: {
-    id?: number
-    wakeUpTime?: string
-    bedTime?: string
-    sleepQuality?: string
-  }) => {
-    if (id) {
-      updateSleep({ id, wakeUpTime, bedTime, sleepQuality })
-    } else {
-      addSleep()
-    }
-  }, [])
+  const submit = useCallback(
+    ({
+      id,
+      wakeUpTime,
+      bedTime,
+      sleepQuality
+    }: {
+      id?: number
+      wakeUpTime?: string
+      bedTime?: string
+      sleepQuality?: string
+    }) => {
+      if (id) {
+        updateSleep({ id, wakeUpTime, bedTime, sleepQuality })
+      } else {
+        addSleep()
+      }
+    },
+    []
+  )
 
-  const onChange = (
-    data : {
+  const onChange = (data: {
     id?: number
     wakeUpTime?: string
     bedTime?: string
