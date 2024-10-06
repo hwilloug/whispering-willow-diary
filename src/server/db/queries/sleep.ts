@@ -11,9 +11,15 @@ export async function getMySleep() {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const sleeps = await db.query.sleep.findMany({
-    where: (model, { eq }) => eq(model.userId, user.userId)
-  })
+  const sleeps = await db
+    .select({
+      date: sleep.date,
+      bedTime: sleep.bedTime,
+      wakeUpTime: sleep.wakeUpTime
+    })
+    .from(sleep)
+    .where(eq(sleep.userId, user.userId))
+    .groupBy(sleep.date, sleep.id)
 
   if (!sleeps) return null
 

@@ -36,6 +36,7 @@ import {
 import {
   createSleep,
   deleteSleep,
+  getMySleep,
   getSleepByDate,
   updateSleep
 } from "../db/queries/sleep"
@@ -312,6 +313,15 @@ export const appRouter = t.router({
           opts.input.wakeUpTime,
           opts.input.sleepQuality
         )
+      }),
+    all: t.procedure
+      .input(
+        z.object({
+          date: z.string()
+        })
+      )
+      .query((opts) => {
+        return getMySleep()
       }),
     one: t.procedure
       .input(

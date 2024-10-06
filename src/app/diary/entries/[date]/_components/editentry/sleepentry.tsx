@@ -1,12 +1,12 @@
 "use client"
 
-import { differenceInMinutes, parse } from "date-fns"
 import { useCallback, useMemo } from "react"
 import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker"
 import TrashIcon from "~/app/diary/_components/icons/trashicon"
 import { trpc } from "~/utils/trpc"
 import { useParams } from "next/navigation"
+import { getHoursSleep } from "~/app/utils"
 
 export default function SleepEntry() {
   const { date } = useParams()
@@ -43,17 +43,6 @@ export default function SleepEntry() {
 
   const parseDbDate = (date: string) => {
     return new Date(date)
-  }
-
-  function getHoursSleep(bedTime: string, wakeUpTime: string) {
-    const bedTimeDate = parseDbDate(bedTime)
-    const wakeUpTimeDate = parseDbDate(wakeUpTime)
-    const diffMin = differenceInMinutes(wakeUpTimeDate, bedTimeDate)
-    let diff = diffMin / 60
-    if (diff < 0) {
-      diff += 24
-    }
-    return diff
   }
 
   const sleepWithHours = useMemo(() => {
