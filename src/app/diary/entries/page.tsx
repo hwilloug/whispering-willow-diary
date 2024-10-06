@@ -2,7 +2,6 @@
 
 import { format, subDays } from "date-fns"
 import Link from "next/link"
-import { useJournalStore } from "~/store"
 import EyeIcon from "../_components/icons/eyeicon"
 import TrashIcon from "../_components/icons/trashicon"
 import DocumentPlusIcon from "../_components/icons/documentplusicon"

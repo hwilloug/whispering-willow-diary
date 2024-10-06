@@ -35,9 +35,9 @@ export default function DailyQuestionEntry() {
     setAnswerContent(data?.answer)
   }, [data?.answer])
 
-  const update = debounce((answer: string) => {
+  const update = debounce((id: number, answer: string) => {
     updateMutation.mutate({
-      id: data!.id,
+      id,
       answer
     })
   }, 500)
@@ -45,7 +45,7 @@ export default function DailyQuestionEntry() {
   const submit = useCallback(
     (entryId: number, questionId: number, answer: string, id?: number) => {
       if (id) {
-        update(answer)
+        update(id, answer)
       } else {
         createMutation.mutate({
           date,
