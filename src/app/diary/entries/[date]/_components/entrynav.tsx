@@ -2,11 +2,16 @@ import { addDays, format, isAfter, isBefore, parse, subDays } from "date-fns"
 import { useParams, useRouter } from "next/navigation"
 import ArrowLeft from "./icons/arrowleft"
 import ArrowRight from "./icons/arrowright"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
+import WeeklyCalendar from "./weekcalendar"
 
 export default function EntryNav() {
   const router = useRouter()
   const { date } = useParams()
+
+  const [selectedDate, setSelectedDate] = useState(
+    parse(date as string, "yyyy-MM-dd", new Date())
+  )
 
   const dateObject = parse(date as string, "yyyy-MM-dd", new Date())
   const yesterday = format(subDays(dateObject, 1), "yyyy-MM-dd")
@@ -32,11 +37,18 @@ export default function EntryNav() {
   }, [dateObject])
 
   return (
-    <div className="grid grid-cols-2 m-6">
+    <div className="grid grid-cols-[auto,3fr,auto] mx-6 items-center">
       <div>
         <button className="styled-button" onClick={onBack}>
           <ArrowLeft />
         </button>
+      </div>
+      <div>
+        <WeeklyCalendar
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          today={new Date()}
+        />
       </div>
       {noForward && (
         <div className="text-right">

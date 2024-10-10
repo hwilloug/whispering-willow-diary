@@ -1,10 +1,8 @@
 "use client"
 
-import { differenceInHours, format, parse, subDays } from "date-fns"
+import { format, parse, subDays } from "date-fns"
 import Highcharts from "highcharts"
 import HighchartsReact from "highcharts-react-official"
-import { Grid } from "lucide-react"
-import { useParams } from "next/navigation"
 import { useMemo, useState } from "react"
 import { getHoursSleep } from "~/app/utils"
 import { trpc } from "~/utils/trpc"
@@ -62,10 +60,12 @@ export function SleepTracker() {
       }
     }
 
-    return Object.entries(sleepByDate).map(([dateString, totalHours]) => ({
-      x: parse(dateString, "yyyy-MM-dd", new Date()).getTime(),
-      y: totalHours
-    }))
+    return Object.entries(sleepByDate)
+      .map(([dateString, totalHours]) => ({
+        x: parse(dateString, "yyyy-MM-dd", new Date()).getTime(),
+        y: totalHours
+      }))
+      .sort((a, b) => a.x - b.x)
   }, [data, timeFilter])
 
   console.log(sleepData)

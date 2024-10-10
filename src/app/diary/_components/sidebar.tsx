@@ -75,7 +75,7 @@ export default function SideBar() {
       )
     },
     {
-      link: "/diary/entries",
+      link: `/diary/entries/${format(new Date(), "yyyy-MM-dd")}`,
       title: "Entries List",
       icon: (
         <svg

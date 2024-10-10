@@ -2,6 +2,7 @@ import { useParams } from "next/navigation"
 import Entry from "../editentry/entry"
 import { trpc } from "~/utils/trpc"
 import { format } from "date-fns"
+import React from "react"
 
 export default function EntryContent({ isEditMode }: { isEditMode: boolean }) {
   const { date } = useParams()
@@ -27,7 +28,12 @@ export default function EntryContent({ isEditMode }: { isEditMode: boolean }) {
                 key={entry.id}
                 className="text-justify bg-amber-200 p-4 rounded-lg"
               >
-                {entry.content}
+                {entry.content?.split("\n").map((line, index) => (
+                  <React.Fragment key={index}>
+                    {line}
+                    {index < entry.content!.split("\n").length - 1 && <br />}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
           ))

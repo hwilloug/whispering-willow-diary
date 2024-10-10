@@ -1,4 +1,5 @@
 import { useParams } from "next/navigation"
+import { useState, useEffect } from "react"
 import {
   Accordion,
   AccordionContent,
@@ -53,10 +54,14 @@ export default function FeelingsEntry() {
 
   const onChange = (value: string) => {
     if (feelings?.id) {
-      const newFeelings = [
-        ...feelings.feelings.filter((f) => f !== value),
-        value
-      ]
+      let newFeelings: string[]
+      if (feelings.feelings.includes(value)) {
+        // If the feeling is already present, remove it
+        newFeelings = feelings.feelings.filter((f) => f !== value)
+      } else {
+        // If the feeling is not present, add it
+        newFeelings = [...feelings.feelings, value]
+      }
       update(newFeelings)
     } else {
       add([value])
@@ -65,10 +70,11 @@ export default function FeelingsEntry() {
 
   function FeelingsAccordion({
     feelingsList,
-    title
-  }: Readonly<{ feelingsList: string[]; title: string }>) {
+    title,
+    value
+  }: Readonly<{ feelingsList: string[]; title: string; value: string }>) {
     return (
-      <AccordionItem value={title} className="border-b-0">
+      <AccordionItem value={value} className="border-b-0">
         <AccordionTrigger className="flex justify-center gap-4 font-bold">
           {title}
         </AccordionTrigger>
@@ -87,281 +93,346 @@ export default function FeelingsEntry() {
     )
   }
 
-  const acceptingOpen = [
-    "Calm",
-    "Centered",
-    "Content",
-    "Fulfilled",
-    "Patient",
-    "Peaceful",
-    "Present",
-    "Relaxed",
-    "Serene",
-    "Trusting"
+  const feelingsCategories = [
+    {
+      title: "Accepting/Open",
+      feelings: [
+        "Calm",
+        "Centered",
+        "Content",
+        "Fulfilled",
+        "Patient",
+        "Peaceful",
+        "Present",
+        "Relaxed",
+        "Serene",
+        "Trusting"
+      ]
+    },
+    {
+      title: "Aliveness/Joy",
+      feelings: [
+        "Amazed",
+        "Awe",
+        "Bliss",
+        "Delighted",
+        "Eager",
+        "Ecstatic",
+        "Enchanted",
+        "Energized",
+        "Engaged",
+        "Enthusiastic",
+        "Excited",
+        "Free",
+        "Happy",
+        "Inspired",
+        "Invigorated",
+        "Lively",
+        "Passionate",
+        "Playful",
+        "Radiant",
+        "Refreshed",
+        "Rejuvenated",
+        "Renewed",
+        "Satisfied",
+        "Thrilled",
+        "Vibrant"
+      ]
+    },
+    {
+      title: "Angry/Annoyed",
+      feelings: [
+        "Agitated",
+        "Aggravated",
+        "Bitter",
+        "Contempt",
+        "Cynical",
+        "Disdain",
+        "Disgruntled",
+        "Disturbed",
+        "Edgy",
+        "Exasperated",
+        "Frustrated",
+        "Furious",
+        "Grouchy",
+        "Hostile",
+        "Impatient",
+        "Irritated",
+        "Irate",
+        "Moody",
+        "On edge",
+        "Outraged",
+        "Pissed",
+        "Resentful",
+        "Upset",
+        "Vindictave"
+      ]
+    },
+    {
+      title: "Courageous/Powerful",
+      feelings: [
+        "Adventurous",
+        "Brave",
+        "Capable",
+        "Confident",
+        "Daring",
+        "Determined",
+        "Free",
+        "Grounded",
+        "Proud",
+        "Strong",
+        "Worthy",
+        "Valiant"
+      ]
+    },
+    {
+      title: "Connected/Loving",
+      feelings: [
+        "Accepting",
+        "Affectionate",
+        "Caring",
+        "Compassion",
+        "Empathy",
+        "Fulfilled",
+        "Present",
+        "Safe",
+        "Warm",
+        "Worthy"
+      ]
+    },
+    {
+      title: "Curious",
+      feelings: [
+        "Engaged",
+        "Exploring",
+        "Fascinated",
+        "Interested",
+        "Intrigued",
+        "Involved",
+        "Stimulated"
+      ]
+    },
+    {
+      title: "Despair/Sad",
+      feelings: [
+        "Anguish",
+        "Depressed",
+        "Despondent",
+        "Disappointed",
+        "Discouraged",
+        "Forlorn",
+        "Gloomy",
+        "Grief",
+        "Heartbroken",
+        "Hopeless",
+        "Lonely",
+        "Longing",
+        "Melancholy",
+        "Sorrow",
+        "Teary",
+        "Unhappy",
+        "Upset",
+        "Weary",
+        "Yearning"
+      ]
+    },
+    {
+      title: "Disconnected/Numb",
+      feelings: [
+        "Aloof",
+        "Bored",
+        "Confused",
+        "Distant",
+        "Empty",
+        "Indifferent",
+        "Isolated",
+        "Lethargic",
+        "Listless",
+        "Removed",
+        "Resistant",
+        "Shut Down",
+        "Uneasy",
+        "Withdrawn"
+      ]
+    },
+    {
+      title: "Embarrassed/Shame",
+      feelings: [
+        "Ashamed",
+        "Humiliated",
+        "Inhibited",
+        "Mortified",
+        "Self-conscious",
+        "Useless",
+        "Weak",
+        "Worthless"
+      ]
+    },
+    {
+      title: "Fear",
+      feelings: [
+        "Afraid",
+        "Anxious",
+        "Apprehensive",
+        "Frightened",
+        "Hesitant",
+        "Nervous",
+        "Panic",
+        "Paralyzed",
+        "Scared",
+        "Terrified",
+        "Worried"
+      ]
+    },
+    {
+      title: "Fragile",
+      feelings: ["Helpless", "Sensitive"]
+    },
+    {
+      title: "Grateful",
+      feelings: [
+        "Appreciative",
+        "Blessed",
+        "Delighted",
+        "Fortunate",
+        "Grace",
+        "Humbled",
+        "Lucky",
+        "Moved",
+        "Thankful",
+        "Touched"
+      ]
+    },
+    {
+      title: "Guilt",
+      feelings: ["Regret", "Remorseful", "Sorry"]
+    },
+    {
+      title: "Hopeful",
+      feelings: ["Encouraged", "Expectant", "Optimistic", "Trusting"]
+    },
+    {
+      title: "Powerless",
+      feelings: ["Impotent", "Incapable", "Resigned", "Trapped", "Victim"]
+    },
+    {
+      title: "Tender",
+      feelings: [
+        "Calm",
+        "Caring",
+        "Loving",
+        "Reflective",
+        "Self-loving",
+        "Serene",
+        "Vulnerable",
+        "Warm"
+      ]
+    },
+    {
+      title: "Stressed/Tense",
+      feelings: [
+        "Anxious",
+        "Burned out",
+        "Cranky",
+        "Depleted",
+        "Edgy",
+        "Exhausted",
+        "Frazzled",
+        "Overwhelm",
+        "Rattled",
+        "Rejecting",
+        "Restless",
+        "Shaken",
+        "Tight",
+        "Weary",
+        "Worn out"
+      ]
+    },
+    {
+      title: "Unsettled/Doubt",
+      feelings: [
+        "Apprehensive",
+        "Concerned",
+        "Dissatisfied",
+        "Disturbed",
+        "Grouchy",
+        "Hesitant",
+        "Inhibited",
+        "Perplexed",
+        "Questioning",
+        "Rejecting",
+        "Reluctant",
+        "Shocked",
+        "Skeptical",
+        "Suspicious",
+        "Ungrounded",
+        "Unsure",
+        "Worried"
+      ]
+    }
   ]
 
-  const alivenessJoy = [
-    "Amazed",
-    "Awe",
-    "Bliss",
-    "Delighted",
-    "Eager",
-    "Ecstatic",
-    "Enchanted",
-    "Energized",
-    "Engaged",
-    "Enthusiastic",
-    "Excited",
-    "Free",
-    "Happy",
-    "Inspired",
-    "Invigorated",
-    "Lively",
-    "Passionate",
-    "Playful",
-    "Radiant",
-    "Refreshed",
-    "Rejuvenated",
-    "Renewed",
-    "Satisfied",
-    "Thrilled",
-    "Vibrant"
-  ]
+  const [openCategories, setOpenCategories] = useState<string[]>([])
 
-  const angryAnnoyed = [
-    "Agitated",
-    "Aggravated",
-    "Bitter",
-    "Contempt",
-    "Cynical",
-    "Disdain",
-    "Disgruntled",
-    "Disturbed",
-    "Edgy",
-    "Exasperated",
-    "Frustrated",
-    "Furious",
-    "Grouchy",
-    "Hostile",
-    "Impatient",
-    "Irritated",
-    "Irate",
-    "Moody",
-    "On edge",
-    "Outraged",
-    "Pissed",
-    "Resentful",
-    "Upset",
-    "Vindictave"
-  ]
+  useEffect(() => {
+    if (feelings?.feelings) {
+      const initialOpenCategories = feelingsCategories
+        .filter((category) =>
+          category.feelings.some((f) => feelings.feelings.includes(f))
+        )
+        .map((category) => category.title)
 
-  const courageousPowerful = [
-    "Adventurous",
-    "Brave",
-    "Capable",
-    "Confident",
-    "Daring",
-    "Determined",
-    "Free",
-    "Grounded",
-    "Proud",
-    "Strong",
-    "Worthy",
-    "Valiant"
-  ]
+      setOpenCategories((prevOpenCategories) => {
+        const newOpenCategories = [
+          ...new Set([...prevOpenCategories, ...initialOpenCategories])
+        ]
+        return newOpenCategories
+      })
+    }
+  }, [feelings?.feelings])
 
-  const connectedLoving = [
-    "Accepting",
-    "Affectionate",
-    "Caring",
-    "Compassion",
-    "Empathy",
-    "Fulfilled",
-    "Present",
-    "Safe",
-    "Warm",
-    "Worthy"
-  ]
+  const handleValueChange = (value: string[]) => {
+    setOpenCategories(value)
+  }
 
-  const curious = [
-    "Engaged",
-    "Exploring",
-    "Fascinated",
-    "Interested",
-    "Intrigued",
-    "Involved",
-    "Stimulated"
-  ]
+  const expandAll = () => {
+    setOpenCategories(feelingsCategories.map((category) => category.title))
+  }
 
-  const despairSad = [
-    "Anguish",
-    "Depressed",
-    "Despondent",
-    "Disappointed",
-    "Discouraged",
-    "Forlorn",
-    "Gloomy",
-    "Grief",
-    "Heartbroken",
-    "Hopeless",
-    "Lonely",
-    "Longing",
-    "Melancholy",
-    "Sorrow",
-    "Teary",
-    "Unhappy",
-    "Upset",
-    "Weary",
-    "Yearning"
-  ]
-
-  const disconnectedNumb = [
-    "Aloof",
-    "Bored",
-    "Confused",
-    "Distant",
-    "Empty",
-    "Indifferent",
-    "Isolated",
-    "Lethargic",
-    "Listless",
-    "Removed",
-    "Resistant",
-    "Shut Down",
-    "Uneasy",
-    "Withdrawn"
-  ]
-
-  const embarrassedShame = [
-    "Ashamed",
-    "Humiliated",
-    "Inhibited",
-    "Mortified",
-    "Self-conscious",
-    "Useless",
-    "Weak",
-    "Worthless"
-  ]
-
-  const fear = [
-    "Afraid",
-    "Anxious",
-    "Apprehensive",
-    "Frightened",
-    "Hesitant",
-    "Nervous",
-    "Panic",
-    "Paralyzed",
-    "Scared",
-    "Terrified",
-    "Worried"
-  ]
-
-  const fragile = ["Helpless", "Sensitive"]
-
-  const grateful = [
-    "Appreciative",
-    "Blessed",
-    "Delighted",
-    "Fortunate",
-    "Grace",
-    "Humbled",
-    "Lucky",
-    "Moved",
-    "Thankful",
-    "Touched"
-  ]
-
-  const guilt = ["Regret", "Remorseful", "Sorry"]
-
-  const hopeful = ["Encouraged", "Expectant", "Optimistic", "Trusting"]
-
-  const powerless = ["Impotent", "Incapable", "Resigned", "Trapped", "Victim"]
-
-  const tender = [
-    "Calm",
-    "Caring",
-    "Loving",
-    "Reflective",
-    "Self-loving",
-    "Serene",
-    "Vulnerable",
-    "Warm"
-  ]
-
-  const stressedTense = [
-    "Anxious",
-    "Burned out",
-    "Cranky",
-    "Depleted",
-    "Edgy",
-    "Exhausted",
-    "Frazzled",
-    "Overwhelm",
-    "Rattled",
-    "Rejecting",
-    "Restless",
-    "Shaken",
-    "Tight",
-    "Weary",
-    "Worn out"
-  ]
-
-  const unsettledDoubt = [
-    "Apprehensive",
-    "Concerned",
-    "Dissatisfied",
-    "Disturbed",
-    "Grouchy",
-    "Hesitant",
-    "Inhibited",
-    "Perplexed",
-    "Questioning",
-    "Rejecting",
-    "Reluctant",
-    "Shocked",
-    "Skeptical",
-    "Suspicious",
-    "Ungrounded",
-    "Unsure",
-    "Worried"
-  ]
+  const collapseAll = () => {
+    setOpenCategories([])
+  }
 
   return (
-    <Accordion type="multiple">
-      <FeelingsAccordion title="Accepting/Open" feelingsList={acceptingOpen} />
-      <FeelingsAccordion title="Aliveness/Joy" feelingsList={alivenessJoy} />
-      <FeelingsAccordion title="Angry/Annoyed" feelingsList={angryAnnoyed} />
-      <FeelingsAccordion
-        title="Courageous/Powerful"
-        feelingsList={courageousPowerful}
-      />
-      <FeelingsAccordion
-        title="Connected/Loving"
-        feelingsList={connectedLoving}
-      />
-      <FeelingsAccordion title="Curious" feelingsList={curious} />
-      <FeelingsAccordion title="Despair/Sad" feelingsList={despairSad} />
-      <FeelingsAccordion
-        title="Disconnected/Numb"
-        feelingsList={disconnectedNumb}
-      />
-      <FeelingsAccordion
-        title="Embarrassed/Shame"
-        feelingsList={embarrassedShame}
-      />
-      <FeelingsAccordion title="Fear" feelingsList={fear} />
-      <FeelingsAccordion title="Fragile" feelingsList={fragile} />
-      <FeelingsAccordion title="Grateful" feelingsList={grateful} />
-      <FeelingsAccordion title="Guilt" feelingsList={guilt} />
-      <FeelingsAccordion title="Hopeful" feelingsList={hopeful} />
-      <FeelingsAccordion title="Powerless" feelingsList={powerless} />
-      <FeelingsAccordion title="Tender" feelingsList={tender} />
-      <FeelingsAccordion title="Stressed/Tense" feelingsList={stressedTense} />
-      <FeelingsAccordion
-        title="Unsettled/Doubt"
-        feelingsList={unsettledDoubt}
-      />
-    </Accordion>
+    <>
+      <div className="flex justify-center gap-4 mb-4">
+        <button
+          className="styled-button"
+          onClick={() =>
+            openCategories.length === feelingsCategories.length
+              ? collapseAll()
+              : expandAll()
+          }
+        >
+          {openCategories.length === feelingsCategories.length
+            ? "Collapse All"
+            : "Expand All"}
+        </button>
+      </div>
+      <Accordion
+        type="multiple"
+        value={openCategories}
+        onValueChange={handleValueChange}
+      >
+        {feelingsCategories.map((category) => (
+          <FeelingsAccordion
+            key={category.title}
+            title={category.title}
+            feelingsList={category.feelings}
+            value={category.title}
+          />
+        ))}
+      </Accordion>
+    </>
   )
 }
