@@ -49,18 +49,30 @@ export function MoodTracker() {
 
   const moodColors = {
     "0": "red",
-    "1": "orange",
-    "2": "blue",
-    "3": "green",
-    "4": "purple"
+    "1": "red",
+    "2": "orange",
+    "3": "orange",
+    "4": "blue",
+    "5": "blue",
+    "6": "green",
+    "7": "green",
+    "8": "purple",
+    "9": "purple",
+    "10": "purple"
   }
 
   const moodText = {
     "0": "Awful",
-    "1": "Bad",
-    "2": "Ok",
-    "3": "Good",
-    "4": "Ecstatic"
+    "1": "Awful",
+    "2": "Bad",
+    "3": "Bad",
+    "4": "Ok",
+    "5": "Ok",
+    "6": "Good",
+    "7": "Good",
+    "8": "Ecstatic",
+    "9": "Ecstatic",
+    "10": "Ecstatic"
   }
 
   const moodData = useMemo(() => {
@@ -111,7 +123,7 @@ export function MoodTracker() {
         title: {
           text: "Mood"
         },
-        max: 4.5,
+        max: 10.5,
         min: 0,
         tickInterval: 1,
         gridLineColor: "transparent",
@@ -128,19 +140,23 @@ export function MoodTracker() {
                 </>`
                 color = "red"
                 break
-              case 1:
+              case 2:
                 mouth = `<path d="M8,17 Q12,14 16,17" />`
                 color = "orange"
                 break
-              case 2:
+              case 4:
                 mouth = `<path d="M8,17 16,17" />`
-                color = "blue"
+                color = "#decd4e"
                 break
-              case 3:
+              case 6:
+                mouth = `<path d="M8,17 16,17" />`
+                color = "#8cd18d"
+                break
+              case 8:
                 mouth = `<path d="M8,17 Q12,20 16,17" />`
                 color = "green"
                 break
-              case 4:
+              case 10:
                 mouth = `<>
                   <path d="M8,17 Q12,20 16,17" />
                   <rect x="7" y="16" width="10" height="0.25" />
@@ -221,6 +237,30 @@ export function MoodTracker() {
           {
             value: 4.5,
             color: moodColors["4"]
+          },
+          {
+            value: 5.5,
+            color: moodColors["5"]
+          },
+          {
+            value: 6.5,
+            color: moodColors["6"]
+          },
+          {
+            value: 7.5,
+            color: moodColors["7"]
+          },
+          {
+            value: 8.5,
+            color: moodColors["8"]
+          },
+          {
+            value: 9.5,
+            color: moodColors["9"]
+          },
+          {
+            value: 10.5,
+            color: moodColors["10"]
           }
         ]
       }

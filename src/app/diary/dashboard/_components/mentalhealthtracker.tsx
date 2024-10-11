@@ -8,7 +8,7 @@ import { mentalHealthSymptoms } from "~/app/diary/entries/[date]/_components/edi
 import { trpc } from "~/utils/trpc"
 import highchartsMore from "highcharts/highcharts-more"
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   highchartsMore(Highcharts)
 }
 
@@ -78,7 +78,7 @@ export function MentalHealthTracker() {
           color: "#333333"
         },
         labelFormatter: function (this: Highcharts.Point | Highcharts.Series) {
-          if ('color' in this) {
+          if ("color" in this) {
             return `<span style="color:${this.color}">${this.name}</span>`
           }
           return this.name

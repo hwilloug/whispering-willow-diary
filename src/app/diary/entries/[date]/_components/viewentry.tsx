@@ -72,7 +72,7 @@ export default function ViewEntry() {
         {format(parse(date, "yyyy-MM-dd", new Date()), "eeee, LLLL d, yyyy")}
       </div>
       <div>
-        <div className="grid grid-cols-[1fr,2fr] gap-4">
+        <div className="grid grid-cols-[1fr,1fr] gap-4">
           <MoodContent isEditMode={isEditMode} />
           <SleepContent isEditMode={isEditMode} />
         </div>

@@ -50,7 +50,7 @@ export default function FaceIcon({
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn(className, "cursor-pointer")}
+      className={className}
       onClick={() => onClick && onClick(value)}
     >
       <circle cx="12" cy="12" r="10" />
