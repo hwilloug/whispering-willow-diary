@@ -53,7 +53,7 @@ export function MentalHealthTracker() {
       .filter((category) => category.data.length > 0)
   }, [filteredMentalHealthData])
 
-  const chartOptions: Highcharts.Options = useMemo(
+  const chartOptions = useMemo<Highcharts.Options>(
     () => ({
       chart: {
         type: "packedbubble",
@@ -72,10 +72,9 @@ export function MentalHealthTracker() {
         itemStyle: {
           color: "#333333"
         },
-        labelFormatter: function (this: Highcharts.Point) {
-          if (this.series) {
-            const series = this.series
-            return `<span style="color:${series.color}">${this.name}</span>`
+        labelFormatter: function (this: Highcharts.Point | Highcharts.Series) {
+          if ('color' in this) {
+            return `<span style="color:${this.color}">${this.name}</span>`
           }
           return this.name
         }
