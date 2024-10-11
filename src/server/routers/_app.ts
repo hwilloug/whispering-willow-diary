@@ -19,6 +19,7 @@ import {
 import {
   createMentalHealth,
   getMentalHealthByDate,
+  getMyMentalHealth,
   updateMentalHealth
 } from "../db/queries/mentalhealth"
 import {
@@ -199,7 +200,10 @@ export const appRouter = t.router({
       )
       .query((opts) => {
         return getMentalHealthByDate(opts.input.date)
-      })
+      }),
+    all: t.procedure.query(() => {
+      return getMyMentalHealth()
+    })
   }),
   substances: t.router({
     all: t.procedure.query(() => {

@@ -5,6 +5,18 @@ import { auth } from "@clerk/nextjs/server"
 import { mentalHealth } from "../models/journal"
 import { and, eq } from "drizzle-orm"
 
+export async function getMyMentalHealth() {
+  const user = auth()
+
+  if (!user.userId) throw new Error("Unauthorized")
+
+  const mentalHealthData = await db.query.mentalHealth.findMany({
+    where: eq(mentalHealth.userId, user.userId)
+  })
+
+  return mentalHealthData
+}
+
 export async function getMentalHealthByEntry(entryId: number) {
   const user = auth()
 

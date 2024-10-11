@@ -4,6 +4,7 @@ import { differenceInDays, formatDate, subDays } from "date-fns"
 import { type ReactNode, useMemo } from "react"
 import { trpc } from "~/utils/trpc"
 import FaceIcon from "../../_components/icons/faceicon"
+import { getMoodIcon } from "../../utils"
 
 export function DiaryStats() {
   const utils = trpc.useUtils()
@@ -60,55 +61,7 @@ export function DiaryStats() {
     return moodTotal / moodCount
   }, [entries])
 
-  const avgMoodIcon = useMemo(() => {
-    switch (Math.round(avgMood)) {
-      case 0:
-        return (
-          <FaceIcon
-            color="red"
-            variant="distressed"
-            value={avgMood}
-            className="m-auto"
-          />
-        )
-      case 1:
-        return (
-          <FaceIcon
-            color="orange"
-            variant="bad"
-            value={avgMood}
-            className="m-auto"
-          />
-        )
-      case 2:
-        return (
-          <FaceIcon
-            color="blue"
-            variant="neutral"
-            value={avgMood}
-            className="m-auto"
-          />
-        )
-      case 3:
-        return (
-          <FaceIcon
-            color="green"
-            variant="happy"
-            value={avgMood}
-            className="m-auto"
-          />
-        )
-      case 4:
-        return (
-          <FaceIcon
-            color="purple"
-            variant="ecstatic"
-            value={avgMood}
-            className="m-auto"
-          />
-        )
-    }
-  }, [avgMood])
+  const avgMoodIcon = useMemo(() => getMoodIcon(avgMood), [avgMood])
 
   const avgMoodBgColor = useMemo(() => {
     switch (Math.round(avgMood)) {
@@ -154,7 +107,7 @@ export function DiaryStats() {
   }, [entries, avgMood])
 
   const stdDeviationColor = useMemo(() => {
-    if (stdDeviation > 0.5) {
+    if (stdDeviation > 1) {
       return "linear-gradient(to bottom, #ef9a9a99, #ef5350)"
     } else {
       return "linear-gradient(to bottom, #a5d6a799, #00e676)"

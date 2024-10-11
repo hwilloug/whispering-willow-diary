@@ -423,6 +423,7 @@ export default function FeelingsEntry() {
         type="multiple"
         value={openCategories}
         onValueChange={handleValueChange}
+        className="grid md:grid-cols-2 gap-4 lg:grid-cols-3"
       >
         {feelingsCategories.map((category) => (
           <FeelingsAccordion
