@@ -1,17 +1,22 @@
 "use client"
 
-import { differenceInDays, format, parse, subDays } from "date-fns"
+import { differenceInDays, parse } from "date-fns"
 import Highcharts from "highcharts"
 import HighchartsReact from "highcharts-react-official"
 import { useMemo } from "react"
 import { mentalHealthSymptoms } from "~/app/diary/entries/[date]/_components/editentry/mentalhealthentry"
 import { trpc } from "~/utils/trpc"
-require("highcharts/highcharts-more")(Highcharts)
+import highchartsMore from "highcharts/highcharts-more"
+
+if (typeof window !== 'undefined') {
+  highchartsMore(Highcharts)
+}
 
 export function MentalHealthTracker() {
   const { data: mentalHealthData } = trpc.mentalHealth.all.useQuery()
 
   const filteredMentalHealthData = useMemo(() => {
+    if (!mentalHealthData) return []
     return mentalHealthData?.filter(
       (entry) =>
         differenceInDays(
