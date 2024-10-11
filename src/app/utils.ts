@@ -11,6 +11,5 @@ export function getHoursSleep(bedTime: string, wakeUpTime: string) {
   if (diff > 24) {
     diff -= 24
   }
-  console.log(diff)
   return diff
 }

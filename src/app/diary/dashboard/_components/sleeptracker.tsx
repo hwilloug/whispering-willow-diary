@@ -16,8 +16,6 @@ export function SleepTracker() {
     date: format(today, "yyyy-MM-dd")
   })
 
-  console.log(data)
-
   const timeFilters = [
     {
       name: "Last Week",
@@ -67,8 +65,6 @@ export function SleepTracker() {
       }))
       .sort((a, b) => a.x - b.x)
   }, [data, timeFilter])
-
-  console.log(sleepData)
 
   const chartOptions: Highcharts.Options = {
     chart: {

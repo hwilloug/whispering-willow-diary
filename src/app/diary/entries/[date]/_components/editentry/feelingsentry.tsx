@@ -404,7 +404,7 @@ export default function FeelingsEntry() {
   }
 
   return (
-    <>
+    <div>
       <div className="flex justify-center gap-4 mb-4">
         <button
           className="styled-button"
@@ -433,6 +433,6 @@ export default function FeelingsEntry() {
           />
         ))}
       </Accordion>
-    </>
+    </div>
   )
 }
