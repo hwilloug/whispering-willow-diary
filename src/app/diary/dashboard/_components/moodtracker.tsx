@@ -14,6 +14,7 @@ import {
   sub
 } from "date-fns"
 import { trpc } from "~/utils/trpc"
+import { useRouter } from "next/navigation"
 
 interface HighchartsDataPoint {
   x: number
@@ -21,7 +22,11 @@ interface HighchartsDataPoint {
 }
 
 export function MoodTracker() {
+  const router = useRouter()
+
   const { data: mood, isLoading } = trpc.mood.all.useQuery()
+  const { data: mentalHealth, isLoading: mentalHealthLoading } =
+    trpc.mentalHealth.all.useQuery()
 
   const today = new Date()
 
@@ -192,7 +197,9 @@ export function MoodTracker() {
         point: {
           events: {
             click: function () {
-              // navigate(`/diary/${convertToShortDate(new Date(this.x))}/view`)
+              router.push(
+                `/diary/entries/${format(fromUnixTime(typeof this.x === "string" ? parseInt(this.x) : this.x), "yyyy-MM-dd")}`
+              )
             }
           }
         }
@@ -205,7 +212,7 @@ export function MoodTracker() {
             return `${format(fromUnixTime(typeof this.x === "string" ? parseInt(this.x) : this.x!), "MMM dd, yyyy")}: <b>${
               // @ts-expect-error  index of string is fine
               moodText[this.y!.toString()]
-            }</b>`
+            }</b><br />${mentalHealth?.find((mh) => mh.date === format(fromUnixTime(typeof this.x === "string" ? parseInt(this.x) : this.x!), "yyyy-MM-dd"))?.mentalHealth.join(", ") || ""}`
         }
       }
     },

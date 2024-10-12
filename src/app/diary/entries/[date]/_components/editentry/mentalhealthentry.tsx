@@ -56,7 +56,11 @@ export const mentalHealthSymptoms = {
     "Hopelessness",
     "Difficulty Concentrating"
   ],
-  Other: ["Food Restriction"]
+  Other: [
+    "Food Restriction",
+    "Trouble Starting Tasks",
+    "Trouble Finishing Tasks"
+  ]
 }
 
 export default function MentalHealthEntry() {

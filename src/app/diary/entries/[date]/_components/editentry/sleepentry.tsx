@@ -46,7 +46,8 @@ export default function SleepEntry() {
   }
 
   const sleepWithHours = useMemo(() => {
-    return sleep?.map((s) => {
+    if (!sleep) return []
+    const sleepWithHours = sleep?.map((s) => {
       if (s.bedTime && s.wakeUpTime) {
         return {
           ...s,
@@ -57,6 +58,7 @@ export default function SleepEntry() {
       }
       return { ...s, hoursSleep: 0 }
     })
+    return sleepWithHours.sort((a, b) => a.id - b.id)
   }, [sleep])
 
   const totalHoursSleep = useMemo(() => {

@@ -35,7 +35,7 @@ const WeeklyCalendar: React.FC<{
       }
     }
     return { weekDates: days, entryDays }
-  }, [selectedDate])
+  }, [selectedDate, entries])
 
   return (
     <div className="container-transparent" style={{ padding: "0px" }}>

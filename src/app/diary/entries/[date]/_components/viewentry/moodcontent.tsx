@@ -11,7 +11,7 @@ export default function MoodContent({ isEditMode }: { isEditMode: boolean }) {
 
   const { data, isLoading } = trpc.mood.one.useQuery({ date })
 
-  const moodIcon = useMemo(() => getMoodIcon(data?.mood || 0), [data?.mood])
+  const moodIcon = useMemo(() => getMoodIcon(data?.mood ?? 0), [data?.mood])
 
   return (
     <div className="bg-[--primary] rounded-xl p-4">
