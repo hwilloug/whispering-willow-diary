@@ -176,6 +176,15 @@ body {
   border-radius: 10px;
 }
 
+.styled-button-dark {
+  width: fit-content;
+  margin: auto;
+  padding: 8px 16px;
+  color: white;
+  background-color: var(--primary-dark);
+  border-radius: 10px;
+}
+
 .styled-button:hover {
   background-color: transparent;
   color: var(--secondary);

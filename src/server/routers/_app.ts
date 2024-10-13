@@ -58,6 +58,13 @@ import {
   getQuestion,
   updateAnswer
 } from "../db/queries/question"
+import {
+  createAppointment,
+  deleteAppointment,
+  getMyAppointments,
+  updateAppointment
+} from "../db/queries/appointments"
+import { createNote, deleteNote, updateNote } from "../db/queries/notes"
 
 const t = initTRPC.create()
 
@@ -474,6 +481,74 @@ export const appRouter = t.router({
       )
       .mutation((opts) => {
         return deleteContent(opts.input.id)
+      })
+  }),
+  appointments: t.router({
+    all: t.procedure.query(() => {
+      return getMyAppointments()
+    }),
+    post: t.procedure
+      .input(
+        z.object({
+          date: z.string(),
+          title: z.string(),
+          description: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return createAppointment(opts.input)
+      }),
+    put: t.procedure
+      .input(
+        z.object({
+          appointmentId: z.number(),
+          date: z.date(),
+          title: z.string(),
+          description: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateAppointment(opts.input)
+      }),
+    delete: t.procedure
+      .input(
+        z.object({
+          id: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteAppointment(opts.input.id)
+      })
+  }),
+  notes: t.router({
+    post: t.procedure
+      .input(
+        z.object({
+          appointmentId: z.number(),
+          note: z.string().optional()
+        })
+      )
+      .mutation((opts) => {
+        return createNote(opts.input)
+      }),
+    put: t.procedure
+      .input(
+        z.object({
+          id: z.number(),
+          note: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateNote(opts.input)
+      }),
+    delete: t.procedure
+      .input(
+        z.object({
+          id: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteNote(opts.input.id)
       })
   })
 })

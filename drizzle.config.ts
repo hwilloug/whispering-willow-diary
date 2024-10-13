@@ -4,7 +4,7 @@ import { env } from "~/env"
 
 export default defineConfig({
   schema: ["./src/server/db/models/*"],
-  schemaFilter: ["journal", "goals", "habits", "users"],
+  schemaFilter: ["journal", "goals", "habits", "users", "appointments"],
   dialect: "postgresql",
   dbCredentials: {
     host: env.DATABASE_HOST,

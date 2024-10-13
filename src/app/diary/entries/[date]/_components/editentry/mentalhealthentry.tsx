@@ -135,7 +135,7 @@ export default function MentalHealthEntry() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full">
       {Object.entries(mentalHealthSymptoms).map(([category, symptoms]) => (
         <div key={category} className="border rounded-md overflow-hidden">
           <Accordion

@@ -3,6 +3,7 @@ import postgres from "postgres"
 
 import { env } from "~/env"
 import * as journal from "./journal"
+import * as appointments from "./appointments"
 
 /**
  * Cache the database connection in development. This avoids creating a new connection on every HMR
@@ -20,4 +21,4 @@ const conn =
   })
 if (env.NODE_ENV !== "production") globalForDb.conn = conn
 
-export const db = drizzle(conn, { schema: journal })
+export const db = drizzle(conn, { schema: { ...journal, ...appointments } })
