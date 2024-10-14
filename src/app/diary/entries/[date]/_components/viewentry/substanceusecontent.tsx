@@ -52,7 +52,8 @@ export default function SubstanceUseContent({
     return {
       chart: {
         type: "column",
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        height: 300
       },
       title: {
         text: ""

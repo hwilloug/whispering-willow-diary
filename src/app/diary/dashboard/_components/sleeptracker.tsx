@@ -95,13 +95,13 @@ export function SleepTracker() {
         plotLines: [
           {
             color: "darkgrey",
-            value: IDEAL_HOURS_SLEEP + 0.5,
+            value: IDEAL_HOURS_SLEEP + 1,
             dashStyle: "Dash",
             width: 2
           },
           {
             color: "darkgrey",
-            value: IDEAL_HOURS_SLEEP - 0.5,
+            value: IDEAL_HOURS_SLEEP - 1,
             dashStyle: "Dash",
             width: 2
           }
@@ -135,11 +135,11 @@ export function SleepTracker() {
         color: "darkgrey",
         zones: [
           {
-            value: IDEAL_HOURS_SLEEP - 0.5,
+            value: IDEAL_HOURS_SLEEP - 1,
             color: "orange"
           },
           {
-            value: IDEAL_HOURS_SLEEP + 0.5,
+            value: IDEAL_HOURS_SLEEP + 1,
             color: "darkgrey"
           },
           {

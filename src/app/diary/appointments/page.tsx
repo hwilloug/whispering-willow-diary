@@ -113,7 +113,7 @@ export default function AppointmentsPage() {
           <div className="text-outline-bold text-3xl text-center py-6">
             Appointments for {format(selectedDate, "EEEE, MMMM do")}
           </div>
-          <div className="">
+          <div className="mb-4">
             {appointments
               ?.filter(
                 (appointment) =>
