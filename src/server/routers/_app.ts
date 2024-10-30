@@ -65,7 +65,28 @@ import {
   updateAppointment
 } from "../db/queries/appointments"
 import { createNote, deleteNote, updateNote } from "../db/queries/notes"
-import { createDailyGoal, createMonthlyGoal, createReflection, createWeeklyGoal, createYearlyGoal, deleteDailyGoal, deleteMonthlyGoal, deleteReflection, deleteWeeklyGoal, deleteYearlyGoal, getDailyGoals, getMonthlyGoals, getReflections, getWeeklyGoals, getYearlyGoals, updateDailyGoal, updateMonthlyGoal, updateReflection, updateWeeklyGoal, updateYearlyGoal } from "../db/queries/goals"
+import {
+  createDailyGoal,
+  createMonthlyGoal,
+  createReflection,
+  createWeeklyGoal,
+  createYearlyGoal,
+  deleteDailyGoal,
+  deleteMonthlyGoal,
+  deleteReflection,
+  deleteWeeklyGoal,
+  deleteYearlyGoal,
+  getDailyGoals,
+  getMonthlyGoals,
+  getReflections,
+  getWeeklyGoals,
+  getYearlyGoals,
+  updateDailyGoal,
+  updateMonthlyGoal,
+  updateReflection,
+  updateWeeklyGoal,
+  updateYearlyGoal
+} from "../db/queries/goals"
 
 const t = initTRPC.create()
 
@@ -610,7 +631,11 @@ export const appRouter = t.router({
         })
       )
       .mutation((opts) => {
-        return createWeeklyGoal(opts.input.goal, opts.input.week, opts.input.year)
+        return createWeeklyGoal(
+          opts.input.goal,
+          opts.input.week,
+          opts.input.year
+        )
       }),
     updateWeekly: t.procedure
       .input(
@@ -688,7 +713,11 @@ export const appRouter = t.router({
         })
       )
       .mutation((opts) => {
-        return createMonthlyGoal(opts.input.goal, opts.input.month, opts.input.year)
+        return createMonthlyGoal(
+          opts.input.goal,
+          opts.input.month,
+          opts.input.year
+        )
       }),
     updateMonthly: t.procedure
       .input(

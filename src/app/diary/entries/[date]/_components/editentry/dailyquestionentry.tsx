@@ -26,7 +26,7 @@ export default function DailyQuestionEntry() {
     date
   })
 
-  if (!entry && !isLoadingEntry) throw new Error("No xentry found")
+  if (!entry && !isLoadingEntry) throw new Error("No entry found")
   if (!question && !isLoadingQuestion) throw new Error("No question found")
 
   const [answerContent, setAnswerContent] = useState(data?.answer)

@@ -2,7 +2,13 @@ import "server-only"
 
 import { db } from "../models"
 import { auth } from "@clerk/nextjs/server"
-import { dailyGoals, monthlyGoals, reflections, weeklyGoals, yearlyGoals } from "../models/goals"
+import {
+  dailyGoals,
+  monthlyGoals,
+  reflections,
+  weeklyGoals,
+  yearlyGoals
+} from "../models/goals"
 import { eq } from "drizzle-orm"
 
 export async function getDailyGoals(date: string) {
@@ -11,7 +17,8 @@ export async function getDailyGoals(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const goals = await db.query.dailyGoals.findMany({
-    where: (model, { eq, and }) => and(eq(model.userId, user.userId), eq(model.date, date)),
+    where: (model, { eq, and }) =>
+      and(eq(model.userId, user.userId), eq(model.date, date)),
     with: {
       reflections: true
     }
@@ -39,9 +46,12 @@ export async function updateDailyGoal(goalId: number, goal: string) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbGoal = await db.update(dailyGoals).set({
-    goal
-  }).where(eq(dailyGoals.id, goalId))
+  const dbGoal = await db
+    .update(dailyGoals)
+    .set({
+      goal
+    })
+    .where(eq(dailyGoals.id, goalId))
 
   return dbGoal
 }
@@ -62,7 +72,12 @@ export async function getWeeklyGoals(week: number, year: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const goals = await db.query.weeklyGoals.findMany({
-    where: (model, { eq, and }) => and(eq(model.userId, user.userId), eq(model.week, week), eq(model.year, year)),
+    where: (model, { eq, and }) =>
+      and(
+        eq(model.userId, user.userId),
+        eq(model.week, week),
+        eq(model.year, year)
+      ),
     with: {
       reflections: true
     }
@@ -71,7 +86,11 @@ export async function getWeeklyGoals(week: number, year: number) {
   return goals
 }
 
-export async function createWeeklyGoal(goal: string, week: number, year: number) {
+export async function createWeeklyGoal(
+  goal: string,
+  week: number,
+  year: number
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
@@ -91,9 +110,12 @@ export async function updateWeeklyGoal(goalId: number, goal: string) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbGoal = await db.update(weeklyGoals).set({
-    goal
-  }).where(eq(weeklyGoals.id, goalId))
+  const dbGoal = await db
+    .update(weeklyGoals)
+    .set({
+      goal
+    })
+    .where(eq(weeklyGoals.id, goalId))
 
   return dbGoal
 }
@@ -114,7 +136,12 @@ export async function getMonthlyGoals(month: number, year: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const goals = await db.query.monthlyGoals.findMany({
-    where: (model, { eq, and }) => and(eq(model.userId, user.userId), eq(model.month, month), eq(model.year, year)),
+    where: (model, { eq, and }) =>
+      and(
+        eq(model.userId, user.userId),
+        eq(model.month, month),
+        eq(model.year, year)
+      ),
     with: {
       reflections: true
     }
@@ -123,7 +150,11 @@ export async function getMonthlyGoals(month: number, year: number) {
   return goals
 }
 
-export async function createMonthlyGoal(goal: string, month: number, year: number) {
+export async function createMonthlyGoal(
+  goal: string,
+  month: number,
+  year: number
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
@@ -143,9 +174,12 @@ export async function updateMonthlyGoal(goalId: number, goal: string) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbGoal = await db.update(monthlyGoals).set({
-    goal
-  }).where(eq(monthlyGoals.id, goalId))
+  const dbGoal = await db
+    .update(monthlyGoals)
+    .set({
+      goal
+    })
+    .where(eq(monthlyGoals.id, goalId))
 
   return dbGoal
 }
@@ -155,7 +189,9 @@ export async function deleteMonthlyGoal(goalId: number) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbGoal = await db.delete(monthlyGoals).where(eq(monthlyGoals.id, goalId))
+  const dbGoal = await db
+    .delete(monthlyGoals)
+    .where(eq(monthlyGoals.id, goalId))
 
   return dbGoal
 }
@@ -166,7 +202,8 @@ export async function getYearlyGoals(year: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const goals = await db.query.yearlyGoals.findMany({
-    where: (model, { eq, and }) => and(eq(model.userId, user.userId), eq(model.year, year)),
+    where: (model, { eq, and }) =>
+      and(eq(model.userId, user.userId), eq(model.year, year)),
     with: {
       reflections: true
     }
@@ -194,9 +231,12 @@ export async function updateYearlyGoal(goalId: number, goal: string) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbGoal = await db.update(yearlyGoals).set({
-    goal
-  }).where(eq(yearlyGoals.id, goalId))
+  const dbGoal = await db
+    .update(yearlyGoals)
+    .set({
+      goal
+    })
+    .where(eq(yearlyGoals.id, goalId))
 
   return dbGoal
 }
@@ -217,7 +257,8 @@ export async function getReflections(goalId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const reflections = await db.query.reflections.findMany({
-    where: (model, { eq, and }) => and(eq(model.userId, user.userId), eq(model.goalId, goalId))
+    where: (model, { eq, and }) =>
+      and(eq(model.userId, user.userId), eq(model.goalId, goalId))
   })
 
   return reflections
@@ -238,14 +279,20 @@ export async function createReflection(goalId: number, reflection: string) {
   return dbReflection
 }
 
-export async function updateReflection(reflectionId: number, reflection: string) {
+export async function updateReflection(
+  reflectionId: number,
+  reflection: string
+) {
   const user = auth()
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbReflection = await db.update(reflections).set({
-    reflection
-  }).where(eq(reflections.id, reflectionId))
+  const dbReflection = await db
+    .update(reflections)
+    .set({
+      reflection
+    })
+    .where(eq(reflections.id, reflectionId))
 
   return dbReflection
 }
@@ -255,7 +302,9 @@ export async function deleteReflection(reflectionId: number) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const dbReflection = await db.delete(reflections).where(eq(reflections.id, reflectionId))
+  const dbReflection = await db
+    .delete(reflections)
+    .where(eq(reflections.id, reflectionId))
 
   return dbReflection
 }

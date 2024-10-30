@@ -21,4 +21,6 @@ const conn =
   })
 if (env.NODE_ENV !== "production") globalForDb.conn = conn
 
-export const db = drizzle(conn, { schema: { ...journal, ...appointments, ...goals } })
+export const db = drizzle(conn, {
+  schema: { ...journal, ...appointments, ...goals }
+})

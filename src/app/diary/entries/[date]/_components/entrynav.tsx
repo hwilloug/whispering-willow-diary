@@ -44,26 +44,26 @@ export default function EntryNav() {
       </div>
       <div className="grid grid-cols-[auto,3fr,auto] mx-6 items-center">
         <div>
-        <button className="styled-button" onClick={onBack}>
-          <ArrowLeft />
-        </button>
-      </div>
-      <div>
-        <WeeklyCalendar
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          today={new Date()}
-        />
-      </div>
-      {noForward && (
-        <div className="text-right">
-          <button
-            className="styled-button justify-self-end"
-            onClick={onForward}
-          >
-            <ArrowRight />
+          <button className="styled-button" onClick={onBack}>
+            <ArrowLeft />
           </button>
         </div>
+        <div>
+          <WeeklyCalendar
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            today={new Date()}
+          />
+        </div>
+        {noForward && (
+          <div className="text-right">
+            <button
+              className="styled-button justify-self-end"
+              onClick={onForward}
+            >
+              <ArrowRight />
+            </button>
+          </div>
         )}
       </div>
     </div>

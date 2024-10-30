@@ -10,8 +10,10 @@ export default function GoalsPage() {
   const tomorrowObject = addDays(todayObject, 1)
   const tomorrow = format(tomorrowObject, "yyyy-MM-dd")
 
-  const {data: dailyGoals, isLoading: isDailyGoalsLoading} = trpc.goals.daily.useQuery({date: today})
-  const { data: tomorrowGoals, isLoading: isTomorrowGoalsLoading} = trpc.goals.daily.useQuery({date: tomorrow})
+  const { data: dailyGoals, isLoading: isDailyGoalsLoading } =
+    trpc.goals.daily.useQuery({ date: today })
+  const { data: tomorrowGoals, isLoading: isTomorrowGoalsLoading } =
+    trpc.goals.daily.useQuery({ date: tomorrow })
 
   const createGoalMutation = trpc.goals.createDaily.useMutation()
 
@@ -28,9 +30,7 @@ export default function GoalsPage() {
       <div className="container-transparent">
         <div>
           <div>
-            {dailyGoals?.map((goal) => (
-              <div key={goal.id}>{goal.goal}</div>
-            ))}
+            {dailyGoals?.map((goal) => <div key={goal.id}>{goal.goal}</div>)}
           </div>
           <div>
             <button onClick={handleAddGoal}>Add Goal</button>

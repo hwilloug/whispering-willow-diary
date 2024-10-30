@@ -11,11 +11,11 @@ export async function getQuestion(dayOfMonth: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const question = await db.query.refQuestion.findFirst({
-    where: (model, { eq }) =>
-      eq(model.dayOfMonth, dayOfMonth) && eq(model.active, true)
+    where: (model, { eq, and }) =>
+      and(eq(model.dayOfMonth, dayOfMonth), eq(model.active, true))
   })
 
-  if (!question) return undefined
+  if (!question) return
 
   return question
 }
@@ -25,16 +25,17 @@ export async function getAnswerByEntry(entryId: number) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const question = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId) && eq(model.userId, user.userId),
+  const answer = await db.query.answer.findFirst({
+    where: (model, { eq, and }) =>
+      and(eq(model.entryId, entryId), eq(model.userId, user.userId)),
     with: {
       question: true
     }
   })
 
-  if (!question) return null
+  if (!answer) return
 
-  return question
+  return answer
 }
 
 export async function getAnswerByDate(date: string) {
@@ -42,16 +43,17 @@ export async function getAnswerByDate(date: string) {
 
   if (!user.userId) throw new Error("Unauthorized")
 
-  const question = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.date, date) && eq(model.userId, user.userId),
+  const answer = await db.query.answer.findFirst({
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId)),
     with: {
       question: true
     }
   })
 
-  if (!question) return null
+  if (!answer) return
 
-  return question
+  return answer
 }
 
 export async function createAnswer(
@@ -65,7 +67,8 @@ export async function createAnswer(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbAnwswer = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.date, date)  && eq(model.userId, user.userId)
+    where: (model, { eq, and }) =>
+      and(eq(model.date, date), eq(model.userId, user.userId))
   })
 
   if (dbAnwswer) throw new Error("Answer already exists")
