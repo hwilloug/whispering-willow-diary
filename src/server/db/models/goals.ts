@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import {
   boolean,
   date,
@@ -56,3 +57,19 @@ export const reflections = goals.table("reflection", {
     .references(() => dailyGoals.id)
     .notNull()
 })
+
+export const dailyGoalsRelations = relations(dailyGoals, ({ many }) => ({
+  reflections: many(reflections)
+}))
+
+export const weeklyGoalsRelations = relations(weeklyGoals, ({ many }) => ({
+  reflections: many(reflections)
+}))
+
+export const monthlyGoalsRelations = relations(monthlyGoals, ({ many }) => ({
+  reflections: many(reflections)
+}))
+
+export const yearlyGoalsRelations = relations(yearlyGoals, ({ many }) => ({
+  reflections: many(reflections)
+}))

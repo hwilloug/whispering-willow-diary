@@ -26,7 +26,7 @@ export async function getAnswerByEntry(entryId: number) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const question = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.entryId, entryId),
+    where: (model, { eq }) => eq(model.entryId, entryId) && eq(model.userId, user.userId),
     with: {
       question: true
     }
@@ -43,7 +43,7 @@ export async function getAnswerByDate(date: string) {
   if (!user.userId) throw new Error("Unauthorized")
 
   const question = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.date, date),
+    where: (model, { eq }) => eq(model.date, date) && eq(model.userId, user.userId),
     with: {
       question: true
     }
@@ -65,7 +65,7 @@ export async function createAnswer(
   if (!user.userId) throw new Error("Unauthorized")
 
   const dbAnwswer = await db.query.answer.findFirst({
-    where: (model, { eq }) => eq(model.date, date)
+    where: (model, { eq }) => eq(model.date, date)  && eq(model.userId, user.userId)
   })
 
   if (dbAnwswer) throw new Error("Answer already exists")

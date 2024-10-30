@@ -4,6 +4,7 @@ import ArrowLeft from "./icons/arrowleft"
 import ArrowRight from "./icons/arrowright"
 import { useMemo, useState } from "react"
 import WeeklyCalendar from "./weekcalendar"
+import CalendarIcon from "./icons/calendaricon"
 
 export default function EntryNav() {
   const router = useRouter()
@@ -37,8 +38,12 @@ export default function EntryNav() {
   }, [dateObject])
 
   return (
-    <div className="grid grid-cols-[auto,3fr,auto] mx-6 items-center">
+    <div>
       <div>
+        <CalendarIcon className="text-white" color="white" />
+      </div>
+      <div className="grid grid-cols-[auto,3fr,auto] mx-6 items-center">
+        <div>
         <button className="styled-button" onClick={onBack}>
           <ArrowLeft />
         </button>
@@ -59,7 +64,8 @@ export default function EntryNav() {
             <ArrowRight />
           </button>
         </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

@@ -65,6 +65,7 @@ import {
   updateAppointment
 } from "../db/queries/appointments"
 import { createNote, deleteNote, updateNote } from "../db/queries/notes"
+import { createDailyGoal, createMonthlyGoal, createReflection, createWeeklyGoal, createYearlyGoal, deleteDailyGoal, deleteMonthlyGoal, deleteReflection, deleteWeeklyGoal, deleteYearlyGoal, getDailyGoals, getMonthlyGoals, getReflections, getWeeklyGoals, getYearlyGoals, updateDailyGoal, updateMonthlyGoal, updateReflection, updateWeeklyGoal, updateYearlyGoal } from "../db/queries/goals"
 
 const t = initTRPC.create()
 
@@ -549,6 +550,202 @@ export const appRouter = t.router({
       )
       .mutation((opts) => {
         return deleteNote(opts.input.id)
+      })
+  }),
+  goals: t.router({
+    daily: t.procedure
+      .input(
+        z.object({
+          date: z.string()
+        })
+      )
+      .query((opts) => {
+        return getDailyGoals(opts.input.date)
+      }),
+    createDaily: t.procedure
+      .input(
+        z.object({
+          goal: z.string(),
+          date: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return createDailyGoal(opts.input.goal, opts.input.date)
+      }),
+    updateDaily: t.procedure
+      .input(
+        z.object({
+          goalId: z.number(),
+          goal: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateDailyGoal(opts.input.goalId, opts.input.goal)
+      }),
+    deleteDaily: t.procedure
+      .input(
+        z.object({
+          goalId: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteDailyGoal(opts.input.goalId)
+      }),
+    weekly: t.procedure
+      .input(
+        z.object({
+          week: z.number(),
+          year: z.number()
+        })
+      )
+      .query((opts) => {
+        return getWeeklyGoals(opts.input.week, opts.input.year)
+      }),
+    createWeekly: t.procedure
+      .input(
+        z.object({
+          goal: z.string(),
+          week: z.number(),
+          year: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return createWeeklyGoal(opts.input.goal, opts.input.week, opts.input.year)
+      }),
+    updateWeekly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number(),
+          goal: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateWeeklyGoal(opts.input.goalId, opts.input.goal)
+      }),
+    deleteWeekly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteWeeklyGoal(opts.input.goalId)
+      }),
+    yearly: t.procedure
+      .input(
+        z.object({
+          year: z.number()
+        })
+      )
+      .query((opts) => {
+        return getYearlyGoals(opts.input.year)
+      }),
+    createYearly: t.procedure
+      .input(
+        z.object({
+          goal: z.string(),
+          year: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return createYearlyGoal(opts.input.goal, opts.input.year)
+      }),
+    updateYearly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number(),
+          goal: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateYearlyGoal(opts.input.goalId, opts.input.goal)
+      }),
+    deleteYearly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteYearlyGoal(opts.input.goalId)
+      }),
+    monthly: t.procedure
+      .input(
+        z.object({
+          month: z.number(),
+          year: z.number()
+        })
+      )
+      .query((opts) => {
+        return getMonthlyGoals(opts.input.month, opts.input.year)
+      }),
+    createMonthly: t.procedure
+      .input(
+        z.object({
+          goal: z.string(),
+          month: z.number(),
+          year: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return createMonthlyGoal(opts.input.goal, opts.input.month, opts.input.year)
+      }),
+    updateMonthly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number(),
+          goal: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateMonthlyGoal(opts.input.goalId, opts.input.goal)
+      }),
+    deleteMonthly: t.procedure
+      .input(
+        z.object({
+          goalId: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteMonthlyGoal(opts.input.goalId)
+      }),
+    reflections: t.procedure
+      .input(
+        z.object({
+          goalId: z.number()
+        })
+      )
+      .query((opts) => {
+        return getReflections(opts.input.goalId)
+      }),
+    createReflection: t.procedure
+      .input(
+        z.object({
+          goalId: z.number(),
+          reflection: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return createReflection(opts.input.goalId, opts.input.reflection)
+      }),
+    updateReflection: t.procedure
+      .input(
+        z.object({
+          reflectionId: z.number(),
+          reflection: z.string()
+        })
+      )
+      .mutation((opts) => {
+        return updateReflection(opts.input.reflectionId, opts.input.reflection)
+      }),
+    deleteReflection: t.procedure
+      .input(
+        z.object({
+          reflectionId: z.number()
+        })
+      )
+      .mutation((opts) => {
+        return deleteReflection(opts.input.reflectionId)
       })
   })
 })
